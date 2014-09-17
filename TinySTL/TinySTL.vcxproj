@@ -79,6 +79,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Alloc.h" />
     <ClInclude Include="Construct.h" />
     <ClInclude Include="TypeTraits.h" />
   </ItemGroup>
