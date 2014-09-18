@@ -6,7 +6,8 @@
 namespace TinySTL{
 
 	/*
-	**空间配置器
+	**空间配置器，以字节数为单位分配
+	**内部使用
 	*/
 	class alloc{
 	private:
