@@ -17,7 +17,7 @@ int main(){
 	auto last = p + 100;
 	int array[100];
 	TinySTL::uninitialized_fill_n(array, 100, 88);
-	for (auto n : array){ cout << n << endl; }
+	for (auto n : array){ cout << n << endl; } 
 	system("pause");
 	return 0;
 }
