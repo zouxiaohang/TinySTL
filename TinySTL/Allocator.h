@@ -4,6 +4,7 @@
 #include "Alloc.h"
 #include "Construct.h"
 
+#include <cassert>
 #include <new>
 
 namespace TinySTL{
@@ -38,6 +39,7 @@ namespace TinySTL{
 	}
 	template<class T>
 	T *allocator<T>::allocate(size_t n){
+		assert(n != 0);
 		return static_cast<T *>(alloc::allocate(sizeof(T) * n));
 	}
 	template<class T>
@@ -46,6 +48,7 @@ namespace TinySTL{
 	}
 	template<class T>
 	void allocator<T>::deallocate(T *ptr, size_t n){
+		assert(n != 0);
 		alloc::deallocate(static_cast<void *>(ptr), sizeof(T)* n);
 	}
 

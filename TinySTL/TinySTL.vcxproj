@@ -83,6 +83,7 @@
     <ClInclude Include="Allocator.h" />
     <ClInclude Include="Construct.h" />
     <ClInclude Include="TypeTraits.h" />
+    <ClInclude Include="UninitializedFunctions.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

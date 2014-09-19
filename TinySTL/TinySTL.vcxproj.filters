@@ -32,5 +32,8 @@
     <ClInclude Include="Allocator.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="UninitializedFunctions.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
