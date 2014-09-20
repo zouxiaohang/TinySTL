@@ -31,3 +31,4 @@ TinySTL
     * type traits：100%  
     * 空间配置器：100%
     * iterator traits：100%
+    * vector：30%
