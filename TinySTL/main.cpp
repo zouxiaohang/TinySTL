@@ -3,6 +3,7 @@
 
 #include "Allocator.h"
 #include "Construct.h"
+#include "Vector.h"
 #include "UninitializedFunctions.h"
 
 using namespace std;
