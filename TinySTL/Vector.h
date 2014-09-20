@@ -1,6 +1,8 @@
 #ifndef _VECTOR_H_
 #define _VECTOR_H_
 
+#include <type_traits>
+
 #include "Allocator.h"
 #include "Iterator.h"
 #include "UninitializedFunctions.h"
@@ -71,7 +73,7 @@ namespace TinySTL{
 		explicit vector(const size_type n);
 		vector(const size_type n, const value_type& value);
 		template<class InputIterator>
-			vector(InputIterator first, InputIterator last);
+		vector(InputIterator first, InputIterator last);
 		vector(const vector& v);
 		vector(vector&& v);
 		vector& operator = (const vector& v);
@@ -83,6 +85,12 @@ namespace TinySTL{
 		//迭代器相关
 		iterator begin(){ return iterator(start_); }
 		iterator end(){ return iterator(finish_); }
+
+		//修改容器相关的操作
+		void clear(){
+			dataAllocator::destroy(start_, finish_);
+			finish_ = start_;
+		}
 	private:
 		void allocateAndFillN(const size_type n, const value_type& value){
 			start_ = dataAllocator::allocate(n);
@@ -95,8 +103,17 @@ namespace TinySTL{
 			finish_ = uninitialized_copy(first, last, start_);
 			endOfStorage_ = finish_;
 		}
-	};
 
+		template<class InputIterator>
+		void vector_aux(InputIterator first, InputIterator last, std::false_type){
+			allocateAndCopy(first, last);
+		}
+		template<class Integer>
+		void vector_aux(Integer n, Integer value, std::true_type){
+			allocateAndFillN(n, value);
+		}
+	};
+	//***********************构造，复制，析构相关***********************
 	template<class T, class Alloc>
 	vector<T, Alloc>::vector(const size_type n){
 		allocateAndFillN(n, value_type());
@@ -106,9 +123,28 @@ namespace TinySTL{
 		allocateAndFillN(n, value);
 	}
 	template<class T, class Alloc>
-	template <class InputIterator>
+	template<class InputIterator>
 	vector<T, Alloc>::vector(InputIterator first, InputIterator last){
-		allocateAndCopy(first, last);
+		//处理指针和数字间的区别的函数
+		vector_aux(first, last, typename std::is_integral<InputIterator>::type());
+	}
+	template<class T, class Alloc>
+	vector<T, Alloc>::vector(const vector& v){
+		allocateAndCopy(v.start_, v.finish_);
+	}
+	template<class T, class Alloc>
+	vector<T, Alloc>::vector(vector&& v){
+		start_ = v.start_;
+		finish_ = v.finish_;
+		endOfStorage_ = v.endOfStorage_;
+		v.clear();
+	}
+	template<class T, class Alloc>
+	vector<T, Alloc>& vector<T, Alloc>::operator = (const vector& v){
+		if (this != &v){
+			allocateAndCopy(v.start_, v.finish_);
+		}
+		return *this;
 	}
 }
 
