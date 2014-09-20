@@ -90,7 +90,7 @@ namespace TinySTL{
 	ForwardIterator _uninitialized_n_fill_aux(ForwardIterator first,
 		Size n, const T& x, _false_type){
 		int i = 0;
-		for (; i != n;){
+		for (; i != n; ++i){
 			construct((first + i), x);
 		}
 		return (first + i);

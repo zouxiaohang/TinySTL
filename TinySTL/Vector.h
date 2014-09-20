@@ -151,7 +151,7 @@ namespace TinySTL{
 	private:
 		void allocateAndFillN(const size_type n, const value_type& value){
 			start_ = dataAllocator::allocate(n);
-			uninitialized_fill_n(start_, n, value);
+			TinySTL::uninitialized_fill_n(start_, n, value);
 			finish_ = endOfStorage_ = start_ + n;
 		}
 		template<class InputIterator>
