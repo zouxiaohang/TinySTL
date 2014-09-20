@@ -1,5 +1,7 @@
 #include <iostream>
 #include <memory>
+#include <string>
+#include <vector>
 
 #include "Allocator.h"
 #include "Construct.h"
@@ -9,16 +11,12 @@
 using namespace std;
 
 int main(){
-	/*for (int i = 1; i != 100000; ++i){
-		auto p = TinySTL::allocator<int>::allocate();
-		
-	}*/
-	auto p = TinySTL::allocator<int>::allocate(100);
-	TinySTL::uninitialized_fill(p, p + 100, 88);
-	auto last = p + 100;
-	int array[100];
-	TinySTL::uninitialized_fill_n(array, 100, 88);
-	for (auto n : array){ cout << n << endl; } 
+	int array[3] = { 1, 2, 3 };
+	TinySTL::vector<int> vec(array, array + 3);
+	//TinySTL::vector<int> vec(3, 1); -> error C2019
+	cout << *(vec.begin()) << endl;
+	cout << *(++vec.begin()) << endl;
+	cout << *(--vec.end()) << endl;
 	system("pause");
 	return 0;
 }
