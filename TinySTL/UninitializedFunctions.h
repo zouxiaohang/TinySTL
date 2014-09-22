@@ -1,6 +1,7 @@
 #ifndef _UNINITIALIZED_FUNCTIONS_H_
 #define _UNINITIALIZED_FUNCTIONS_H_
 
+#include "Algorithm.h"
 #include "Construct.h"
 #include "Iterator.h"
 #include "TypeTraits.h"
@@ -52,9 +53,7 @@ namespace TinySTL{
 	template<class ForwardIterator, class T>
 	void _uninitialized_fill_aux(ForwardIterator first, ForwardIterator last,
 		const T& value, _true_type){
-		//TODO
-		//换成自己的fill函数
-		std::fill(first, last, value);
+		fill(first, last, value);
 	}
 	template<class ForwardIterator, class T>
 	void _uninitialized_fill_aux(ForwardIterator first, ForwardIterator last,
@@ -82,9 +81,7 @@ namespace TinySTL{
 	template<class ForwardIterator, class Size, class T>
 	ForwardIterator _uninitialized_n_fill_aux(ForwardIterator first,
 		Size n, const T& x, _true_type){
-		//TODO
-		//换成自己的fill_n函数
-		return std::fill_n(first, n, x);
+		return fill_n(first, n, x);
 	}
 	template<class ForwardIterator, class Size, class T>
 	ForwardIterator _uninitialized_n_fill_aux(ForwardIterator first,
