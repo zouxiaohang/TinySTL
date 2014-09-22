@@ -151,7 +151,7 @@ namespace TinySTL{
 		void destroyAndDeallocateAll(){
 			if (capacity() != 0){
 				dataAllocator::destroy(start_, finish_);
-				dataAllocator::deallocate(start_, endOfStorage_ - start_);
+				dataAllocator::deallocate(start_, capacity());
 			}
 		}
 		void allocateAndFillN(const size_type n, const value_type& value){
@@ -181,10 +181,10 @@ namespace TinySTL{
 		template<class InputIterator>
 		void reallocateAndCopy(iterator position, InputIterator first, InputIterator last);
 		void reallocateAndFillN(iterator position, const size_type& n, const value_type& val);
-		difference_type getNewCapacity(difference_type len)const{
-			difference_type oldCapacity = endOfStorage_ - start_;
-			oldCapacity = oldCapacity ? oldCapacity : 1;
-			difference_type newCapacity = oldCapacity + std::max(oldCapacity, len);
+		size_type getNewCapacity(size_type len)const{
+			size_type oldCapacity = endOfStorage_ - start_;
+			auto res = std::max(oldCapacity, len);
+			size_type newCapacity = (oldCapacity != 0 ? (oldCapacity + res) : 1);
 			return newCapacity;
 		}
 	};// end of class vector
@@ -294,6 +294,7 @@ namespace TinySTL{
 	template<class T, class Alloc>
 	template<class Integer>
 	void vector<T, Alloc>::insert_aux(iterator position, Integer n, Integer value, std::true_type){
+		assert(n != 0);
 		difference_type locationLeft = endOfStorage_ - finish_; // the size of left storage
 		difference_type locationNeed = n;
 
