@@ -33,9 +33,24 @@ TinySTL
     * iterator traits：100%
     * vector：100%
     * STL Algorithms:  
-        *   fill：100% 
-        * fill_n：100%   
-#测试
-##测试环境：VS2013 release模式
-##测试结果：
+        * fill：100% 
+        * fill_n：100%    
+
+#TinySTL测试:
+###测试环境：Windows 7 && VS2013 && release模式
+###测试结果：
+    //std::vector<int> vec;
+    TinySTL::vector<int> vec;
+	   ProfilerInstance::start();
+	   int i = 0;
+	   for (; i != 10000; ++i){
+		   vec.push_back(i);
+	   }
+	   ProfilerInstance::finish();
+	   ProfilerInstance::dumpDuringTime();
+    
+######i = 100000 -> (TinySTL::vector<int>：2ms \\ std::vector<int>：6ms)
+######i = 1000000 -> (TinySTL::vector<int>：11ms \\ std::vector<int>：16ms)
+######i = 10000000 -> (TinySTL::vector<int>：129ms \\ std::vector<int>：210ms)
+
 
