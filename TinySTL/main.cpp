@@ -7,18 +7,26 @@
 #include "Allocator.h"
 #include "Construct.h"
 #include "Vector.h"
+#include "Profiler\Profiler.h"
 #include "UninitializedFunctions.h"
 
 using namespace std;
+using namespace TinySTL::Profiler;
 
 int main(){
-	int array[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-	//TinySTL::vector<int> svec(array, array + 5);
-	//svec.erase(svec.begin() + 1, svec.begin() + 4);//1,5
-	TinySTL::vector<int> svec(10, 0);
-	svec.insert(svec.begin() + 0, array, array + 10);
-	//svec.insert(svec.begin()+0, 10, 99);
-	for (auto s : svec){ cout << s << endl; }
+	
+	int array[100000] = { 1 };
+	std::vector<int> vec;
+	//TinySTL::vector<int> vec;
+	ProfilerInstance::start();
+	int i = 0;
+	for (; i != 10000000; ++i){
+		//vec.insert(vec.end(), array, array + 1);
+		vec.push_back(i);
+	}
+	//vec.insert(vec.end(), array, array + 100000);
+	ProfilerInstance::finish();
+	ProfilerInstance::dumpDuringTime();
 	system("pause");
 	return 0;
 }
