@@ -1,6 +1,8 @@
 #ifndef _VECTOR_H_
 #define _VECTOR_H_
 
+#include <array>
+#include <algorithm>
 #include <type_traits>
 
 #include "Allocator.h"
@@ -11,7 +13,7 @@ namespace TinySTL{
 	
 	namespace {
 		template<class T>
-		class viter: public iterator<random_access_iterator<T, ptrdiff_t>, T>{
+		class viter : public TinySTL::iterator<TinySTL::random_access_iterator_tag, T>{
 		private:
 			T * ptr_;
 		private:
@@ -21,6 +23,8 @@ namespace TinySTL{
 			explicit viter(T *ptr):ptr_(ptr){}
 			viter(const viter& vit);
 			viter& operator = (const viter& vit);
+
+			operator void* (){ return ptr_; }//change to the primitive pointer type
 
 			T& operator *(){ return *ptr_; }
 			T *operator ->(){ return &(operator *()); }
@@ -69,6 +73,7 @@ namespace TinySTL{
 		}
 	}// end of anonymous namespace
 
+	//********* vector *************
 	template<class T, class Alloc = allocator<T>>
 	class vector{
 	private:
@@ -79,12 +84,12 @@ namespace TinySTL{
 		typedef Alloc dataAllocator;
 		//Alloc dataAllocator;
 	public:
-		typedef T			value_type;
-		typedef viter<T>	iterator;
-		typedef iterator	pointer;
-		typedef T&			reference;
-		typedef size_t		size_type;
-		typedef typename iterator::difference_type difference_type;
+		typedef T									value_type;
+		typedef viter<T>							iterator;
+		typedef iterator							pointer;
+		typedef T&									reference;
+		typedef size_t								size_type;
+		typedef typename iterator::difference_type	difference_type;
 	public:
 		//构造，复制，析构相关函数
 		vector()
@@ -97,8 +102,7 @@ namespace TinySTL{
 		vector(vector&& v);
 		vector& operator = (const vector& v);
 		~vector(){ 
-			dataAllocator::destroy(start_, finish_); 
-			dataAllocator::deallocate(start_, endOfStorage_ - start_); 
+			destroyAndDeallocateAll();
 		}
 
 		//迭代器相关
@@ -129,26 +133,27 @@ namespace TinySTL{
 				std::swap(endOfStorage_, v.endOfStorage_);
 			}
 		}
-		//TODO
 		void push_back(const value_type& value);
 		void pop_back(){
 			--finish_;
 			dataAllocator::destroy(finish_);
 		}
-		//TODO
 		iterator insert(iterator position, const value_type& val);
-		//TODO
-		void insert(iterator position, size_type n, const value_type& val);
-		//TODO
+		void insert(iterator position, const size_type& n, const value_type& val);
 		template <class InputIterator>
 		void insert(iterator position, InputIterator first, InputIterator last);
-		//TODO
 		iterator erase(iterator position);
 		iterator erase(iterator first, iterator last);
 
 		//容器的空间配置器相关
 		Alloc get_allocator(){ return dataAllocator; }
 	private:
+		void destroyAndDeallocateAll(){
+			if (capacity() != 0){
+				dataAllocator::destroy(start_, finish_);
+				dataAllocator::deallocate(start_, endOfStorage_ - start_);
+			}
+		}
 		void allocateAndFillN(const size_type n, const value_type& value){
 			start_ = dataAllocator::allocate(n);
 			TinySTL::uninitialized_fill_n(start_, n, value);
@@ -169,7 +174,15 @@ namespace TinySTL{
 		void vector_aux(Integer n, Integer value, std::true_type){
 			allocateAndFillN(n, value);
 		}
-	};
+		template<class InputIterator>
+		void insert_aux(iterator position, InputIterator first, InputIterator last, std::false_type);
+		template<class Integer>
+		void insert_aux(iterator position, Integer n, Integer value, std::true_type);
+		template<class InputIterator>
+		void reallocateAndCopy(iterator position, InputIterator first, InputIterator last);
+		void reallocateAndFillN(iterator position, const size_type& n, const value_type& val);
+	};// end of class vector
+
 	//***********************构造，复制，析构相关***********************
 	template<class T, class Alloc>
 	vector<T, Alloc>::vector(const size_type n){
@@ -220,6 +233,67 @@ namespace TinySTL{
 			*temp = *(last++);
 		}
 		return viter<T>(first);
+	}
+	template<class T, class Alloc>
+	template<class InputIterator>
+	void vector<T, Alloc>::reallocateAndCopy(iterator position, InputIterator first, InputIterator last){
+		difference_type oldCapacity = endOfStorage_ - start_;
+		oldCapacity = oldCapacity ? oldCapacity : 1;
+		difference_type newCapacity = oldCapacity + std::max(oldCapacity, last - first);
+
+		T *newStart = dataAllocator::allocate(newCapacity);
+		T *newEndOfStorage = newStart + newCapacity;
+		T *newFinish = uninitialized_copy(begin(), position, newStart);
+		newFinish = uninitialized_copy(first, last, newFinish);
+		newFinish = uninitialized_copy(position, end(), newFinish);
+
+		destroyAndDeallocateAll();
+		start_ = newStart;
+		finish_ = newFinish;
+		endOfStorage_ = newEndOfStorage;
+	}
+	template<class T, class Alloc>
+	template<class InputIterator>
+	void vector<T, Alloc>::insert_aux(iterator position, 
+									InputIterator first, InputIterator last, 
+									std::false_type){
+		difference_type locationLeft = endOfStorage_ - finish_; // the size of left storage
+		difference_type locationNeed = last - first;
+
+		if (locationLeft >= locationNeed){
+			auto tempPtr = end() - 1;
+			for (; tempPtr - position >= 0; --tempPtr){//move the [position, finish_) back
+				*(tempPtr + locationNeed) = *tempPtr;
+			}
+			uninitialized_copy(first, last, position);
+			finish_ += locationNeed;
+		}else{
+			reallocateAndCopy(position, first, last);
+		}
+	}
+	template<class T, class Alloc>
+	template<class Integer>
+	void vector<T, Alloc>::insert_aux(iterator position, Integer n, Integer value, std::true_type){
+		vector<value_type> v(n, value);
+		insert(position, v.begin(), v.end());
+	}
+	template<class T, class Alloc>
+	template<class InputIterator>
+	void vector<T, Alloc>::insert(iterator position, InputIterator first, InputIterator last){
+		insert_aux(position, first, last, typename std::is_integral<InputIterator>::type());
+	}
+	template<class T, class Alloc>
+	void vector<T, Alloc>::insert(iterator position, const size_type& n, const value_type& val){
+		insert_aux(position, n, val, typename std::is_integral<value_type>::type());
+	}
+	template<class T, class Alloc>
+	typename vector<T, Alloc>::iterator vector<T, Alloc>::insert(iterator position, const value_type& val){
+		insert(position, 1, val);
+		return position;
+	}
+	template<class T, class Alloc>
+	void vector<T, Alloc>::push_back(const value_type& value){
+		insert(end(), value);
 	}
 }
 
