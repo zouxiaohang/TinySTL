@@ -1,7 +1,6 @@
 #ifndef _VECTOR_H_
 #define _VECTOR_H_
 
-#include <array>
 #include <algorithm>
 #include <type_traits>
 
