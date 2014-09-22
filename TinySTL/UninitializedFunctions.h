@@ -88,7 +88,7 @@ namespace TinySTL{
 		Size n, const T& x, _false_type){
 		int i = 0;
 		for (; i != n; ++i){
-			construct((first + i), x);
+			construct((T*)(first + i), x);
 		}
 		return (first + i);
 	}
