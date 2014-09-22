@@ -33,5 +33,38 @@ TinySTL
     * iterator traits：100%
     * vector：100%
     * STL Algorithms:  
-        *   fill：100% 
-        * fill_n：100% 
+        * fill：100% 
+        * fill_n：100%    
+
+#TinySTL测试:
+###测试环境：Windows 7 && VS2013 && release模式
+###测试结果：
+    //std::vector<int> vec;
+    TinySTL::vector<int> vec;
+	ProfilerInstance::start();
+	int i = 0;
+	for (; i != 10000; ++i){
+		vec.push_back(i);
+	}
+	ProfilerInstance::finish();
+	ProfilerInstance::dumpDuringTime();
+    
+######i = 100000 -> (TinySTL::vector<int>：2ms \\ std::vector<int>：6ms)
+######i = 1000000 -> (TinySTL::vector<int>：11ms \\ std::vector<int>：16ms)
+######i = 10000000 -> (TinySTL::vector<int>：129ms \\ std::vector<int>：210ms)  
+    //std::vector<std::string> vec;
+    TinySTL::vector<std::string> vec;
+	ProfilerInstance::start();
+	int i = 0;
+	for (; i != 10000; ++i){
+		vec.push_back(std::string("zouxiaohang"));
+	}
+	ProfilerInstance::finish();
+	ProfilerInstance::dumpDuringTime();
+    
+######i = 100000 -> (TinySTL::vector<int>：18ms \\ std::vector<int>：29ms)
+######i = 1000000 -> (TinySTL::vector<int>：181ms \\ std::vector<int>：232ms)
+######i = 10000000 -> (TinySTL::vector<int>：2372ms \\ std::vector<int>：1972ms)
+
+
+
