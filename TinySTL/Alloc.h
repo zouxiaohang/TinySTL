@@ -71,11 +71,12 @@ namespace TinySTL{
 	void alloc::deallocate(void *ptr, size_t bytes){
 		if (bytes > EMaxBytes::MAXBYTES){
 			free(ptr);
+		}else{
+			size_t index = FREELIST_INDEX(bytes);
+			obj *node = static_cast<obj *>(ptr);
+			node->next = free_list[index];
+			free_list[index] = node;
 		}
-		size_t index = FREELIST_INDEX(bytes);
-		obj *node = static_cast<obj *>(ptr);
-		node->next = free_list[index];
-		free_list[index] = node;
 	}
 	void *alloc::reallocate(void *ptr, size_t old_sz, size_t new_sz){
 		deallocate(ptr, old_sz);
