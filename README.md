@@ -34,7 +34,7 @@ TinySTL
     * vector：100%
     * STL Algorithms:  
         *   fill：100% 
-        * fill_n：100% 
+        * fill_n：100%   
 #测试
 ##测试环境：VS2013 release模式
 ##测试结果：
