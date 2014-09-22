@@ -24,7 +24,7 @@ namespace TinySTL{
 			viter(const viter& vit);
 			viter& operator = (const viter& vit);
 
-			operator void* (){ return ptr_; }//change to the primitive pointer type
+			operator T* (){ return ptr_; }//change to the primitive pointer type
 
 			T& operator *(){ return *ptr_; }
 			T *operator ->(){ return &(operator *()); }
