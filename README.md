@@ -7,7 +7,7 @@ TinySTL
 编译环境：VS2013及以上版本
 
 ##开发计划：
-  * STL的几大基本组件，如vector、list、deque、set、map、unordered_\*等
+  * STL的几大基本组件，如string、vector、list、deque、set、map、unordered_\*等
   * STL算法库中的大部分算法
   * circular buffer
   * bitmap
@@ -31,4 +31,4 @@ TinySTL
     * type traits：100%  
     * 空间配置器：100%
     * iterator traits：100%
-    * vector：30%
+    * vector：100%
