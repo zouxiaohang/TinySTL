@@ -162,7 +162,7 @@ namespace TinySTL{
 		template<class InputIterator>
 		void allocateAndCopy(InputIterator first, InputIterator last){
 			start_ = dataAllocator::allocate(last - first);
-			finish_ = uninitialized_copy(first, last, start_);
+			finish_ = TinySTL::uninitialized_copy(first, last, start_);
 			endOfStorage_ = finish_;
 		}
 
@@ -171,13 +171,13 @@ namespace TinySTL{
 			allocateAndCopy(first, last);
 		}
 		template<class Integer>
-		void vector_aux(Integer n, Integer value, std::true_type){
+		void vector_aux(Integer n, const value_type& value, std::true_type){
 			allocateAndFillN(n, value);
 		}
 		template<class InputIterator>
 		void insert_aux(iterator position, InputIterator first, InputIterator last, std::false_type);
 		template<class Integer>
-		void insert_aux(iterator position, Integer n, Integer value, std::true_type);
+		void insert_aux(iterator position, Integer n, const value_type& value, std::true_type);
 		template<class InputIterator>
 		void reallocateAndCopy(iterator position, InputIterator first, InputIterator last);
 		void reallocateAndFillN(iterator position, const size_type& n, const value_type& val);
@@ -247,9 +247,9 @@ namespace TinySTL{
 
 		T *newStart = dataAllocator::allocate(newCapacity);
 		T *newEndOfStorage = newStart + newCapacity;
-		T *newFinish = uninitialized_copy(begin(), position, newStart);
-		newFinish = uninitialized_copy(first, last, newFinish);
-		newFinish = uninitialized_copy(position, end(), newFinish);
+		T *newFinish = TinySTL::uninitialized_copy(begin(), position, newStart);
+		newFinish = TinySTL::uninitialized_copy(first, last, newFinish);
+		newFinish = TinySTL::uninitialized_copy(position, end(), newFinish);
 
 		destroyAndDeallocateAll();
 		start_ = newStart;
@@ -262,9 +262,9 @@ namespace TinySTL{
 
 		T *newStart = dataAllocator::allocate(newCapacity);
 		T *newEndOfStorage = newStart + newCapacity;
-		T *newFinish = uninitialized_copy(begin(), position, newStart);
-		newFinish = uninitialized_fill_n(newFinish, n, val);
-		newFinish = uninitialized_copy(position, end(), newFinish);
+		T *newFinish = TinySTL::uninitialized_copy(begin(), position, newStart);
+		newFinish = TinySTL::uninitialized_fill_n(newFinish, n, val);
+		newFinish = TinySTL::uninitialized_copy(position, end(), newFinish);
 
 		destroyAndDeallocateAll();
 		start_ = newStart;
@@ -285,7 +285,7 @@ namespace TinySTL{
 			for (; tempPtr - position >= 0; --tempPtr){//move the [position, finish_) back
 				*(tempPtr + locationNeed) = *tempPtr;
 			}
-			uninitialized_copy(first, last, position);
+			TinySTL::uninitialized_copy(first, last, position);
 			finish_ += locationNeed;
 		}else{
 			reallocateAndCopy(position, first, last);
@@ -293,7 +293,7 @@ namespace TinySTL{
 	}
 	template<class T, class Alloc>
 	template<class Integer>
-	void vector<T, Alloc>::insert_aux(iterator position, Integer n, Integer value, std::true_type){
+	void vector<T, Alloc>::insert_aux(iterator position, Integer n, const value_type& value, std::true_type){
 		assert(n != 0);
 		difference_type locationLeft = endOfStorage_ - finish_; // the size of left storage
 		difference_type locationNeed = n;
@@ -303,7 +303,7 @@ namespace TinySTL{
 			for (; tempPtr - position >= 0; --tempPtr){//move the [position, finish_) back
 				*(tempPtr + locationNeed) = *tempPtr;
 			}
-			uninitialized_fill_n(position, n, value);
+			TinySTL::uninitialized_fill_n(position, n, value);
 			finish_ += locationNeed;
 		}
 		else{
@@ -317,7 +317,7 @@ namespace TinySTL{
 	}
 	template<class T, class Alloc>
 	void vector<T, Alloc>::insert(iterator position, const size_type& n, const value_type& val){
-		insert_aux(position, n, val, typename std::is_integral<value_type>::type());
+		insert_aux(position, n, val, typename std::is_integral<size_type>::type());
 	}
 	template<class T, class Alloc>
 	typename vector<T, Alloc>::iterator vector<T, Alloc>::insert(iterator position, const value_type& val){

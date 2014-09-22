@@ -15,16 +15,16 @@ using namespace TinySTL::Profiler;
 
 int main(){
 	
-	int array[100000] = { 1 };
-	std::vector<int> vec;
-	//TinySTL::vector<int> vec;
+	//std::vector<std::string> vec;
+	//TinySTL::vector<std::string> vec;
+	TinySTL::vector<int> vec;
 	ProfilerInstance::start();
 	int i = 0;
-	for (; i != 10000000; ++i){
-		//vec.insert(vec.end(), array, array + 1);
+	for (; i != 10000; ++i){
+		//vec.push_back(std::string("zouxiaohang"));
 		vec.push_back(i);
 	}
-	//vec.insert(vec.end(), array, array + 100000);
+	//for (auto i : vec){ cout << i << endl; }
 	ProfilerInstance::finish();
 	ProfilerInstance::dumpDuringTime();
 	system("pause");
