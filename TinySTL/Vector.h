@@ -101,6 +101,7 @@ namespace TinySTL{
 		vector(const vector& v);
 		vector(vector&& v);
 		vector& operator = (const vector& v);
+		vector& operator = (vector&& v);
 		~vector(){ 
 			destroyAndDeallocateAll();
 		}
@@ -219,12 +220,23 @@ namespace TinySTL{
 		start_ = v.start_;
 		finish_ = v.finish_;
 		endOfStorage_ = v.endOfStorage_;
-		v.clear();
+		v.start_ = v.finish_ = v.endOfStorage_ = 0;
 	}
 	template<class T, class Alloc>
 	vector<T, Alloc>& vector<T, Alloc>::operator = (const vector& v){
 		if (this != &v){
 			allocateAndCopy(v.start_, v.finish_);
+		}
+		return *this;
+	}
+	template<class T, class Alloc>
+	vector<T, Alloc>& vector<T, Alloc>::operator = (vector&& v){
+		if (this != &v){
+			destroyAndDeallocateAll();
+			start_ = v.start_;
+			finish_ = v.finish_;
+			endOfStorage_ = v.endOfStorage_;
+			v.start_ = v.finish_ = v.endOfStorage_ = 0;
 		}
 		return *this;
 	}
