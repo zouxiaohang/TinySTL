@@ -19,7 +19,7 @@ namespace TinySTL{
 	public:
 		//构造。复制，析构相关
 		reverse_iterator() :base_(0), cur_(0){}
-		explicit reverse_iterator(iterator_type it) :base_(it), cur_(base_ - 1){}
+		explicit reverse_iterator(iterator_type it) :base_(it), cur_(it - 1){}
 		template <class Iter>
 		reverse_iterator(const reverse_iterator<Iter>& rev_it){ 
 			base_ = (iterator_type)rev_it.base(); 
@@ -27,9 +27,9 @@ namespace TinySTL{
 		};
 
 		//其他成员函数
-		iterator_type base() const{ return base_; }
-		reference operator*() const{ return (*cur_); }
-		pointer operator->() const{ return &(operator *()); }
+		iterator_type base(){ return base_; }
+		reference operator*(){ return (*cur_); }
+		pointer operator->(){ return &(operator *()); }
 		reverse_iterator& operator ++(){
 			--base_;
 			--cur_;
@@ -50,12 +50,12 @@ namespace TinySTL{
 			--(*this);
 			return temp;
 		}
-		reference operator[] (difference_type n) const{
+		reference operator[] (difference_type n){
 			return base()[-n - 1];
 		}
-		reverse_iterator operator + (difference_type n) const;
+		reverse_iterator operator + (difference_type n);
 		reverse_iterator& operator += (difference_type n);
-		reverse_iterator operator - (difference_type n) const;
+		reverse_iterator operator - (difference_type n);
 		reverse_iterator& operator -= (difference_type n);
 	private:
 		Iterator advanceNStep(Iterator it,
@@ -130,13 +130,13 @@ namespace TinySTL{
 		return *this;
 	}
 	template<class Iterator>
-	reverse_iterator<Iterator> reverse_iterator<Iterator>::operator + (difference_type n) const{
+	reverse_iterator<Iterator> reverse_iterator<Iterator>::operator + (difference_type n){
 		reverse_iterator<Iterator> res = *this;
 		res += n;
 		return res;
 	}
 	template<class Iterator>
-	reverse_iterator<Iterator> reverse_iterator<Iterator>::operator - (difference_type n) const{
+	reverse_iterator<Iterator> reverse_iterator<Iterator>::operator - (difference_type n){
 		reverse_iterator<Iterator> res = *this;
 		res -= n;
 		return res;

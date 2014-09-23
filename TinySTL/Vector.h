@@ -7,6 +7,7 @@
 #include "Allocator.h"
 #include "Algorithm.h"
 #include "Iterator.h"
+#include "ReverseIterator.h"
 #include "UninitializedFunctions.h"
 
 namespace TinySTL{
@@ -86,6 +87,7 @@ namespace TinySTL{
 	public:
 		typedef T									value_type;
 		typedef viter<T>							iterator;
+		typedef reverse_iterator<T *>			reverse_iterator;
 		typedef iterator							pointer;
 		typedef T&									reference;
 		typedef size_t								size_type;
@@ -113,6 +115,8 @@ namespace TinySTL{
 		//迭代器相关
 		iterator begin(){ return iterator(start_); }
 		iterator end(){ return iterator(finish_); }
+		reverse_iterator rbegin(){ return reverse_iterator(end()); }
+		reverse_iterator rend(){ return reverse_iterator(begin()); }
 
 		//与容量相关
 		difference_type size()const{ return finish_ - start_; }
