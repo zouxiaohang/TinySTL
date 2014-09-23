@@ -138,12 +138,12 @@ namespace TinySTL{
 			--finish_;
 			dataAllocator::destroy(finish_);
 		}
-		iterator insert(iterator position, const value_type& val);
-		void insert(iterator position, const size_type& n, const value_type& val);
+		iterator insert(const iterator& position, const value_type& val);
+		void insert(const iterator& position, const size_type& n, const value_type& val);
 		template <class InputIterator>
-		void insert(iterator position, InputIterator first, InputIterator last);
-		iterator erase(iterator position);
-		iterator erase(iterator first, iterator last);
+		void insert(const iterator& position, InputIterator first, InputIterator last);
+		iterator erase(const iterator& position);
+		iterator erase(const iterator& first, const iterator& last);
 
 		//容器的空间配置器相关
 		Alloc get_allocator(){ return dataAllocator; }
@@ -175,12 +175,12 @@ namespace TinySTL{
 			allocateAndFillN(n, value);
 		}
 		template<class InputIterator>
-		void insert_aux(iterator position, InputIterator first, InputIterator last, std::false_type);
+		void insert_aux(const iterator& position, InputIterator first, InputIterator last, std::false_type);
 		template<class Integer>
-		void insert_aux(iterator position, Integer n, const value_type& value, std::true_type);
+		void insert_aux(const iterator& position, Integer n, const value_type& value, std::true_type);
 		template<class InputIterator>
-		void reallocateAndCopy(iterator position, InputIterator first, InputIterator last);
-		void reallocateAndFillN(iterator position, const size_type& n, const value_type& val);
+		void reallocateAndCopy(const iterator& position, InputIterator first, InputIterator last);
+		void reallocateAndFillN(const iterator& position, const size_type& n, const value_type& val);
 		size_type getNewCapacity(size_type len)const{
 			size_type oldCapacity = endOfStorage_ - start_;
 			auto res = std::max(oldCapacity, len);
@@ -224,11 +224,11 @@ namespace TinySTL{
 	}
 	//***************修改容器的相关操作**************************
 	template<class T,class Alloc>
-	typename vector<T, Alloc>::iterator vector<T, Alloc>::erase(iterator position){
+	typename vector<T, Alloc>::iterator vector<T, Alloc>::erase(const iterator& position){
 		return erase(position, position + 1);
 	}
 	template<class T, class Alloc>
-	typename vector<T, Alloc>::iterator vector<T, Alloc>::erase(iterator first, iterator last){
+	typename vector<T, Alloc>::iterator vector<T, Alloc>::erase(const iterator& first, const iterator& last){
 		//尾部残留对象数
 		difference_type lenOfTail = end() - last;
 		//删去的对象数目
@@ -242,7 +242,7 @@ namespace TinySTL{
 	}
 	template<class T, class Alloc>
 	template<class InputIterator>
-	void vector<T, Alloc>::reallocateAndCopy(iterator position, InputIterator first, InputIterator last){
+	void vector<T, Alloc>::reallocateAndCopy(const iterator& position, InputIterator first, InputIterator last){
 		difference_type newCapacity = getNewCapacity(last - first);
 
 		T *newStart = dataAllocator::allocate(newCapacity);
@@ -257,7 +257,7 @@ namespace TinySTL{
 		endOfStorage_ = newEndOfStorage;
 	}
 	template<class T, class Alloc>
-	void vector<T, Alloc>::reallocateAndFillN(iterator position, const size_type& n, const value_type& val){
+	void vector<T, Alloc>::reallocateAndFillN(const iterator& position, const size_type& n, const value_type& val){
 		difference_type newCapacity = getNewCapacity(n);
 
 		T *newStart = dataAllocator::allocate(newCapacity);
@@ -273,7 +273,7 @@ namespace TinySTL{
 	}
 	template<class T, class Alloc>
 	template<class InputIterator>
-	void vector<T, Alloc>::insert_aux(iterator position, 
+	void vector<T, Alloc>::insert_aux(const iterator& position,
 									InputIterator first, 
 									InputIterator last, 
 									std::false_type){
@@ -293,7 +293,7 @@ namespace TinySTL{
 	}
 	template<class T, class Alloc>
 	template<class Integer>
-	void vector<T, Alloc>::insert_aux(iterator position, Integer n, const value_type& value, std::true_type){
+	void vector<T, Alloc>::insert_aux(const iterator& position, Integer n, const value_type& value, std::true_type){
 		assert(n != 0);
 		difference_type locationLeft = endOfStorage_ - finish_; // the size of left storage
 		difference_type locationNeed = n;
@@ -312,15 +312,15 @@ namespace TinySTL{
 	}
 	template<class T, class Alloc>
 	template<class InputIterator>
-	void vector<T, Alloc>::insert(iterator position, InputIterator first, InputIterator last){
+	void vector<T, Alloc>::insert(const iterator& position, InputIterator first, InputIterator last){
 		insert_aux(position, first, last, typename std::is_integral<InputIterator>::type());
 	}
 	template<class T, class Alloc>
-	void vector<T, Alloc>::insert(iterator position, const size_type& n, const value_type& val){
+	void vector<T, Alloc>::insert(const iterator& position, const size_type& n, const value_type& val){
 		insert_aux(position, n, val, typename std::is_integral<size_type>::type());
 	}
 	template<class T, class Alloc>
-	typename vector<T, Alloc>::iterator vector<T, Alloc>::insert(iterator position, const value_type& val){
+	typename vector<T, Alloc>::iterator vector<T, Alloc>::insert(const iterator& position, const value_type& val){
 		insert(position, 1, val);
 		return position;
 	}
