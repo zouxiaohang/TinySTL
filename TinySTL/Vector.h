@@ -106,6 +106,10 @@ namespace TinySTL{
 			destroyAndDeallocateAll();
 		}
 
+		//比较操作相关
+		bool operator == (const vector& v);
+		bool operator != (const vector& v);
+
 		//迭代器相关
 		iterator begin(){ return iterator(start_); }
 		iterator end(){ return iterator(finish_); }
@@ -194,6 +198,11 @@ namespace TinySTL{
 			size_type newCapacity = (oldCapacity != 0 ? (oldCapacity + res) : 1);
 			return newCapacity;
 		}
+	public:
+		template<class T, class Alloc>
+		friend bool operator == (const vector<T, Alloc>& v1, const vector<T, Alloc>& v2);
+		template<class T, class Alloc>
+		friend bool operator != (const vector<T, Alloc>& v1, const vector<T, Alloc>& v2);
 	};// end of class vector
 
 	//***********************构造，复制，析构相关***********************
@@ -378,6 +387,34 @@ namespace TinySTL{
 	template<class T, class Alloc>
 	void vector<T, Alloc>::push_back(const value_type& value){
 		insert(end(), value);
+	}
+	//***********逻辑比较操作相关*******************
+	template<class T, class Alloc>
+	bool vector<T, Alloc>::operator == (const vector& v){
+		if (size() != v.size()){
+			return false;
+		}
+		else{
+			auto ptr1 = start_;
+			auto ptr2 = v.start_;
+			for (; ptr1 != finish_ && ptr2 != v.finish_; ++ptr1, ++ptr2){
+				if (*ptr1 != *ptr2)
+					return false;
+			}
+			return true;
+		}
+	}
+	template<class T, class Alloc>
+	bool vector<T, Alloc>::operator != (const vector& v){
+		return !(*this == v);
+	}
+	template<class T, class Alloc>
+	bool operator == (const vector<T, Alloc>& v1, const vector<T, Alloc>& v2){
+		return v1 == v2;
+	}
+	template<class T, class Alloc>
+	bool operator != (const vector<T, Alloc>& v1, const vector<T, Alloc>& v2){
+		return !(v1 == v2);
 	}
 }
 
