@@ -53,5 +53,11 @@
     <ClInclude Include="Profiler\Profiler.h">
       <Filter>头文件\Profiler</Filter>
     </ClInclude>
+    <ClInclude Include="String.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ReverseIterator.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

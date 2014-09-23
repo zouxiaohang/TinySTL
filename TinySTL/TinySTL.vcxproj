@@ -86,6 +86,8 @@
     <ClInclude Include="Construct.h" />
     <ClInclude Include="Iterator.h" />
     <ClInclude Include="Profiler\Profiler.h" />
+    <ClInclude Include="ReverseIterator.h" />
+    <ClInclude Include="String.h" />
     <ClInclude Include="TypeTraits.h" />
     <ClInclude Include="UninitializedFunctions.h" />
     <ClInclude Include="Vector.h" />
