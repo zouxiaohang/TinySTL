@@ -89,7 +89,7 @@ namespace TinySTL{
 	public:
 		typedef T									value_type;
 		typedef viter<T>							iterator;
-		typedef reverse_iterator<viter<T>>				reverse_iterator;
+		typedef reverse_iterator<viter<T>>			reverse_iterator;
 		typedef iterator							pointer;
 		typedef T&									reference;
 		typedef size_t								size_type;
