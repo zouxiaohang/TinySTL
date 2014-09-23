@@ -31,6 +31,7 @@ TinySTL
     * type traits：100%  
     * 空间配置器：100%
     * iterator traits：100%
+    * reverse_iterator：100%
     * vector：100%
     * STL Algorithms:  
         * fill：100% 
