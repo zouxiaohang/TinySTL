@@ -35,11 +35,13 @@ namespace TinySTL{
 			viter& operator --(){ --ptr_; return *this; }
 			viter operator --(int){ viter temp = *this; --(*this); return temp; }
 
-			bool operator == (const viter& vit){ return ptr_ == vit.ptr_; }
-			bool operator != (const viter& vit){ return !(*this == vit); }
+			bool operator == (const viter& vit)const{ return ptr_ == vit.ptr_; }
+			bool operator != (const viter& vit)const{ return !(*this == vit); }
 			viter operator + (const difference_type i){ return viter(ptr_ + i); }
+			viter& operator += (const difference_type i){ ptr_ += i; return *this; }
 			viter operator - (const difference_type i){ return viter(ptr_ - i); }
-			difference_type operator - (const viter& vit){ return (ptr_ - vit.ptr_); }
+			viter& operator -= (const difference_type i){ ptr_ -= i; return *this; }
+			difference_type operator - (const viter& vit)const{ return (ptr_ - vit.ptr_); }
 
 			friend viter operator + (const viter& vit, const difference_type i);
 			friend viter operator + (const difference_type i, const viter& vit);
@@ -55,6 +57,7 @@ namespace TinySTL{
 			if (this != &vit){
 				ptr_ = vit.ptr_;
 			}
+			return *this;
 		}
 		template<class T>
 		viter<T> operator + (const viter<T>& vit, const typename viter<T>::difference_type i){
@@ -83,11 +86,10 @@ namespace TinySTL{
 		T *endOfStorage_;
 
 		typedef Alloc dataAllocator;
-		//Alloc dataAllocator;
 	public:
 		typedef T									value_type;
 		typedef viter<T>							iterator;
-		typedef reverse_iterator<T *>			reverse_iterator;
+		typedef reverse_iterator<viter<T>>				reverse_iterator;
 		typedef iterator							pointer;
 		typedef T&									reference;
 		typedef size_t								size_type;
