@@ -190,11 +190,18 @@ namespace TinySTL{
 	//************≤Â»Î£¨…æ≥˝œ‡πÿ***********************
 	template<class T, size_t N, class Alloc>
 	void circular_buffer<T, N, Alloc>::push(const T& val){
-		if (full())
+		/*if (full())
 			throw;
-		indexOfTail = nextIndex(indexOfTail);
-		dataAllocator::construct(start_ + indexOfTail, val);
-		++size_;
+		*/
+		if (full()){
+			indexOfTail = nextIndex(indexOfTail);
+			dataAllocator::construct(start_ + indexOfTail, val);
+			indexOfHead = nextIndex(indexOfHead);
+		}else{
+			indexOfTail = nextIndex(indexOfTail);
+			dataAllocator::construct(start_ + indexOfTail, val);
+			++size_;
+		}
 	}
 	template<class T, size_t N, class Alloc>
 	void circular_buffer<T, N, Alloc>::pop(){
