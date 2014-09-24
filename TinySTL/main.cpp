@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <list>
 #include <memory>
@@ -6,22 +7,23 @@
 #include <iterator>
 #include <utility>
 
-#include "Vector.h"
+#include <boost\circular_buffer.hpp>
+
+#include "CircularBuffer.h"
 #include "Profiler\Profiler.h"
-#include "ReverseIterator.h"
 
 using namespace std;
-using namespace TinySTL;
+using namespace TinySTL::Profiler;
 
 int main(){
-	int i = 11; int *ptr = &i;
-	int array[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-	TinySTL::vector<int> v(array, array + 9);
-	
-	
-	for (auto rit = v.rbegin(); rit != v.rend();rit = rit + 1){ cout << *rit << endl; }
-	//TinySTL::reverse_iterator<std::list<int>::iterator> rit(List.begin());
-
+	TinySTL::circular_buffer<int, 10000> cb(10000, 0);
+	//boost::circular_buffer<int> cb(10000, 0);
+	ProfilerInstance::start();
+	for (int i = 0; i != 100; ++i){
+		cb.push_back(i);
+	}
+	ProfilerInstance::finish();
+	ProfilerInstance::dumpDuringTime();
 	system("pause");
 	return 0;
 }
