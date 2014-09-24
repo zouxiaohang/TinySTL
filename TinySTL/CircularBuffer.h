@@ -68,7 +68,7 @@ namespace TinySTL{
 		T *start_;
 		T *finish_;
 		int indexOfHead;
-		int indexOfTail;
+		int indexOfTail;//the last position 
 
 		typedef Alloc dataAllocator;
 	public:
@@ -78,6 +78,9 @@ namespace TinySTL{
 		template<class InputIterator>
 		circular_buffer(InputIterator first, InputIterator last);
 
+		bool full(){ return ((indexOfTail + 1) % N) == indexOfHead; }
+		bool empty(){ return indexOfHead == indexOfTail; }
+
 		//just for test
 		T *begin(){ return start_; }
 		T *end(){ return finish_; }
@@ -85,24 +88,28 @@ namespace TinySTL{
 		void allocateAndFillN(const int& n, const value_type& val){
 			start_ = dataAllocator::allocate(N);
 			finish_ = start_ + N;
-			indexOfHead = indexOfTail = 0;
+			indexOfHead = 0;
 			if (N <= n){
 				finish_ = TinySTL::uninitialized_fill_n(start_, N, val);
+				indexOfTail = N - 1;
 			}else{//N > n
 				finish_ = TinySTL::uninitialized_fill_n(start_, n, val);
 				finish_ = TinySTL::uninitialized_fill_n(finish_, N - n, value_type());
+				indexOfTail = n - 1;
 			}
 		}
 		template<class InputIterator>
 		void allocateAndCopy(InputIterator first, InputIterator last){
 			int n = last - first;
 			start_ = dataAllocator::allocate(N);
-			indexOfHead = indexOfTail = 0;
+			indexOfHead = 0;
 			if (N <= n){
 				finish_ = TinySTL::uninitialized_copy(first, first + N, start_);
+				indexOfTail = N - 1;
 			}else{//N > n
 				finish_ = TinySTL::uninitialized_copy(first, last, start_);
 				finish_ = TinySTL::uninitialized_fill_n(finish_, N - n, value_type());
+				indexOfTail = n - 1;
 			}
 		}
 	};
