@@ -117,8 +117,6 @@ namespace TinySTL{
 
 		typedef Alloc dataAllocator;
 	public:
-		circular_buffer() :
-			start_(0), finish_(0), indexOfHead(0), indexOfTail(0), size_(0){}
 		explicit circular_buffer(const int& n, const value_type& val = value_type());
 		template<class InputIterator>
 		circular_buffer(InputIterator first, InputIterator last);
@@ -148,8 +146,8 @@ namespace TinySTL{
 		reference operator [](size_type i){ return *(start_ + i); }
 		reference front(){ return *(start_ + indexOfHead); }
 		reference back(){ return *(start_ + indexOfTail); }
-		void push(const T& val);
-		void pop();
+		void push_back(const T& val);
+		void pop_front();
 
 		bool operator == (circular_buffer& cb){
 			auto it1 = first(), it2 = cb.first();
@@ -257,7 +255,7 @@ namespace TinySTL{
 	}
 	//************≤Â»Î£¨…æ≥˝œ‡πÿ***********************
 	template<class T, size_t N, class Alloc>
-	void circular_buffer<T, N, Alloc>::push(const T& val){
+	void circular_buffer<T, N, Alloc>::push_back(const T& val){
 		if (full()){
 			indexOfTail = nextIndex(indexOfTail);
 			dataAllocator::construct(start_ + indexOfTail, val);
@@ -269,7 +267,7 @@ namespace TinySTL{
 		}
 	}
 	template<class T, size_t N, class Alloc>
-	void circular_buffer<T, N, Alloc>::pop(){
+	void circular_buffer<T, N, Alloc>::pop_front(){
 		if (empty())
 			throw;
 		dataAllocator::destroy(start_ + indexOfHead);
