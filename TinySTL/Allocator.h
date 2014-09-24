@@ -49,7 +49,7 @@ namespace TinySTL{
 	}
 	template<class T>
 	void allocator<T>::deallocate(T *ptr, size_t n){
-		assert(n != 0);
+		if (n == 0) return;
 		alloc::deallocate(static_cast<void *>(ptr), sizeof(T)* n);
 	}
 
