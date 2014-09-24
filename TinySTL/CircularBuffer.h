@@ -57,9 +57,16 @@ namespace TinySTL{
 			bool operator != (const cb_iter& it)const{
 				return !((*this) == it);
 			}
+			//fuck
+			//fuck
+			//fuck
+			//fuck
 			//wish to do like this, but buggy
 			//for (auto it = cb.first(); it <= cb.last(); ++it)
 			//	{ cout << *it << endl; }
+			//fuck
+			//fuck
+			//fuck
 			bool operator <= (const cb_iter& it)const{//fuck
 				if (*this == it) return true;
 				auto indexOfThis = ptr_ - container_->start_;
@@ -115,9 +122,13 @@ namespace TinySTL{
 		explicit circular_buffer(const int& n, const value_type& val = value_type());
 		template<class InputIterator>
 		circular_buffer(InputIterator first, InputIterator last);
+		circular_buffer(const circular_buffer& cb);
+		circular_buffer& operator = (const circular_buffer& cb);
+		circular_buffer& operator = (circular_buffer&& cb);
+		circular_buffer(circular_buffer&& cb);
 		~circular_buffer(){
-			/*dataAllocator::destroy(start_, finish_);
-			dataAllocator::deallocate(start_, finish_);*/
+			clear();
+			dataAllocator::deallocate(start_, size_);
 		}
 
 		bool full(){ return size_ == N; }
@@ -139,6 +150,17 @@ namespace TinySTL{
 		reference back(){ return *(start_ + indexOfTail); }
 		void push(const T& val);
 		void pop();
+
+		bool operator == (circular_buffer& cb){
+			auto it1 = first(), it2 = cb.first();
+			for (;it1 != last() && it2 != cb.last(); ++it1, ++it2){
+				if (*it1 != *it2) return false;
+			}
+			return (it1 == last()) && (it2 == cb.last()) && (*(last()) == *(cb.last()));
+		}
+		bool operator != (circular_buffer& cb){
+			return !(*this == cb);
+		}
 
 		Alloc get_allocator(){ return dataAllocator; }
 	private:
@@ -174,6 +196,28 @@ namespace TinySTL{
 			}
 		}
 		int nextIndex(int index){ return ++index % N; }
+		void copyAllMembers(const circular_buffer& cb){
+			start_ = cb.start_;
+			finish_ = cb.finish_;
+			indexOfHead = cb.indexOfHead;
+			indexOfTail = cb.indexOfTail;
+			size_ = cb.size_;
+		}
+		void zeroCircular(circular_buffer& cb){
+			cb.start_ = cb.finish_ = 0;
+			cb.indexOfHead = cb.indexOfTail = cb.size_ = 0;
+		}
+		void clone(const circular_buffer& cb){
+			start_ = dataAllocator::allocate(N);
+			finish_ = start_ + N;
+			size_ = N;
+			indexOfHead = cb.indexOfHead;
+			indexOfTail = cb.indexOfTail;
+			TinySTL::uninitialized_copy(cb.start_, cb.finish_, start_);
+		}
+	public:
+		template<class T, size_t N, class Alloc>
+		friend std::ostream& operator <<(std::ostream& os, circular_buffer<T, N, Alloc>& cb);
 	};//end of circular buffer
 
 	//**********构造，复制，析构相关*****************
@@ -187,12 +231,33 @@ namespace TinySTL{
 	circular_buffer<T, N, Alloc>::circular_buffer(InputIterator first, InputIterator last){
 		allocateAndCopy(first, last);
 	}
+	template<class T, size_t N, class Alloc>
+	circular_buffer<T, N, Alloc>::circular_buffer(const circular_buffer<T, N, Alloc>& cb){
+		clone(cb);
+	}
+	template<class T, size_t N, class Alloc>
+	circular_buffer<T, N, Alloc>::circular_buffer(circular_buffer<T, N, Alloc>&& cb){
+		copyAllMembers(cb);
+		zeroCircular(cb);
+	}
+	template<class T, size_t N, class Alloc>
+	circular_buffer<T, N, Alloc>& circular_buffer<T, N, Alloc>::operator = (const circular_buffer<T, N, Alloc>& cb){
+		if (this != &cb){
+			clone(cb);
+		}
+		return *this;
+	}
+	template<class T, size_t N, class Alloc>
+	circular_buffer<T, N, Alloc>& circular_buffer<T, N, Alloc>::operator = (circular_buffer<T, N, Alloc>&& cb){
+		if (*this != cb){
+			copyAllMembers(cb);
+			zeroCircular(cb);
+		}
+		return *this;
+	}
 	//************插入，删除相关***********************
 	template<class T, size_t N, class Alloc>
 	void circular_buffer<T, N, Alloc>::push(const T& val){
-		/*if (full())
-			throw;
-		*/
 		if (full()){
 			indexOfTail = nextIndex(indexOfTail);
 			dataAllocator::construct(start_ + indexOfTail, val);
@@ -210,6 +275,16 @@ namespace TinySTL{
 		dataAllocator::destroy(start_ + indexOfHead);
 		indexOfHead = nextIndex(indexOfHead);
 		--size_;
+	}
+
+	template<class T, size_t N, class Alloc>
+	std::ostream& operator <<(std::ostream& os, circular_buffer<T, N, Alloc>& cb){
+		os << "(";
+		for (auto it = cb.first(); it != cb.last(); ++it){
+			os << *it << ", ";
+		}
+		os << *(cb.last()) << ")";
+		return os;
 	}
 }
 
