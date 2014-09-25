@@ -193,7 +193,7 @@ namespace TinySTL{
 				size_ = n;
 			}
 		}
-		int nextIndex(int index){ return ++index % N; }
+		int nextIndex(int index){ return (index + 1) % N; }
 		void copyAllMembers(const circular_buffer& cb){
 			start_ = cb.start_;
 			finish_ = cb.finish_;
@@ -277,11 +277,14 @@ namespace TinySTL{
 
 	template<class T, size_t N, class Alloc>
 	std::ostream& operator <<(std::ostream& os, circular_buffer<T, N, Alloc>& cb){
-		os << "(";
-		for (auto it = cb.first(); it != cb.last(); ++it){
-			os << *it << ", ";
+		circular_buffer<T, N, Alloc>::size_type size = cb.size();
+		if (!cb.empty()){
+			os << "(";
+			for (auto it = cb.first(); it != cb.last() && size != 0; ++it, --size){
+				os << *it << ", ";
+			}
+			os << *(cb.last()) << ")";
 		}
-		os << *(cb.last()) << ")";
 		return os;
 	}
 }
