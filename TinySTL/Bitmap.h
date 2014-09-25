@@ -2,6 +2,7 @@
 #define _BITMAP_H_
 
 #include <cstdint>
+#include <iostream>
 #include <string>
 
 #include "Allocator.h"
@@ -16,7 +17,8 @@ namespace TinySTL{
 	private:
 		uint8_t *start_;
 		uint8_t *finish_;
-		const size_t size_;
+		const size_t size_;//the size of bit
+		const size_t sizeOfUINT8_;//the size of how many uint8_t
 		enum EAlign{ ALIGN = 8 };
 	public:
 		bitmap();
@@ -34,27 +36,47 @@ namespace TinySTL{
 		//Returns whether all of the bits in the bitset are set (to one).
 		bool all() const;//TODO
 
-		bitset& set();//TODO
-		bitset& set(size_t pos, bool val = true);//TODO
-		bitset& reset();//TODO
-		bitset& reset(size_t pos);//TODO
-		bitset& flip();//TODO
-		bitset& flip(size_t pos);//TODO
+		bitmap& set(){
+			uninitialized_fill_n(start_, size_, ~0);
+		}
+		bitmap& set(size_t pos, bool val = true);//TODO
+		bitmap& reset();//TODO
+		bitmap& reset(size_t pos);//TODO
+		bitmap& flip();//TODO
+		bitmap& flip(size_t pos);//TODO
 
 		std::string to_string() const;//TODO
+
+		template<size_t N>
+		friend std::ostream& operator <<(std::ostream& os, const bitmap<N>& bm);
 	private:
 		size_t roundUp8(size_t bytes){
 			return ((bytes + EAlign::ALIGN - 1) & ~(EAlign::ALIGN - 1));
 		}
-		void allocateAndFillN(const size_t n, const uint8_t val){
+		//将i的第nth为置为newVal
+		void setNthInInt8(uint8_t& i, size_t nth, bool newVal){//nth从0开始
+			uint8_t temp = i & (1 << nth); //取出i的第nth位
+			if ((bool)temp == newVal){
+				return;
+			}else{
+				if (temp){//nth位为1
+					temp = ~temp;
+					i = i & temp;
+				}else{//nth位为0
+					i = i | (1 << nth);
+				}
+			}
+		}
+		size_t getNth(size_t n){ return (n / 8); }
+		void allocateAndFillN(size_t n, uint8_t val){
 			start_ = dataAllocator::allocate(n);
 			finish_ = uninitialized_fill_n(start_, n, val);
 		}
 	};// end of bitmap
 
 	template<size_t N>
-	bitmap<N>::bitmap() :size_(N){
-		allocateAndFillN(size_, 0);
+	bitmap<N>::bitmap() :size_(roundUp8(N)), sizeOfUINT8_(roundUp8(N) / 8 + 1){
+		allocateAndFillN(sizeOfUINT8_, 0);
 	}
 }
 
