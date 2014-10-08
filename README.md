@@ -14,6 +14,7 @@ TinySTL
   * skip list
   * binary search tree
   * AVL tree
+  * 线段树
   * splay tree
   * rope
   * Van Emde Boas tree
