@@ -14,6 +14,7 @@ TinySTL
   * skip list
   * binary search tree
   * AVL tree
+  * 线段树
   * splay tree
   * rope
   * Van Emde Boas tree
@@ -36,7 +37,8 @@ TinySTL
 * STL Algorithms:  
     * fill：100% 
     * fill_n：100% 
-* circular_buffer：100%   
+* circular_buffer：90%   
+* bitmap：30%
 
 #TinySTL测试:
 ###测试环境：Windows 7 && VS2013 && release模式
