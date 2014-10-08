@@ -43,7 +43,7 @@ TinySTL
 #TinySTL测试:
 ###测试环境：Windows 7 && VS2013 && release模式
 ###测试结果：
-####(1)
+####(1):
 
     //std::vector<int> vec;
     TinySTL::vector<int> vec;
@@ -58,6 +58,8 @@ TinySTL
 ######i = 100000 -> (TinySTL::vector<int>：2ms \\ std::vector<int>：6ms)
 ######i = 1000000 -> (TinySTL::vector<int>：11ms \\ std::vector<int>：16ms)
 ######i = 10000000 -> (TinySTL::vector<int>：129ms \\ std::vector<int>：210ms)  
+####(2):
+
     //std::vector<std::string> vec;
     TinySTL::vector<std::string> vec;
 	ProfilerInstance::start();
@@ -71,6 +73,8 @@ TinySTL
 ######i = 100000 -> (TinySTL::vector<int>：18ms \\ std::vector<int>：29ms)
 ######i = 1000000 -> (TinySTL::vector<int>：181ms \\ std::vector<int>：232ms)
 ######i = 10000000 -> (TinySTL::vector<int>：2372ms \\ std::vector<int>：1972ms)
+####(3):
+
     TinySTL::circular_buffer<int, 10000> cb(10000, 0);
     //boost::circular_buffer<int> cb(10000, 0);
 	ProfilerInstance::start();
@@ -83,6 +87,8 @@ TinySTL
 ######i = 10000000 -> (TinySTL::circular_buffer：75ms \\ boost::circular_buffer：22ms)
 ######i = 100000000 -> (TinySTL::circular_buffer：604ms \\ boost::circular_buffer：252ms)
 ######i = 1000000000 -> (TinySTL::circular_buffer：5936ms \\ boost::circular_buffer：2241ms)
+####(4):
+
     std::string str("abcdefghijklmnpqrstuvwxyz");
     TinySTL::bitmap<26> bm;
 	for (auto it = str.cbegin(); it != str.cend(); ++it){
