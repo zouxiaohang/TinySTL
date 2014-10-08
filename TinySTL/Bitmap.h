@@ -30,11 +30,11 @@ namespace TinySTL{
 		//Returns whether the bit at position pos is set (i.e., whether it is one).
 		bool test(size_t pos) const;//TODO
 		//Returns whether any of the bits is set (i.e., whether at least one bit in the bitset is set to one).
-		bool any() const;//TODO	
+		bool any() const;
 		//Returns whether none of the bits is set (i.e., whether all bits in the bitset have a value of zero).
-		bool none() const;//TODO
+		bool none() const;
 		//Returns whether all of the bits in the bitset are set (to one).
-		bool all() const;//TODO
+		bool all() const;
 
 		bitmap& set(){
 			uninitialized_fill_n(start_, sizeOfUINT8_, ~0);
@@ -73,6 +73,8 @@ namespace TinySTL{
 		}
 		//将第n个位置转换为其在第几个uint8_t中
 		size_t getNth(size_t n){ return (n / 8); }
+		//将第n个位置转换为其在第N个uint8_t中的第几个bit上
+		size_t getMth(size_t n){ return (n % EAlign::ALIGN); }
 		void allocateAndFillN(size_t n, uint8_t val){
 			start_ = dataAllocator::allocate(n);
 			finish_ = uninitialized_fill_n(start_, n, val);
@@ -84,10 +86,16 @@ namespace TinySTL{
 		allocateAndFillN(sizeOfUINT8_, 0);
 	}
 	template<size_t N>
+	bitmap<N>& bitmap<N>::set(size_t pos, bool val = true){
+		assert(pos >= 0);
+		const auto nth = getNth(pos);
+		const auto mth = getMth(pos);
+		uint8_t *ptr = start_ + nth;//get the nth uint8_t
+		setNthInInt8(*ptr, mth, val);
+		return *this;
+	}
+	template<size_t N>
 	size_t bitmap<N>::count() const{
-		//const size_t blocks = sizeOfUINT8_ / 4;//以四个uint8_t为一个block来判断，提高效率
-		//uint32_t *ptr = (uint32_t*)start_;
-		size_;
 		uint8_t *ptr = start_;
 		size_t sum = 0;
 		for (; ptr != finish_; ++ptr){
@@ -98,6 +106,30 @@ namespace TinySTL{
 			}
 		}
 		return sum;
+	}
+	template<size_t N>
+	bool bitmap<N>::any() const{
+		uint8_t *ptr = start_;
+		for (; ptr != finish_; ++ptr){
+			uint8_t n = *ptr;
+			if (n != 0)
+				return true;
+		}
+		return false;
+	}
+	template<size_t N>
+	bool bitmap<N>::all() const{
+		uint8_t *ptr = start_;
+		for (; ptr != finish_; ++ptr){
+			uint8_t n = *ptr;
+			if (n != (uint8_t)~0)
+				return false;
+		}
+		return true;
+	}
+	template<size_t N>
+	bool bitmap<N>::none() const{
+		return !any();
 	}
 }
 
