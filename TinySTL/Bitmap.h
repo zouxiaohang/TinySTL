@@ -17,15 +17,15 @@ namespace TinySTL{
 	private:
 		uint8_t *start_;
 		uint8_t *finish_;
-		const size_t size_;//the size of bit
-		const size_t sizeOfUINT8_;//the size of how many uint8_t
+		const size_t size_;//记录多少bit
+		const size_t sizeOfUINT8_;//记录多少uint8_t
 		enum EAlign{ ALIGN = 8 };
 	public:
 		bitmap();
 		explicit bitmap(const std::string& str);//TODO
 
 		//Returns the number of bits in the bitset that are set (i.e., that have a value of one)
-		size_t count() const;//TODO
+		size_t count() const;
 		size_t size() const{ return size_; }
 		//Returns whether the bit at position pos is set (i.e., whether it is one).
 		bool test(size_t pos) const;//TODO
@@ -37,10 +37,14 @@ namespace TinySTL{
 		bool all() const;//TODO
 
 		bitmap& set(){
-			uninitialized_fill_n(start_, size_, ~0);
+			uninitialized_fill_n(start_, sizeOfUINT8_, ~0);
+			return *this;
 		}
 		bitmap& set(size_t pos, bool val = true);//TODO
-		bitmap& reset();//TODO
+		bitmap& reset(){
+			uninitialized_fill_n(start_, sizeOfUINT8_, 0);
+			return *this;
+		}
 		bitmap& reset(size_t pos);//TODO
 		bitmap& flip();//TODO
 		bitmap& flip(size_t pos);//TODO
@@ -48,7 +52,7 @@ namespace TinySTL{
 		std::string to_string() const;//TODO
 
 		template<size_t N>
-		friend std::ostream& operator <<(std::ostream& os, const bitmap<N>& bm);
+		friend std::ostream& operator <<(std::ostream& os, const bitmap<N>& bm);//TODO
 	private:
 		size_t roundUp8(size_t bytes){
 			return ((bytes + EAlign::ALIGN - 1) & ~(EAlign::ALIGN - 1));
@@ -67,6 +71,7 @@ namespace TinySTL{
 				}
 			}
 		}
+		//将第n个位置转换为其在第几个uint8_t中
 		size_t getNth(size_t n){ return (n / 8); }
 		void allocateAndFillN(size_t n, uint8_t val){
 			start_ = dataAllocator::allocate(n);
@@ -75,8 +80,24 @@ namespace TinySTL{
 	};// end of bitmap
 
 	template<size_t N>
-	bitmap<N>::bitmap() :size_(roundUp8(N)), sizeOfUINT8_(roundUp8(N) / 8 + 1){
+	bitmap<N>::bitmap() :size_(roundUp8(N)), sizeOfUINT8_(roundUp8(N) / 8){
 		allocateAndFillN(sizeOfUINT8_, 0);
+	}
+	template<size_t N>
+	size_t bitmap<N>::count() const{
+		//const size_t blocks = sizeOfUINT8_ / 4;//以四个uint8_t为一个block来判断，提高效率
+		//uint32_t *ptr = (uint32_t*)start_;
+		size_;
+		uint8_t *ptr = start_;
+		size_t sum = 0;
+		for (; ptr != finish_; ++ptr){
+			uint8_t n = *ptr;
+			while (n){
+				++sum;
+				n = n >> 1;
+			}
+		}
+		return sum;
 	}
 }
 
