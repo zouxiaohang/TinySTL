@@ -1,29 +1,30 @@
 #include <cassert>
 #include <iostream>
 #include <list>
+#include <mutex>
 #include <memory>
 #include <string>
 #include <vector>
 #include <iterator>
+#include <thread>
 #include <utility>
 
 #include <boost\circular_buffer.hpp>
 
-#include "CircularBuffer.h"
+#include "Bitmap.h"
 #include "Profiler\Profiler.h"
 
 using namespace std;
 using namespace TinySTL::Profiler;
 
 int main(){
-	TinySTL::circular_buffer<int, 10000> cb(10000, 0);
-	//boost::circular_buffer<int> cb(10000, 0);
-	ProfilerInstance::start();
-	for (int i = 0; i != 100; ++i){
-		cb.push_back(i);
+	std::string str("abcdefghijklmnpqrstuvwxyz");
+	TinySTL::bitmap<26> bm;
+	for (auto it = str.cbegin(); it != str.cend(); ++it){
+		bm.set(*it - 'a');
 	}
-	ProfilerInstance::finish();
-	ProfilerInstance::dumpDuringTime();
+	cout << bm << endl;
+	cout << bm.size() << endl;
 	system("pause");
 	return 0;
 }

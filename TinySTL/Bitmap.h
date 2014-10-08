@@ -22,7 +22,6 @@ namespace TinySTL{
 		enum EAlign{ ALIGN = 8 };
 	public:
 		bitmap();
-		explicit bitmap(const std::string& str);//TODO
 
 		//Returns the number of bits in the bitset that are set (i.e., that have a value of one)
 		size_t count() const;
