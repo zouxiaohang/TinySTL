@@ -87,7 +87,7 @@ TinySTL
 ######i = 10000000 -> (TinySTL::circular_buffer：75ms \\ boost::circular_buffer：22ms)
 ######i = 100000000 -> (TinySTL::circular_buffer：604ms \\ boost::circular_buffer：252ms)
 ######i = 1000000000 -> (TinySTL::circular_buffer：5936ms \\ boost::circular_buffer：2241ms)
-####(4):
+####(4):题目：利用bitmap找出str中未出现的字母  
 
     std::string str("abcdefghijklmnpqrstuvwxyz");
     TinySTL::bitmap<26> bm;
@@ -100,7 +100,6 @@ TinySTL
 		if (!bm.test(i))
 			cout << "字母" << (char)('a' + i) << "没出现！！！" << endl;
 	}
-题目：利用bitmap找出str中未出现的字母  
 输出结果：  
 
     111111111111110111111111111000000
