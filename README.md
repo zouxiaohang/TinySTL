@@ -43,6 +43,8 @@ TinySTL
 #TinySTL测试:
 ###测试环境：Windows 7 && VS2013 && release模式
 ###测试结果：
+####(1)
+
     //std::vector<int> vec;
     TinySTL::vector<int> vec;
 	ProfilerInstance::start();
