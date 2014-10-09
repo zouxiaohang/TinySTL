@@ -28,13 +28,13 @@ namespace TinySTL{
 		return first;
 	}
 	template<class Size>
-	void *fill_n(char *first, Size n, const char& value)
+	char *fill_n(char *first, Size n, const char& value)
 	{
 		memset(first, static_cast<unsigned char>(value), n);
 		return first + n;
 	}
 	template<class Size>
-	void *fill_n(wchar_t *first, Size n, const wchar_t& value)
+	wchar_t *fill_n(wchar_t *first, Size n, const wchar_t& value)
 	{
 		memset(first, static_cast<unsigned char>(value), n * sizeof(wchar_t));
 		return first + n;
