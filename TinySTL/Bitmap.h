@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <iostream>
+#include <stdexcept>
 #include <string>
 
 #include "Allocator.h"
@@ -10,6 +11,8 @@
 
 namespace TinySTL{
 
+	//bitmap会将N上调至8的倍数
+	//因此bitmap实际上会操作的bit数是大于等于N的
 	template<size_t N>
 	class bitmap{
 	public:
@@ -28,6 +31,7 @@ namespace TinySTL{
 		size_t size() const{ return size_; }
 		//Returns whether the bit at position pos is set (i.e., whether it is one).
 		bool test(size_t pos) const{
+			THROW(pos);
 			const auto nth = getNth(pos);
 			const auto mth = getMth(pos);
 			uint8_t *ptr = start_ + nth;
@@ -88,6 +92,10 @@ namespace TinySTL{
 			start_ = dataAllocator::allocate(n);
 			finish_ = uninitialized_fill_n(start_, n, val);
 		}
+		void THROW(size_t n)const{
+			if (!(0 <= n && n < size()))
+				throw std::out_of_range("Out Of Range");
+		}
 	};// end of bitmap
 
 	template<size_t N>
@@ -96,7 +104,7 @@ namespace TinySTL{
 	}
 	template<size_t N>
 	bitmap<N>& bitmap<N>::set(size_t pos, bool val){
-		assert(pos >= 0);
+		THROW(pos);
 		const auto nth = getNth(pos);
 		const auto mth = getMth(pos);
 		uint8_t *ptr = start_ + nth;//get the nth uint8_t
@@ -119,6 +127,7 @@ namespace TinySTL{
 	}
 	template<size_t N>
 	bitmap<N>& bitmap<N>::flip(size_t pos){
+		THROW(pos);
 		const auto nth = getNth(pos);
 		const auto mth = getMth(pos);
 		uint8_t *ptr = start_ + nth;
@@ -134,10 +143,11 @@ namespace TinySTL{
 		uint8_t *ptr = start_;
 		size_t sum = 0;
 		for (; ptr != finish_; ++ptr){
-			uint8_t n = *ptr;
-			while (n){
-				++sum;
-				n = n >> 1;
+			for (int i = 0; i != 8; ++i){
+				uint8_t t = getMask(*ptr, i);
+				if (t){
+					++sum;
+				}
 			}
 		}
 		return sum;
