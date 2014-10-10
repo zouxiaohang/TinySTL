@@ -75,11 +75,11 @@ namespace TinySTL{
 		}
 
 		char& operator[] (size_t pos){ return *(start_ + pos); }
-		const char& operator[] (size_t pos) const{ return (*this)[pos]; }
+		const char& operator[] (size_t pos) const{ return *(start_ + pos); }
 		char& back(){ return *(finish_ - 1); }
-		const char& back() const{ return back(); }
+		const char& back() const{ return *(finish_ - 1); }
 		char& front(){ return *(start_); }
-		const char& front() const{ return front(); }
+		const char& front() const{ return *(start_); }
 
 		void push_back(char c){ insert(end(), c); }
 		string& insert(size_t pos, const string& str);
@@ -158,7 +158,7 @@ namespace TinySTL{
 			return string(begin() + pos, begin() + pos + len);
 		}
 
-		int compare(const string& str) const noexcept;
+		int compare(const string& str) const;
 		int compare(size_t pos, size_t len, const string& str) const;
 		int compare(size_t pos, size_t len, const string& str,
 			size_t subpos, size_t sublen = npos) const;
@@ -445,6 +445,39 @@ namespace TinySTL{
 	string& string::replace(size_t pos, size_t len, size_t n, char c){
 		return replace(begin() + pos, begin() + pos + len, n, c);
 	}
-	
+	/*size_t string::find(const char* s, size_t pos, size_t n) const{
+		size_t lenghtOfS = strlen(s);
+		if (n < lenghtOfS)
+			return npos;
+		int i, j;
+		size_t res = 0;
+		for (i = pos; i != pos + n; ++i){
+			for (j = 0; j != lenghtOfS; ++j){
+				if (*(begin() + i + j) != s[j])
+					break;
+			}
+			if (j == lenghtOfS)
+				return i;
+		}
+		return npos;
+	}*/
+	size_t string::find(const string& str, size_t pos) const{
+		size_t lenghtOfS = str.size();
+		if (size() - pos < lenghtOfS)
+			return npos;
+		int i, j;
+		size_t res = 0;
+		for (i = pos; i != size(); ++i){
+			for (j = 0; j != lenghtOfS; ++j){
+				if (*(begin() + i + j) != str[j])
+					break;
+			}
+			if (j == lenghtOfS)
+				return i;
+		}
+		return npos;
+	}
+	/*size_t string::find(const char* s, size_t pos) const;
+	size_t string::find(char c, size_t pos) const;*/
 }
 #endif
