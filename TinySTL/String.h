@@ -50,14 +50,14 @@ namespace TinySTL{
 		const_iterator begin() const{ return start_; }
 		iterator end(){ return finish_; }
 		const_iterator end() const{ return finish_; }
-		reverse_iterator rbegin(){ return reverse_iterator(start_); }
-		const_reverse_iterator rbegin() const{ return reverse_iterator(start_); }
-		reverse_iterator rend(){ return reverse_iterator(finish_); }
-		const_reverse_iterator rend() const{ return reverse_iterator(finish_); }
-		/*const_iterator cbegin() const{ return start_; }
+		reverse_iterator rbegin(){ return reverse_iterator(finish_); }
+		const_reverse_iterator rbegin() const{ return const_reverse_iterator(finish_); }
+		reverse_iterator rend(){ return reverse_iterator(start_); }
+		const_reverse_iterator rend() const{ return const_reverse_iterator(start_); }
+		const_iterator cbegin() const{ return start_; }
 		const_iterator cend() const{ return finish_; }
-		const_reverse_iterator crbegin() const{ return reverse_iterator(start_); }
-		const_reverse_iterator crend() const{ return reverse_iterator(finish_); }*/
+		const_reverse_iterator crbegin() const{ return const_reverse_iterator(finish_); }
+		const_reverse_iterator crend() const{ return const_reverse_iterator(start_); }
 		size_t size() const{ return finish_ - start_; }
 		size_t length() const{ return size(); }
 		size_t capacity() const{ return endOfStorage_ - start_; }
@@ -133,5 +133,12 @@ namespace TinySTL{
 		allocateAndFillN(1, c);
 		return *this;
 	}
+	void string::resize(size_t n){
+		resize(n, value_type());
+	}
+	void string::resize(size_t n, char c){
+
+	}
+	void reserve(size_t n = 0);//TODO
 }
 #endif
