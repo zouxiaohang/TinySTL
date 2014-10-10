@@ -210,6 +210,13 @@ namespace TinySTL{
 		size_t rfind_aux(const_iterator cit, size_t pos, size_t lengthOfS, size_t cond)const;
 		size_t find_aux(const_iterator cit, size_t pos, size_t lengthOfS, size_t cond)const;
 		int compare_aux(size_t pos, size_t len, const_iterator cit, size_t subpos, size_t sublen)const;
+		bool isContained(char ch, const_iterator first, const_iterator last)const{
+			for (auto cit = first; cit != last; ++cit){
+				if (*cit == ch)
+					return true;
+			}
+			return false;
+		}
 	public:
 		friend std::ostream& operator <<(std::ostream& os, const string&str);
 		friend std::istream& operator>> (std::istream& is, string& str);
@@ -593,6 +600,22 @@ namespace TinySTL{
 	}
 	int string::compare(size_t pos, size_t len, const char* s, size_t n) const{
 		return compare_aux(pos, len, s, 0, n);
+	}
+	size_t string::find_first_of(const string& str, size_t pos) const{
+		return find_first_of(str.begin(), pos, str.size() - pos);
+	}
+	size_t string::find_first_of(const char* s, size_t pos) const{
+		return find_first_of(s, pos, size() - pos);
+	}
+	size_t string::find_first_of(const char* s, size_t pos, size_t n) const{
+		for (size_t i = pos; i != pos + n; ++i){
+			if (isContained((*this)[i], s, s + strlen(s)))
+				return i;
+		}
+		return npos;
+	}
+	size_t string::find_first_of(char c, size_t pos) const{
+		return find(c, pos);
 	}
 	std::ostream& operator <<(std::ostream& os, const string&str){
 		for (const auto ch : str){
