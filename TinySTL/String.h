@@ -81,6 +81,7 @@ namespace TinySTL{
 		char& front(){ return *(start_); }
 		const char& front() const{ return front(); }
 
+		void push_back(char c){ insert(end(), c); }
 		string& insert(size_t pos, const string& str);
 		string& insert(size_t pos, const string& str, size_t subpos, size_t sublen = npos);
 		string& insert(size_t pos, const char* s);
@@ -90,18 +91,26 @@ namespace TinySTL{
 		iterator insert(iterator p, char c);
 		template <class InputIterator>
 		iterator insert(iterator p, InputIterator first, InputIterator last);
+		string& append(const string& str);
+		string& append(const string& str, size_t subpos, size_t sublen = npos);
+		string& append(const char* s);
+		string& append(const char* s, size_t n);
+		string& append(size_t n, char c);
+		template <class InputIterator>
+		string& append(InputIterator first, InputIterator last);
+		string& operator+= (const string& str);
+		string& operator+= (const char* s);
+		string& operator+= (char c);
 
-		string& operator+= (const string& str){
-			insert(size(), str);
-			return *this;
-		}
-		string& operator+= (const char* s){
-			insert(size(), s);
-			return *this;
-		}
-		string& operator+= (char c){
-			insert(end(), c);
-			return *this;
+		void pop_back(){ erase(end() - 1, end()); }
+		string& erase(size_t pos = 0, size_t len = npos);
+		iterator erase(iterator p);
+		iterator erase(iterator first, iterator last);
+
+		void swap(string& str){
+			std::swap(start_, str.start_);
+			std::swap(finish_, str.finish_);
+			std::swap(endOfStorage_, str.endOfStorage_);
 		}
 	private:
 		//插入时空间不足的情况
@@ -137,7 +146,8 @@ namespace TinySTL{
 			dataAllocator::destroy(start_, finish_);
 			dataAllocator::deallocate(start_, endOfStorage_ - start_);
 		}
-	};
+	};// end of string
+
 	const size_t string::npos;
 
 	string::string(size_t n, char c){
@@ -292,6 +302,59 @@ namespace TinySTL{
 	}
 	string::iterator string::insert(iterator p, char c){
 		return insert(p, 1, c);
+	}
+	string& string::operator+= (const string& str){
+		insert(size(), str);
+		return *this;
+	}
+	string& string::operator+= (const char* s){
+		insert(size(), s);
+		return *this;
+	}
+	string& string::operator+= (char c){
+		insert(end(), c);
+		return *this;
+	}
+	string& string::append(const string& str){
+		(*this) += str;
+		return *this;
+	}
+	string& string::append(const string& str, size_t subpos, size_t sublen){
+		insert(size(), str, subpos, sublen);
+		return *this;
+	}
+	string& string::append(const char* s){
+		(*this) += s;
+		return *this;
+	}
+	string& string::append(const char* s, size_t n){
+		insert(size(), s, n);
+		return *this;
+	}
+	string& string::append(size_t n, char c){
+		insert(end(), n, c);
+		return *this;
+	}
+	template <class InputIterator>
+	string& string::append(InputIterator first, InputIterator last){
+		insert(end(), first, last);
+		return *this;
+	}
+	string::iterator string::erase(iterator first, iterator last){
+		size_t lengthOfMove = finish_ - last;
+		for (auto i = 0; i != lengthOfMove; ++i){
+			*(first + i) = *(last + i);
+		}
+		dataAllocator::destroy(first + lengthOfMove, finish_);
+		finish_ = first + lengthOfMove;
+		return first;
+	}
+	string& string::erase(size_t pos, size_t len){
+		erase(begin() + pos, begin() + pos + len);
+		return *this;
+	}
+	string::iterator string::erase(iterator p){
+		return erase(p, end());
 	}
 }
 #endif
