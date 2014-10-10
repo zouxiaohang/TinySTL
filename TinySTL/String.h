@@ -33,6 +33,7 @@ namespace TinySTL{
 	public:
 		string() :start_(0), finish_(0), endOfStorage_(0){}
 		string(const string& str);
+		string(string&& str);
 		string(const string& str, size_t pos, size_t len = npos);
 		string(const char* s);
 		string(const char* s, size_t n);
@@ -41,6 +42,7 @@ namespace TinySTL{
 		string(InputIterator first, InputIterator last);
 
 		string& operator= (const string& str);
+		string& operator= (string&& str);
 		string& operator= (const char* s);
 		string& operator= (char c);
 
@@ -166,6 +168,12 @@ namespace TinySTL{
 		int compare(size_t pos, size_t len, const char* s) const;
 		int compare(size_t pos, size_t len, const char* s, size_t n) const;
 	private:
+		void moveData(string& str){
+			start_ = str.start_;
+			finish_ = str.finish_;
+			endOfStorage_ = str.endOfStorage_;
+			str.start_ = str.finish_ = str.endOfStorage_ = 0;
+		}
 		//插入时空间不足的情况
 		template<class InputIterator>
 		iterator insert_aux_copy(iterator p, InputIterator first, InputIterator last);
@@ -201,6 +209,7 @@ namespace TinySTL{
 		}
 		size_t rfind_aux(const_iterator cit, size_t pos, size_t lengthOfS, size_t cond)const;
 		size_t find_aux(const_iterator cit, size_t pos, size_t lengthOfS, size_t cond)const;
+		int compare_aux(size_t pos, size_t len, const_iterator cit, size_t subpos, size_t sublen)const;
 	public:
 		friend std::ostream& operator <<(std::ostream& os, const string&str);
 	};// end of string
@@ -224,6 +233,9 @@ namespace TinySTL{
 	string::string(const string& str){
 		allocateAndCopy(str.start_, str.finish_);
 	}
+	string::string(string&& str){
+		moveData(str);
+	}
 	string::string(const string& str, size_t pos, size_t len){
 		allocateAndCopy(str.start_ + pos, str.start_ + pos + len);
 	}
@@ -231,6 +243,12 @@ namespace TinySTL{
 		if (this != &str){
 			destroyAndDeallocate();
 			allocateAndCopy(str.start_, str.finish_);
+		}
+		return *this;
+	}
+	string& string::operator= (string&& str){
+		if (this != &str){
+			moveData(str);
 		}
 		return *this;
 	}
@@ -515,6 +533,39 @@ namespace TinySTL{
 		if (n < lengthOfS)
 			return npos;
 		return rfind_aux(s, pos, lengthOfS, pos - n);
+	}
+	int string::compare(const string& str) const{
+		return compare(0, size(), str, 0, str.size());
+	}
+	int string::compare(size_t pos, size_t len, const string& str) const{
+		return compare(pos, len, str, 0, str.size());
+	}
+	int string::compare_aux(size_t pos, size_t len, const_iterator cit, size_t subpos, size_t sublen)const{
+		size_t i, j;
+		for (i = 0, j = 0; i != len && j != sublen; ++i, ++j){
+		if ((*this)[pos + i] < cit[subpos + j])
+		return -1;
+		else if ((*this)[pos + i] > cit[subpos + j])
+		return 1;
+		}
+		if (i == len && j == sublen)
+		return 0;
+		else if (i == len)
+		return -1;
+		else if (j == sublen)
+		return 1;
+	}
+	int string::compare(size_t pos, size_t len, const string& str, size_t subpos, size_t sublen) const{
+		return compare_aux(pos, len, str.begin(), subpos, sublen);
+	}
+	int string::compare(const char* s) const{
+		return compare(0, size(), s, strlen(s));
+	}
+	int string::compare(size_t pos, size_t len, const char* s) const{
+		return compare(pos, len, s, strlen(s));
+	}
+	int string::compare(size_t pos, size_t len, const char* s, size_t n) const{
+		return compare_aux(pos, len, s, 0, n);
 	}
 	std::ostream& operator <<(std::ostream& os, const string&str){
 		for (const auto ch : str){
