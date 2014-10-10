@@ -106,5 +106,21 @@ TinySTL
     111111111111110111111111111000000
     32  
     字母o没出现！！！
+    
+####(5):
+
+    //std::string str;
+    TinySTL::string str;
+	ProfilerInstance::start();
+	int i = 0;
+	for (; i != 1000000; ++i){
+		str.push_back('x');
+	}
+	ProfilerInstance::finish();
+	ProfilerInstance::dumpDuringTime();
+    
+######i = 1000000 -> (TinySTL::string：7ms \\ std::string：37ms)
+######i = 10000000 -> (TinySTL::string：39ms \\ std::string：229ms)
+######i = 100000000 -> (TinySTL::string：484ms \\ std::string：1965ms)
 
 
