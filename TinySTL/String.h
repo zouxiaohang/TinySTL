@@ -617,6 +617,26 @@ namespace TinySTL{
 	size_t string::find_first_of(char c, size_t pos) const{
 		return find(c, pos);
 	}
+	size_t string::find_first_not_of(const string& str, size_t pos) const{
+		return find_first_not_of(str.begin(), pos, str.size() - pos);
+	}
+	size_t string::find_first_not_of(const char* s, size_t pos) const{
+		return find_first_not_of(s, pos, size() - pos);
+	}
+	size_t string::find_first_not_of(const char* s, size_t pos, size_t n) const{
+		for (size_t i = pos; i != pos + n; ++i){
+			if (!isContained((*this)[i], s, s + strlen(s)))
+				return i;
+		}
+		return npos;
+	}
+	size_t string::find_first_not_of(char c, size_t pos) const{
+		for (size_t i = pos; i != size(); ++i){
+			if ((*this)[i] != c)
+				return i;
+		}
+		return npos;
+	}
 	std::ostream& operator <<(std::ostream& os, const string&str){
 		for (const auto ch : str){
 			os << ch;
