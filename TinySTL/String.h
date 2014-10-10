@@ -199,6 +199,10 @@ namespace TinySTL{
 			dataAllocator::destroy(start_, finish_);
 			dataAllocator::deallocate(start_, endOfStorage_ - start_);
 		}
+		size_t rfind_aux(const_iterator cit, size_t pos, size_t lengthOfS, size_t cond)const;
+		size_t find_aux(const_iterator cit, size_t pos, size_t lengthOfS, size_t cond)const;
+	public:
+		friend std::ostream& operator <<(std::ostream& os, const string&str);
 	};// end of string
 
 	const size_t string::npos;
@@ -445,39 +449,78 @@ namespace TinySTL{
 	string& string::replace(size_t pos, size_t len, size_t n, char c){
 		return replace(begin() + pos, begin() + pos + len, n, c);
 	}
-	/*size_t string::find(const char* s, size_t pos, size_t n) const{
-		size_t lenghtOfS = strlen(s);
-		if (n < lenghtOfS)
-			return npos;
-		int i, j;
-		size_t res = 0;
-		for (i = pos; i != pos + n; ++i){
-			for (j = 0; j != lenghtOfS; ++j){
-				if (*(begin() + i + j) != s[j])
+	size_t string::find_aux(const_iterator cit, size_t pos, size_t lengthOfS, size_t cond)const{
+		size_t i, j;
+		for (i = pos; i != cond; ++i){
+			for (j = 0; j != lengthOfS; ++j){
+				if (*(begin() + i + j) != cit[j])
 					break;
 			}
-			if (j == lenghtOfS)
-				return i;
-		}
-		return npos;
-	}*/
-	size_t string::find(const string& str, size_t pos) const{
-		size_t lenghtOfS = str.size();
-		if (size() - pos < lenghtOfS)
-			return npos;
-		int i, j;
-		size_t res = 0;
-		for (i = pos; i != size(); ++i){
-			for (j = 0; j != lenghtOfS; ++j){
-				if (*(begin() + i + j) != str[j])
-					break;
-			}
-			if (j == lenghtOfS)
+			if (j == lengthOfS)
 				return i;
 		}
 		return npos;
 	}
-	/*size_t string::find(const char* s, size_t pos) const;
-	size_t string::find(char c, size_t pos) const;*/
+	size_t string::find(const char* s, size_t pos, size_t n) const{
+		size_t lenghtOfS = strlen(s);
+		if (n < lenghtOfS)
+			return npos;
+		return find_aux(s, pos, lenghtOfS, pos + n);
+	}
+	size_t string::find(const string& str, size_t pos) const{
+		size_t lengthOfS = str.size();
+		if (size() - pos < lengthOfS)
+			return npos;
+		return find_aux(str.cbegin(), pos, lengthOfS, size());
+	}
+	size_t string::find(const char* s, size_t pos) const{
+		return find(s, pos, size() - pos);
+	}
+	size_t string::find(char c, size_t pos) const{
+		for (auto cit = cbegin() + pos; cit != cend(); ++cit){
+			if (*cit == c)
+				return cit - cbegin();
+		}
+		return npos;
+	}
+	size_t string::rfind(char c, size_t pos) const{
+		for (auto crit = crbegin() + pos; crit != crend(); ++crit){
+			if (*crit == c)
+				return crit - crbegin();
+		}
+		return npos;
+	}
+	size_t string::rfind_aux(const_iterator cit, size_t pos, size_t lengthOfS, size_t cond)const{
+		size_t i, j;
+		for (i = pos - lengthOfS; i >= cond; --i){
+			for (j = 0; j != lengthOfS; ++j){
+				if (*(begin() + i + j) != cit[j])
+					break;
+			}
+			if (j == lengthOfS)
+				return i;
+		}
+		return npos;
+	}
+	size_t string::rfind(const string& str, size_t pos) const{
+		auto lengthOfS = str.size();
+		if (pos - 0 < lengthOfS)
+			return npos;
+		return rfind_aux(str.begin(), pos, lengthOfS, 0);
+	}
+	size_t string::rfind(const char* s, size_t pos) const{
+		return rfind(s, pos, pos);
+	}
+	size_t string::rfind(const char* s, size_t pos, size_t n) const{
+		auto lengthOfS = strlen(s);
+		if (n < lengthOfS)
+			return npos;
+		return rfind_aux(s, pos, lengthOfS, pos - n);
+	}
+	std::ostream& operator <<(std::ostream& os, const string&str){
+		for (const auto ch : str)
+			os << ch;
+		return os;
+	}
 }
 #endif
