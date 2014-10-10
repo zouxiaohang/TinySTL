@@ -80,7 +80,35 @@ namespace TinySTL{
 		const char& back() const{ return back(); }
 		char& front(){ return *(start_); }
 		const char& front() const{ return front(); }
+
+		string& insert(size_t pos, const string& str);
+		string& insert(size_t pos, const string& str, size_t subpos, size_t sublen = npos);
+		string& insert(size_t pos, const char* s);
+		string& insert(size_t pos, const char* s, size_t n);
+		string& insert(size_t pos, size_t n, char c);
+		iterator insert(iterator p, size_t n, char c);
+		iterator insert(iterator p, char c);
+		template <class InputIterator>
+		iterator insert(iterator p, InputIterator first, InputIterator last);
+
+		string& operator+= (const string& str){
+			insert(size(), str);
+			return *this;
+		}
+		string& operator+= (const char* s){
+			insert(size(), s);
+			return *this;
+		}
+		string& operator+= (char c){
+			insert(end(), c);
+			return *this;
+		}
 	private:
+		//插入时空间不足的情况
+		template<class InputIterator>
+		iterator insert_aux_copy(iterator p, InputIterator first, InputIterator last);
+		//插入时空间不足的情况
+		iterator insert_aux_filln(iterator p, size_t n, value_type c);
 		size_type getNewCapacity(size_type len)const{
 			size_type oldCapacity = endOfStorage_ - start_;
 			auto res = std::max(oldCapacity, len);
@@ -181,6 +209,89 @@ namespace TinySTL{
 		start_ = newStart;
 		finish_ = newFinish;
 		endOfStorage_ = start_ + n;
+	}
+	template <class InputIterator>
+	string::iterator string::insert_aux_copy(iterator p, InputIterator first, InputIterator last){
+		size_t lengthOfInsert = last - first;
+		auto newCapacity = getNewCapacity(lengthOfInsert);
+		iterator newStart = dataAllocator::allocate(newCapacity);
+		iterator newFinish = TinySTL::uninitialized_copy(start_, p, newStart);
+		newFinish = TinySTL::uninitialized_copy(first, last, newFinish);
+		auto res = newFinish;
+		newFinish = TinySTL::uninitialized_copy(p, finish_, newFinish);
+		
+		destroyAndDeallocate();
+		start_ = newStart;
+		finish_ = newFinish;
+		endOfStorage_ = start_ + newCapacity;
+		return res;
+	}
+	template <class InputIterator>
+	string::iterator string::insert(iterator p, InputIterator first, InputIterator last){
+		auto lengthOfLeft = capacity() - size();
+		size_t lengthOfInsert = last - first;
+		if (lengthOfInsert <= lengthOfLeft){
+			auto ptr = finish_;
+			for (auto i = lengthOfInsert; i != 0; --i){
+				*(finish_ - 1 + i) = *(--ptr);
+			}
+			TinySTL::uninitialized_copy(first, last, p);
+			finish_ += lengthOfInsert;
+			return (p + lengthOfInsert);
+		}else{
+			return insert_aux_copy(p, first, last);
+		}
+	}
+	string& string::insert(size_t pos, const string& str){
+		insert(start_ + pos, str.begin(), str.end());
+		return *this;
+	}
+	string& string::insert(size_t pos, const string& str, size_t subpos, size_t sublen){
+		insert(begin() + pos, str.begin() + subpos, str.begin() + subpos + sublen);
+		return *this;
+	}
+	string& string::insert(size_t pos, const char* s){
+		insert(begin() + pos, s, s + strlen(s));
+		return *this;
+	}
+	string& string::insert(size_t pos, const char* s, size_t n){
+		insert(begin() + pos, s, s + n);
+		return *this;
+	}
+	string::iterator string::insert_aux_filln(iterator p, size_t n, value_type c){
+		auto newCapacity = getNewCapacity(n);
+		iterator newStart = dataAllocator::allocate(newCapacity);
+		iterator newFinish = TinySTL::uninitialized_copy(start_, p, newStart);
+		newFinish = TinySTL::uninitialized_fill_n(newFinish, n, c);
+		auto res = newFinish;
+		newFinish = TinySTL::uninitialized_copy(p, finish_, newFinish);
+
+		destroyAndDeallocate();
+		start_ = newStart;
+		finish_ = newFinish;
+		endOfStorage_ = start_ + newCapacity;
+		return res;
+	}
+	string& string::insert(size_t pos, size_t n, char c){
+		insert(begin() + pos, n, c);
+		return *this;
+	}
+	string::iterator string::insert(iterator p, size_t n, char c){
+		auto lengthOfLeft = capacity() - size();
+		if (n <= lengthOfLeft){
+			auto ptr = finish_;
+			for (auto i = n; i != 0; --i){
+				*(finish_ - 1 + i) = *(--ptr);
+			}
+			TinySTL::uninitialized_fill_n(p, n, c);
+			finish_ += n;
+			return (p + n);
+		}else{
+			return insert_aux_filln(p, n, c);
+		}
+	}
+	string::iterator string::insert(iterator p, char c){
+		return insert(p, 1, c);
 	}
 }
 #endif
