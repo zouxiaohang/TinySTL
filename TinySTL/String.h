@@ -212,6 +212,33 @@ namespace TinySTL{
 		int compare_aux(size_t pos, size_t len, const_iterator cit, size_t subpos, size_t sublen)const;
 	public:
 		friend std::ostream& operator <<(std::ostream& os, const string&str);
+		friend std::istream& operator>> (std::istream& is, string& str);
+		friend string operator+ (const string& lhs, const string& rhs);
+		friend string operator+ (const string& lhs, const char* rhs);
+		friend string operator+ (const char* lhs, const string& rhs);
+		friend string operator+ (const string& lhs, char rhs);
+		friend string operator+ (char lhs, const string& rhs);
+		friend bool operator== (const string& lhs, const string& rhs);
+		friend bool operator== (const char*   lhs, const string& rhs);
+		friend bool operator== (const string& lhs, const char*   rhs);
+		friend bool operator!= (const string& lhs, const string& rhs);
+		friend bool operator!= (const char*   lhs, const string& rhs);
+		friend bool operator!= (const string& lhs, const char*   rhs);
+		friend bool operator<  (const string& lhs, const string& rhs);
+		friend bool operator<  (const char*   lhs, const string& rhs);
+		friend bool operator<  (const string& lhs, const char*   rhs);
+		friend bool operator<= (const string& lhs, const string& rhs);
+		friend bool operator<= (const char*   lhs, const string& rhs);
+		friend bool operator<= (const string& lhs, const char*   rhs);
+		friend bool operator>  (const string& lhs, const string& rhs);
+		friend bool operator>  (const char*   lhs, const string& rhs);
+		friend bool operator>  (const string& lhs, const char*   rhs);
+		friend bool operator>= (const string& lhs, const string& rhs);
+		friend bool operator>= (const char*   lhs, const string& rhs);
+		friend bool operator>= (const string& lhs, const char*   rhs);
+		friend void swap(string& x, string& y);
+		friend std::istream& getline(std::istream& is, string& str, char delim);
+		friend std::istream& getline(std::istream& is, string& str);
 	};// end of string
 
 	const size_t string::npos;
@@ -572,6 +599,9 @@ namespace TinySTL{
 			os << ch;
 		}
 		return os;
+	}
+	void swap(string& x, string& y){
+		x.swap(y);
 	}
 }
 #endif
