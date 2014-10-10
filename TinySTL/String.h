@@ -66,11 +66,27 @@ namespace TinySTL{
 			start_ = finish_;
 		}
 		bool empty() const{ return begin() == end(); }
-		void resize(size_t n);//TODO
-		void resize(size_t n, char c);//TODO
-		void reserve(size_t n = 0);//TODO
-		void shrink_to_fit(){ dataAllocator::deallocate(finish_, endOfStorage_ - finish_); }
+		void resize(size_t n);
+		void resize(size_t n, char c);
+		void reserve(size_t n = 0);
+		void shrink_to_fit(){ 
+			dataAllocator::deallocate(finish_, endOfStorage_ - finish_); 
+			endOfStorage_ = finish_;
+		}
+
+		char& operator[] (size_t pos){ return *(start_ + pos); }
+		const char& operator[] (size_t pos) const{ return (*this)[pos]; }
+		char& back(){ return *(finish_ - 1); }
+		const char& back() const{ return back(); }
+		char& front(){ return *(start_); }
+		const char& front() const{ return front(); }
 	private:
+		size_type getNewCapacity(size_type len)const{
+			size_type oldCapacity = endOfStorage_ - start_;
+			auto res = std::max(oldCapacity, len);
+			size_type newCapacity = (oldCapacity != 0 ? (oldCapacity + res) : 1);
+			return newCapacity;
+		}
 		void allocateAndFillN(size_t n, char c){
 			start_ = dataAllocator::allocate(n);
 			finish_ = TinySTL::uninitialized_fill_n(start_, n, c);
@@ -137,8 +153,34 @@ namespace TinySTL{
 		resize(n, value_type());
 	}
 	void string::resize(size_t n, char c){
+		if (n < size()){
+			dataAllocator::destroy(start_ + n, finish_);
+			finish_ = start_ + n;
+		}else if (n > size() && n <= capacity()){
+			auto lengthOfInsert = n - size();
+			finish_ = TinySTL::uninitialized_fill_n(finish_, lengthOfInsert, c);
+		}
+		else if (n > capacity()){
+			auto lengthOfInsert = n - size();
+			iterator newStart = dataAllocator::allocate(getNewCapacity(lengthOfInsert));
+			iterator newFinish = TinySTL::uninitialized_copy(begin(), end(), newStart);
+			newFinish = TinySTL::uninitialized_fill_n(newFinish, lengthOfInsert, c);
 
+			destroyAndDeallocate();
+			start_ = newStart;
+			finish_ = newFinish;
+			endOfStorage_ = start_ + n;
+		}
 	}
-	void reserve(size_t n = 0);//TODO
+	void string::reserve(size_t n){
+		if (n <= capacity())
+			return;
+		iterator newStart = dataAllocator::allocate(n);
+		iterator newFinish = TinySTL::uninitialized_copy(begin(), end(), newStart);
+		destroyAndDeallocate();
+		start_ = newStart;
+		finish_ = newFinish;
+		endOfStorage_ = start_ + n;
+	}
 }
 #endif
