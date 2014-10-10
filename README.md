@@ -56,9 +56,9 @@ TinySTL
 	ProfilerInstance::finish();
 	ProfilerInstance::dumpDuringTime();
     
-######i = 100000 -> (TinySTL::vector<int>：2ms \\ std::vector<int>：6ms)
-######i = 1000000 -> (TinySTL::vector<int>：11ms \\ std::vector<int>：16ms)
-######i = 10000000 -> (TinySTL::vector<int>：129ms \\ std::vector<int>：210ms)  
+######i = 100000 -> (TinySTL::vector&lt;int>：2ms \\ std::vector&lt;int>：6ms)
+######i = 1000000 -> (TinySTL::vector&lt;int>：11ms \\ std::vector&lt;int>：16ms)
+######i = 10000000 -> (TinySTL::vector&lt;int>：129ms \\ std::vector&lt;int>：210ms)  
 ####(2):vector&lt;string>
 
     //std::vector<std::string> vec;
@@ -71,9 +71,9 @@ TinySTL
 	ProfilerInstance::finish();
 	ProfilerInstance::dumpDuringTime();
     
-######i = 100000 -> (TinySTL::vector<int>：18ms \\ std::vector<int>：29ms)
-######i = 1000000 -> (TinySTL::vector<int>：181ms \\ std::vector<int>：232ms)
-######i = 10000000 -> (TinySTL::vector<int>：2372ms \\ std::vector<int>：1972ms)
+######i = 100000 -> (TinySTL::vector&lt;int>：18ms \\ std::vector&lt;int>：29ms)
+######i = 1000000 -> (TinySTL::vector&lt;int>：181ms \\ std::vector&lt;int>：232ms)
+######i = 10000000 -> (TinySTL::vector&lt;int>：2372ms \\ std::vector&lt;int>：1972ms)
 ####(3):circular_buffer&lt;int, N>
 
     TinySTL::circular_buffer<int, 10000> cb(10000, 0);
