@@ -39,11 +39,12 @@ TinySTL
     * fill_n：100% 
 * circular_buffer：90%   
 * bitmap：100%
+* string：70%
 
 #TinySTL测试:
 ###测试环境：Windows 7 && VS2013 && release模式
 ###测试结果：
-####(1):
+####(1):vector&lt;int>
 
     //std::vector<int> vec;
     TinySTL::vector<int> vec;
@@ -55,10 +56,10 @@ TinySTL
 	ProfilerInstance::finish();
 	ProfilerInstance::dumpDuringTime();
     
-######i = 100000 -> (TinySTL::vector<int>：2ms \\ std::vector<int>：6ms)
-######i = 1000000 -> (TinySTL::vector<int>：11ms \\ std::vector<int>：16ms)
-######i = 10000000 -> (TinySTL::vector<int>：129ms \\ std::vector<int>：210ms)  
-####(2):
+######i = 100000 -> (TinySTL::vector&lt;int>：2ms \\ std::vector&lt;int>：6ms)
+######i = 1000000 -> (TinySTL::vector&lt;int>：11ms \\ std::vector&lt;int>：16ms)
+######i = 10000000 -> (TinySTL::vector&lt;int>：129ms \\ std::vector&lt;int>：210ms)  
+####(2):vector&lt;string>
 
     //std::vector<std::string> vec;
     TinySTL::vector<std::string> vec;
@@ -70,10 +71,10 @@ TinySTL
 	ProfilerInstance::finish();
 	ProfilerInstance::dumpDuringTime();
     
-######i = 100000 -> (TinySTL::vector<int>：18ms \\ std::vector<int>：29ms)
-######i = 1000000 -> (TinySTL::vector<int>：181ms \\ std::vector<int>：232ms)
-######i = 10000000 -> (TinySTL::vector<int>：2372ms \\ std::vector<int>：1972ms)
-####(3):
+######i = 100000 -> (TinySTL::vector&lt;string>：18ms \\ std::vector&lt;string>：29ms)
+######i = 1000000 -> (TinySTL::vector&lt;string>：181ms \\ std::vector&lt;string>：232ms)
+######i = 10000000 -> (TinySTL::vector&lt;string>：2372ms \\ std::vector&lt;string>：1972ms)
+####(3):circular_buffer&lt;int, N>
 
     TinySTL::circular_buffer<int, 10000> cb(10000, 0);
     //boost::circular_buffer<int> cb(10000, 0);
@@ -105,5 +106,21 @@ TinySTL
     111111111111110111111111111000000
     32  
     字母o没出现！！！
+    
+####(5):string
+
+    //std::string str;
+    TinySTL::string str;
+	ProfilerInstance::start();
+	int i = 0;
+	for (; i != 1000000; ++i){
+		str.push_back('x');
+	}
+	ProfilerInstance::finish();
+	ProfilerInstance::dumpDuringTime();
+    
+######i = 1000000 -> (TinySTL::string：7ms \\ std::string：37ms)
+######i = 10000000 -> (TinySTL::string：39ms \\ std::string：229ms)
+######i = 100000000 -> (TinySTL::string：484ms \\ std::string：1965ms)
 
 
