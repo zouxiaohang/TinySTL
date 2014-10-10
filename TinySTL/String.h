@@ -109,8 +109,7 @@ namespace TinySTL{
 
 		string& replace(size_t pos, size_t len, const string& str);
 		string& replace(iterator i1, iterator i2, const string& str);
-		string& replace(size_t pos, size_t len, const string& str,
-			size_t subpos, size_t sublen = npos);
+		string& replace(size_t pos, size_t len, const string& str, size_t subpos, size_t sublen = npos);
 		string& replace(size_t pos, size_t len, const char* s);
 		string& replace(iterator i1, iterator i2, const char* s);
 		string& replace(size_t pos, size_t len, const char* s, size_t n);
@@ -118,14 +117,54 @@ namespace TinySTL{
 		string& replace(size_t pos, size_t len, size_t n, char c);
 		string& replace(iterator i1, iterator i2, size_t n, char c);
 		template <class InputIterator>
-		string& replace(iterator i1, iterator i2,
-			InputIterator first, InputIterator last);
+		string& replace(iterator i1, iterator i2, InputIterator first, InputIterator last);
 
 		void swap(string& str){
 			std::swap(start_, str.start_);
 			std::swap(finish_, str.finish_);
 			std::swap(endOfStorage_, str.endOfStorage_);
 		}
+		size_t copy(char* s, size_t len, size_t pos = 0) const{
+			auto ptr = TinySTL::uninitialized_copy(begin() + pos, begin() + pos + len, s);
+			return (size_t)(ptr - s);
+		}
+
+		size_t find(const string& str, size_t pos = 0) const;
+		size_t find(const char* s, size_t pos = 0) const;
+		size_t find(const char* s, size_t pos, size_t n) const;
+		size_t find(char c, size_t pos = 0) const;
+		size_t rfind(const string& str, size_t pos = npos) const;
+		size_t rfind(const char* s, size_t pos = npos) const;
+		size_t rfind(const char* s, size_t pos, size_t n) const;
+		size_t rfind(char c, size_t pos = npos) const;
+		size_t find_first_of(const string& str, size_t pos = 0) const;
+		size_t find_first_of(const char* s, size_t pos = 0) const;
+		size_t find_first_of(const char* s, size_t pos, size_t n) const;
+		size_t find_first_of(char c, size_t pos = 0) const;
+		size_t find_last_of(const string& str, size_t pos = npos) const;
+		size_t find_last_of(const char* s, size_t pos = npos) const;
+		size_t find_last_of(const char* s, size_t pos, size_t n) const;
+		size_t find_last_of(char c, size_t pos = npos) const;
+		size_t find_first_not_of(const string& str, size_t pos = 0) const;
+		size_t find_first_not_of(const char* s, size_t pos = 0) const;
+		size_t find_first_not_of(const char* s, size_t pos, size_t n) const;
+		size_t find_first_not_of(char c, size_t pos = 0) const;
+		size_t find_last_not_of(const string& str, size_t pos = npos) const;
+		size_t find_last_not_of(const char* s, size_t pos = npos) const;
+		size_t find_last_not_of(const char* s, size_t pos, size_t n) const;
+		size_t find_last_not_of(char c, size_t pos = npos) const;
+
+		string substr(size_t pos = 0, size_t len = npos) const{
+			return string(begin() + pos, begin() + pos + len);
+		}
+
+		int compare(const string& str) const noexcept;
+		int compare(size_t pos, size_t len, const string& str) const;
+		int compare(size_t pos, size_t len, const string& str,
+			size_t subpos, size_t sublen = npos) const;
+		int compare(const char* s) const;
+		int compare(size_t pos, size_t len, const char* s) const;
+		int compare(size_t pos, size_t len, const char* s, size_t n) const;
 	private:
 		//插入时空间不足的情况
 		template<class InputIterator>
