@@ -57,9 +57,9 @@ namespace TinySTL{
 		reference operator[] (difference_type n){
 			return base()[-n - 1];
 		}
-		reverse_iterator operator + (difference_type n);
+		reverse_iterator operator + (difference_type n)const;
 		reverse_iterator& operator += (difference_type n);
-		reverse_iterator operator - (difference_type n);
+		reverse_iterator operator - (difference_type n)const;
 		reverse_iterator& operator -= (difference_type n);
 	private:
 		Iterator advanceNStep(Iterator it,
@@ -134,13 +134,13 @@ namespace TinySTL{
 		return *this;
 	}
 	template<class Iterator>
-	reverse_iterator<Iterator> reverse_iterator<Iterator>::operator + (difference_type n){
+	reverse_iterator<Iterator> reverse_iterator<Iterator>::operator + (difference_type n)const{
 		reverse_iterator<Iterator> res = *this;
 		res += n;
 		return res;
 	}
 	template<class Iterator>
-	reverse_iterator<Iterator> reverse_iterator<Iterator>::operator - (difference_type n){
+	reverse_iterator<Iterator> reverse_iterator<Iterator>::operator - (difference_type n)const{
 		reverse_iterator<Iterator> res = *this;
 		res -= n;
 		return res;
