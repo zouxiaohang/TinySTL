@@ -12,7 +12,9 @@ namespace TinySTL{
 		typedef typename iterator_traits<Iterator>::value_type value_type;
 		typedef typename iterator_traits<Iterator>::difference_type difference_type;
 		typedef typename iterator_traits<Iterator>::pointer pointer;
+		typedef const pointer const_pointer;
 		typedef typename iterator_traits<Iterator>::reference reference;
+		typedef const reference const_reference;
 	private:
 		Iterator base_;
 		Iterator cur_;
@@ -29,7 +31,9 @@ namespace TinySTL{
 		//其他成员函数
 		iterator_type base(){ return base_; }
 		reference operator*(){ return (*cur_); }
+		const_reference operator*()const{ return(*cur_); }
 		pointer operator->(){ return &(operator *()); }
+		const_pointer operator->()const{ return &(operator*()); }
 		reverse_iterator& operator ++(){
 			--base_;
 			--cur_;
