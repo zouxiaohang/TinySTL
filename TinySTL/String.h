@@ -107,6 +107,20 @@ namespace TinySTL{
 		iterator erase(iterator p);
 		iterator erase(iterator first, iterator last);
 
+		string& replace(size_t pos, size_t len, const string& str);
+		string& replace(iterator i1, iterator i2, const string& str);
+		string& replace(size_t pos, size_t len, const string& str,
+			size_t subpos, size_t sublen = npos);
+		string& replace(size_t pos, size_t len, const char* s);
+		string& replace(iterator i1, iterator i2, const char* s);
+		string& replace(size_t pos, size_t len, const char* s, size_t n);
+		string& replace(iterator i1, iterator i2, const char* s, size_t n);
+		string& replace(size_t pos, size_t len, size_t n, char c);
+		string& replace(iterator i1, iterator i2, size_t n, char c);
+		template <class InputIterator>
+		string& replace(iterator i1, iterator i2,
+			InputIterator first, InputIterator last);
+
 		void swap(string& str){
 			std::swap(start_, str.start_);
 			std::swap(finish_, str.finish_);
@@ -356,5 +370,42 @@ namespace TinySTL{
 	string::iterator string::erase(iterator p){
 		return erase(p, end());
 	}
+	template <class InputIterator>
+	string& string::replace(iterator i1, iterator i2,
+		InputIterator first, InputIterator last){
+		auto ptr = erase(i1, i2);
+		insert(ptr, first, last);
+		return *this;
+	}
+	string& string::replace(size_t pos, size_t len, const string& str){
+		return replace(begin() + pos, begin() + pos + len, str.begin(), str.end());
+	}
+	string& string::replace(iterator i1, iterator i2, const string& str){
+		return replace(i1, i2, str.begin(), str.end());
+	}
+	string& string::replace(size_t pos, size_t len, const string& str, size_t subpos, size_t sublen){
+		return replace(begin() + pos, begin() + pos + len, str.begin() + subpos, str.begin() + pos + sublen);
+	}
+	string& string::replace(size_t pos, size_t len, const char* s){
+		return replace(begin() + pos, begin() + pos + len, s, s + strlen(s));
+	}
+	string& string::replace(iterator i1, iterator i2, const char* s){
+		return replace(i1, i2, s, s + strlen(s));
+	}
+	string& string::replace(iterator i1, iterator i2, size_t n, char c){
+		auto ptr = erase(i1, i2);
+		insert(ptr, n, c);
+		return *this;
+	}
+	string& string::replace(size_t pos, size_t len, const char* s, size_t n){
+		return replace(begin() + pos, begin() + pos + len, s, s + n);
+	}
+	string& string::replace(iterator i1, iterator i2, const char* s, size_t n){
+		return replace(i1, i2, s, s + n);
+	}
+	string& string::replace(size_t pos, size_t len, size_t n, char c){
+		return replace(begin() + pos, begin() + pos + len, n, c);
+	}
+	
 }
 #endif
