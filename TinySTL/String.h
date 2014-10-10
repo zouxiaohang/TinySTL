@@ -298,9 +298,8 @@ namespace TinySTL{
 		auto lengthOfLeft = capacity() - size();
 		size_t lengthOfInsert = last - first;
 		if (lengthOfInsert <= lengthOfLeft){
-			auto ptr = finish_;
-			for (auto i = lengthOfInsert; i != 0; --i){
-				*(finish_ - 1 + i) = *(--ptr);
+			for (iterator it = finish_ - 1; it >= p; --it){
+				*(it + lengthOfInsert) = *(it);
 			}
 			TinySTL::uninitialized_copy(first, last, p);
 			finish_ += lengthOfInsert;
@@ -346,9 +345,8 @@ namespace TinySTL{
 	string::iterator string::insert(iterator p, size_t n, char c){
 		auto lengthOfLeft = capacity() - size();
 		if (n <= lengthOfLeft){
-			auto ptr = finish_;
-			for (auto i = n; i != 0; --i){
-				*(finish_ - 1 + i) = *(--ptr);
+			for (iterator it = finish_ - 1; it >= p; --it){
+				*(it + n) = *(it);
 			}
 			TinySTL::uninitialized_fill_n(p, n, c);
 			finish_ += n;
@@ -405,6 +403,7 @@ namespace TinySTL{
 		dataAllocator::destroy(first + lengthOfMove, finish_);
 		finish_ = first + lengthOfMove;
 		return first;
+		
 	}
 	string& string::erase(size_t pos, size_t len){
 		erase(begin() + pos, begin() + pos + len);
@@ -518,8 +517,9 @@ namespace TinySTL{
 		return rfind_aux(s, pos, lengthOfS, pos - n);
 	}
 	std::ostream& operator <<(std::ostream& os, const string&str){
-		for (const auto ch : str)
+		for (const auto ch : str){
 			os << ch;
+		}
 		return os;
 	}
 }
