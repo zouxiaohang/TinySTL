@@ -135,7 +135,7 @@ namespace TinySTL{
 		size_t find(const char* s, size_t pos = 0) const;
 		size_t find(const char* s, size_t pos, size_t n) const;
 		size_t find(char c, size_t pos = 0) const;
-		size_t rfind(const string& str, size_t pos = npos) const;
+		size_t rfind(const string& str, size_t pos = npos) const;//ok
 		size_t rfind(const char* s, size_t pos = npos) const;
 		size_t rfind(const char* s, size_t pos, size_t n) const;
 		size_t rfind(char c, size_t pos = npos) const;//ok
@@ -143,18 +143,18 @@ namespace TinySTL{
 		size_t find_first_of(const char* s, size_t pos = 0) const;
 		size_t find_first_of(const char* s, size_t pos, size_t n) const;
 		size_t find_first_of(char c, size_t pos = 0) const;
-		size_t find_last_of(const string& str, size_t pos = npos) const;
-		size_t find_last_of(const char* s, size_t pos = npos) const;
+		size_t find_last_of(const string& str, size_t pos = npos) const;//ok
+		size_t find_last_of(const char* s, size_t pos = npos) const;//ok
 		size_t find_last_of(const char* s, size_t pos, size_t n) const;
-		size_t find_last_of(char c, size_t pos = npos) const;
+		size_t find_last_of(char c, size_t pos = npos) const;//ok
 		size_t find_first_not_of(const string& str, size_t pos = 0) const;
 		size_t find_first_not_of(const char* s, size_t pos = 0) const;
 		size_t find_first_not_of(const char* s, size_t pos, size_t n) const;
 		size_t find_first_not_of(char c, size_t pos = 0) const;
-		size_t find_last_not_of(const string& str, size_t pos = npos) const;
-		size_t find_last_not_of(const char* s, size_t pos = npos) const;
+		size_t find_last_not_of(const string& str, size_t pos = npos) const;//ok
+		size_t find_last_not_of(const char* s, size_t pos = npos) const;//ok
 		size_t find_last_not_of(const char* s, size_t pos, size_t n) const;
-		size_t find_last_not_of(char c, size_t pos = npos) const;
+		size_t find_last_not_of(char c, size_t pos = npos) const;//ok
 
 		string substr(size_t pos = 0, size_t len = npos) const{
 			if (len == npos)
@@ -209,7 +209,7 @@ namespace TinySTL{
 			dataAllocator::destroy(start_, finish_);
 			dataAllocator::deallocate(start_, endOfStorage_ - start_);
 		}
-		size_t rfind_aux(const_iterator cit, size_t pos, size_t lengthOfS, size_t cond)const;
+		size_t rfind_aux(const_iterator cit, size_t pos, size_t lengthOfS, int cond)const;
 		size_t find_aux(const_iterator cit, size_t pos, size_t lengthOfS, size_t cond)const;
 		int compare_aux(size_t pos, size_t len, const_iterator cit, size_t subpos, size_t sublen)const;
 		bool isContained(char ch, const_iterator first, const_iterator last)const{
@@ -552,8 +552,8 @@ namespace TinySTL{
 		}
 		return npos;
 	}
-	size_t string::rfind_aux(const_iterator cit, size_t pos, size_t lengthOfS, size_t cond)const{
-		size_t i, j;
+	size_t string::rfind_aux(const_iterator cit, size_t pos, size_t lengthOfS, int cond)const{
+		int i, j;
 		for (i = pos - lengthOfS; i >= cond; --i){
 			for (j = 0; j != lengthOfS; ++j){
 				if (*(begin() + i + j) != cit[j])
@@ -568,10 +568,12 @@ namespace TinySTL{
 		auto lengthOfS = str.size();
 		if (pos - 0 < lengthOfS)
 			return npos;
+		pos = changeVarWhenEuqalNPOS(pos, size(), 1);
 		return rfind_aux(str.begin(), pos, lengthOfS, 0);
 	}
-	size_t string::rfind(const char* s, size_t pos) const{
-		return rfind(s, pos, pos);
+	size_t string::rfind(const char* s, size_t pos) const{//ok
+		pos = changeVarWhenEuqalNPOS(pos, size(), 1);
+		return rfind(s, pos, pos + 1);
 	}
 	size_t string::rfind(const char* s, size_t pos, size_t n) const{
 		auto lengthOfS = strlen(s);
