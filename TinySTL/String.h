@@ -34,7 +34,7 @@ namespace TinySTL{
 		string() :start_(0), finish_(0), endOfStorage_(0){}
 		string(const string& str);
 		string(string&& str);
-		string(const string& str, size_t pos, size_t len = npos);
+		string(const string& str, size_t pos, size_t len = npos);//ok
 		string(const char* s);
 		string(const char* s, size_t n);
 		string(size_t n, char c);
@@ -85,7 +85,7 @@ namespace TinySTL{
 
 		void push_back(char c){ insert(end(), c); }
 		string& insert(size_t pos, const string& str);
-		string& insert(size_t pos, const string& str, size_t subpos, size_t sublen = npos);
+		string& insert(size_t pos, const string& str, size_t subpos, size_t sublen = npos);//ok
 		string& insert(size_t pos, const char* s);
 		string& insert(size_t pos, const char* s, size_t n);
 		string& insert(size_t pos, size_t n, char c);
@@ -94,7 +94,7 @@ namespace TinySTL{
 		template <class InputIterator>
 		iterator insert(iterator p, InputIterator first, InputIterator last);
 		string& append(const string& str);
-		string& append(const string& str, size_t subpos, size_t sublen = npos);
+		string& append(const string& str, size_t subpos, size_t sublen = npos);//ok
 		string& append(const char* s);
 		string& append(const char* s, size_t n);
 		string& append(size_t n, char c);
@@ -105,13 +105,13 @@ namespace TinySTL{
 		string& operator+= (char c);
 
 		void pop_back(){ erase(end() - 1, end()); }
-		string& erase(size_t pos = 0, size_t len = npos);
+		string& erase(size_t pos = 0, size_t len = npos);//ok
 		iterator erase(iterator p);
 		iterator erase(iterator first, iterator last);
 
 		string& replace(size_t pos, size_t len, const string& str);
 		string& replace(iterator i1, iterator i2, const string& str);
-		string& replace(size_t pos, size_t len, const string& str, size_t subpos, size_t sublen = npos);
+		string& replace(size_t pos, size_t len, const string& str, size_t subpos, size_t sublen = npos);//ok
 		string& replace(size_t pos, size_t len, const char* s);
 		string& replace(iterator i1, iterator i2, const char* s);
 		string& replace(size_t pos, size_t len, const char* s, size_t n);
@@ -138,7 +138,7 @@ namespace TinySTL{
 		size_t rfind(const string& str, size_t pos = npos) const;
 		size_t rfind(const char* s, size_t pos = npos) const;
 		size_t rfind(const char* s, size_t pos, size_t n) const;
-		size_t rfind(char c, size_t pos = npos) const;
+		size_t rfind(char c, size_t pos = npos) const;//ok
 		size_t find_first_of(const string& str, size_t pos = 0) const;
 		size_t find_first_of(const char* s, size_t pos = 0) const;
 		size_t find_first_of(const char* s, size_t pos, size_t n) const;
@@ -219,6 +219,9 @@ namespace TinySTL{
 			}
 			return false;
 		}
+		size_t changeVarWhenEuqalNPOS(size_t var, size_t minuend, size_t minue)const{
+			return (var == npos ? minuend - minue : var);
+		}
 	public:
 		friend std::ostream& operator <<(std::ostream& os, const string&str);
 		friend std::istream& operator>> (std::istream& is, string& str);
@@ -273,6 +276,7 @@ namespace TinySTL{
 		moveData(str);
 	}
 	string::string(const string& str, size_t pos, size_t len){
+		len = changeVarWhenEuqalNPOS(len, str.size(), pos);
 		allocateAndCopy(str.start_ + pos, str.start_ + pos + len);
 	}
 	string& string::operator= (const string& str){
@@ -367,6 +371,7 @@ namespace TinySTL{
 		return *this;
 	}
 	string& string::insert(size_t pos, const string& str, size_t subpos, size_t sublen){
+		sublen = changeVarWhenEuqalNPOS(sublen, str.size(), subpos);
 		insert(begin() + pos, str.begin() + subpos, str.begin() + subpos + sublen);
 		return *this;
 	}
@@ -429,6 +434,7 @@ namespace TinySTL{
 		return *this;
 	}
 	string& string::append(const string& str, size_t subpos, size_t sublen){
+		sublen = changeVarWhenEuqalNPOS(sublen, str.size(), subpos);
 		insert(size(), str, subpos, sublen);
 		return *this;
 	}
@@ -460,6 +466,7 @@ namespace TinySTL{
 		
 	}
 	string& string::erase(size_t pos, size_t len){
+		len = changeVarWhenEuqalNPOS(len, size(), pos);
 		erase(begin() + pos, begin() + pos + len);
 		return *this;
 	}
@@ -480,7 +487,8 @@ namespace TinySTL{
 		return replace(i1, i2, str.begin(), str.end());
 	}
 	string& string::replace(size_t pos, size_t len, const string& str, size_t subpos, size_t sublen){
-		return replace(begin() + pos, begin() + pos + len, str.begin() + subpos, str.begin() + pos + sublen);
+		sublen = changeVarWhenEuqalNPOS(sublen, str.size(), subpos);
+		return replace(begin() + pos, begin() + pos + len, str.begin() + subpos, str.begin() + subpos + sublen);
 	}
 	string& string::replace(size_t pos, size_t len, const char* s){
 		return replace(begin() + pos, begin() + pos + len, s, s + strlen(s));
@@ -537,9 +545,10 @@ namespace TinySTL{
 		return npos;
 	}
 	size_t string::rfind(char c, size_t pos) const{
-		for (auto crit = crbegin() + pos; crit != crend(); ++crit){
-			if (*crit == c)
-				return crit - crbegin();
+		pos = changeVarWhenEuqalNPOS(pos, size(), 1);
+		for (auto cit = cbegin() + pos; cit >= cbegin(); --cit){
+			if (*cit == c)
+				return cit - cbegin();
 		}
 		return npos;
 	}
@@ -640,23 +649,46 @@ namespace TinySTL{
 		return npos;
 	}
 	size_t string::find_last_of(const string& str, size_t pos) const{
-		if (pos == npos)
-			pos = size() - 1;
+		pos = changeVarWhenEuqalNPOS(pos, size(), 1);
 		return find_last_of(str.begin(), pos, pos + 1);
 	}
 	size_t string::find_last_of(const char* s, size_t pos) const{
-		if (pos == npos)
-			pos = size() - 1;
+		pos = changeVarWhenEuqalNPOS(pos, size(), 1);
 		return find_last_of(s, pos, pos + 1);
 	}
 	size_t string::find_last_of(const char* s, size_t pos, size_t n) const{
-		for (size_t i = pos; i != 0 && i != pos - n; --i){
+		for (size_t i = pos, j = 0; i >= 0 && j != n; --i, ++j){
 			if (isContained((*this)[i], s, s + strlen(s)))
 				return i;
 		}
 		return npos;
 	}
-	//size_t string::find_last_of(char c, size_t pos = npos) const;
+	size_t string::find_last_of(char c, size_t pos) const{
+		return rfind(c, pos);
+	}
+	size_t string::find_last_not_of(const string& str, size_t pos) const{
+		pos = changeVarWhenEuqalNPOS(pos, size(), 1);
+		return find_last_not_of(str.begin(), pos, size());
+	}
+	size_t string::find_last_not_of(const char* s, size_t pos) const{
+		pos = changeVarWhenEuqalNPOS(pos, size(), 1);
+		return find_last_not_of(s, pos, pos + 1);
+	}
+	size_t string::find_last_not_of(const char* s, size_t pos, size_t n) const{
+		for (size_t i = pos, j = 0; i >= 0 && j != n; --i, ++j){
+			if (!isContained((*this)[i], s, s + strlen(s)))
+				return i;
+		}
+		return npos;
+	}
+	size_t string::find_last_not_of(char c, size_t pos) const{
+		pos = changeVarWhenEuqalNPOS(pos, size(), 1);
+		for (int i = pos; i >= 0; --i){
+			if ((*this)[i] != c)
+				return i;
+		}
+		return npos;
+	}
 	std::ostream& operator <<(std::ostream& os, const string&str){
 		for (const auto ch : str){
 			os << ch;
