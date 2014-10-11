@@ -604,7 +604,7 @@ namespace TinySTL{
 		return compare_aux(pos, len, s, 0, n);
 	}
 	size_t string::find_first_of(const string& str, size_t pos) const{
-		return find_first_of(str.begin(), pos, str.size() - pos);
+		return find_first_of(str.begin(), pos, size() - pos);
 	}
 	size_t string::find_first_of(const char* s, size_t pos) const{
 		return find_first_of(s, pos, size() - pos);
@@ -620,7 +620,7 @@ namespace TinySTL{
 		return find(c, pos);
 	}
 	size_t string::find_first_not_of(const string& str, size_t pos) const{
-		return find_first_not_of(str.begin(), pos, str.size() - pos);
+		return find_first_not_of(str.begin(), pos, size() - pos);
 	}
 	size_t string::find_first_not_of(const char* s, size_t pos) const{
 		return find_first_not_of(s, pos, size() - pos);
@@ -639,26 +639,20 @@ namespace TinySTL{
 		}
 		return npos;
 	}
-	//size_t string::find_last_of(const string& str, size_t pos = npos) const;
+	size_t string::find_last_of(const string& str, size_t pos) const{
+		if (pos == npos)
+			pos = size() - 1;
+		return find_last_of(str.begin(), pos, pos + 1);
+	}
 	size_t string::find_last_of(const char* s, size_t pos) const{
 		if (pos == npos)
 			pos = size() - 1;
 		return find_last_of(s, pos, pos + 1);
 	}
 	size_t string::find_last_of(const char* s, size_t pos, size_t n) const{
-		/*size_t lengthOfS = strlen(s);*/
-		/*if (n < lengthOfS)
-			return npos;*/
-		size_t i, j;
-		for (i = pos; i != 0 && i != pos - n; --i){
+		for (size_t i = pos; i != 0 && i != pos - n; --i){
 			if (isContained((*this)[i], s, s + strlen(s)))
 				return i;
-			/*for (j = 0; j != lengthOfS; ++j){
-				if ((*this)[i + j] != s[j])
-					break;
-			}
-			if (j == lengthOfS)
-				return i;*/
 		}
 		return npos;
 	}
