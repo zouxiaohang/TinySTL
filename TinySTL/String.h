@@ -157,6 +157,8 @@ namespace TinySTL{
 		size_t find_last_not_of(char c, size_t pos = npos) const;
 
 		string substr(size_t pos = 0, size_t len = npos) const{
+			if (len == npos)
+				len = size() - pos;
 			return string(begin() + pos, begin() + pos + len);
 		}
 
@@ -637,6 +639,30 @@ namespace TinySTL{
 		}
 		return npos;
 	}
+	//size_t string::find_last_of(const string& str, size_t pos = npos) const;
+	size_t string::find_last_of(const char* s, size_t pos) const{
+		if (pos == npos)
+			pos = size() - 1;
+		return find_last_of(s, pos, pos + 1);
+	}
+	size_t string::find_last_of(const char* s, size_t pos, size_t n) const{
+		/*size_t lengthOfS = strlen(s);*/
+		/*if (n < lengthOfS)
+			return npos;*/
+		size_t i, j;
+		for (i = pos; i != 0 && i != pos - n; --i){
+			if (isContained((*this)[i], s, s + strlen(s)))
+				return i;
+			/*for (j = 0; j != lengthOfS; ++j){
+				if ((*this)[i + j] != s[j])
+					break;
+			}
+			if (j == lengthOfS)
+				return i;*/
+		}
+		return npos;
+	}
+	//size_t string::find_last_of(char c, size_t pos = npos) const;
 	std::ostream& operator <<(std::ostream& os, const string&str){
 		for (const auto ch : str){
 			os << ch;
