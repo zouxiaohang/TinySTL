@@ -768,7 +768,9 @@ namespace TinySTL{
 		template<class Iterator1, class Iterator2>
 		bool lessEqual_aux(Iterator1 first1, Iterator1 last1, Iterator2 first2, Iterator2 last2){
 			for (; first1 != last1 && first2 != last2; ++first1, ++first2){
-				if (*first1 > *first2)
+				if (*first1 < *first2)
+					return true;
+				else if (*first1 > *first2)
 					return false;
 			}
 			if ((first1 == last1 && first2 == last2)// ==
@@ -800,7 +802,9 @@ namespace TinySTL{
 		template<class Iterator1, class Iterator2>
 		bool greaterEqual_aux(Iterator1 first1, Iterator1 last1, Iterator2 first2, Iterator2 last2){
 			for (; first1 != last1 && first2 != last2; ++first1, ++first2){
-				if (*first1 < *first2)
+				if (*first1 > *first2)
+					return true;
+				else if (*first1 < *first2)
 					return false;
 			}
 			if ((first1 == last1 && first2 == last2)// ==
