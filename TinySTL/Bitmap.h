@@ -4,9 +4,10 @@
 #include <cstdint>
 #include <iostream>
 #include <stdexcept>
-#include <string>
+//#include <string>
 
 #include "Allocator.h"
+#include "String.h"
 #include "UninitializedFunctions.h"
 
 namespace TinySTL{
@@ -60,7 +61,8 @@ namespace TinySTL{
 		bitmap& flip();
 		bitmap& flip(size_t pos);
 
-		std::string to_string() const;
+		//std::string to_string() const;
+		string to_string() const;
 
 		template<size_t N>
 		friend std::ostream& operator <<(std::ostream& os, const bitmap<N>& bm);
@@ -177,8 +179,8 @@ namespace TinySTL{
 		return !any();
 	}
 	template<size_t N>
-	std::string bitmap<N>::to_string() const{
-		std::string str;
+	string bitmap<N>::to_string() const{
+		string str;
 		uint8_t *ptr = start_;
 		for (; ptr != finish_; ++ptr){
 			uint8_t n = *ptr;
