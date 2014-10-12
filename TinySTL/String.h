@@ -4,6 +4,7 @@
 #include "Allocator.h"
 #include "ReverseIterator.h"
 #include "UninitializedFunctions.h"
+#include "Utility.h"
 
 #include <cstring>
 #include <type_traits>
@@ -122,9 +123,9 @@ namespace TinySTL{
 		string& replace(iterator i1, iterator i2, InputIterator first, InputIterator last);
 
 		void swap(string& str){
-			std::swap(start_, str.start_);
-			std::swap(finish_, str.finish_);
-			std::swap(endOfStorage_, str.endOfStorage_);
+			TinySTL::swap(start_, str.start_);
+			TinySTL::swap(finish_, str.finish_);
+			TinySTL::swap(endOfStorage_, str.endOfStorage_);
 		}
 		size_t copy(char* s, size_t len, size_t pos = 0) const{
 			auto ptr = TinySTL::uninitialized_copy(begin() + pos, begin() + pos + len, s);

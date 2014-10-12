@@ -2,6 +2,7 @@
 #define _QUEUE_H_
 
 #include "Deque.h"
+#include "Functional.h"
 #include "Vector.h"
 
 namespace TinySTL{
