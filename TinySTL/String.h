@@ -223,7 +223,7 @@ namespace TinySTL{
 		}
 	public:
 		friend std::ostream& operator <<(std::ostream& os, const string&str);
-		friend std::istream& operator>> (std::istream& is, string& str);
+		friend std::istream& operator >> (std::istream& is, string& str);
 		friend string operator+ (const string& lhs, const string& rhs);
 		friend string operator+ (const string& lhs, const char* rhs);
 		friend string operator+ (const char* lhs, const string& rhs);
@@ -589,17 +589,17 @@ namespace TinySTL{
 	int string::compare_aux(size_t pos, size_t len, const_iterator cit, size_t subpos, size_t sublen)const{
 		size_t i, j;
 		for (i = 0, j = 0; i != len && j != sublen; ++i, ++j){
-		if ((*this)[pos + i] < cit[subpos + j])
-		return -1;
-		else if ((*this)[pos + i] > cit[subpos + j])
-		return 1;
+			if ((*this)[pos + i] < cit[subpos + j])
+				return -1;
+			else if ((*this)[pos + i] > cit[subpos + j])
+				return 1;
 		}
 		if (i == len && j == sublen)
-		return 0;
+			return 0;
 		else if (i == len)
-		return -1;
-		else if (j == sublen)
-		return 1;
+			return -1;
+		else
+			return 1;
 	}
 	int string::compare(size_t pos, size_t len, const string& str, size_t subpos, size_t sublen) const{
 		return compare_aux(pos, len, str.begin(), subpos, sublen);
@@ -695,6 +695,32 @@ namespace TinySTL{
 			os << ch;
 		}
 		return os;
+	}
+	std::istream& operator >> (std::istream& is, string& str){
+		char ch;
+		string::size_type oldSize = str.size(), index = 0;
+		bool hasPrevBlank = false, badState = false;
+		while (is.get(ch)){//跳过前导空白
+			if (isblank(ch) || ch == '\n')
+				hasPrevBlank = true;
+			else
+				break;
+		}
+		is.putback(ch);
+		while (is.get(ch)){
+			if (ch != EOF && !isblank(ch) && ch != '\n'){
+				if (++index <= oldSize)
+					str[index - 1] = ch;
+				else
+					str.push_back(ch);
+			}else{//istream读取出错
+				badState = true;
+				break;
+			}
+		}
+		if (index < oldSize)
+			str.erase(str.begin() + index, str.end());
+		return is;
 	}
 	string operator+ (const string& lhs, const string& rhs){
 		string res(lhs);
