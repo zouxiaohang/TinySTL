@@ -38,6 +38,8 @@ TinySTL
     * fill：100% 
     * fill_n：100% 
     * find：100%
+    * min、max：100%
+    * swap：100%
 * circular_buffer：90%   
 * bitmap：100%
 * string：100%
