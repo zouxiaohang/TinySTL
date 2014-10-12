@@ -183,7 +183,7 @@ namespace TinySTL{
 		iterator insert_aux_filln(iterator p, size_t n, value_type c);
 		size_type getNewCapacity(size_type len)const{
 			size_type oldCapacity = endOfStorage_ - start_;
-			auto res = std::max(oldCapacity, len);
+			auto res = TinySTL::max(oldCapacity, len);
 			size_type newCapacity = (oldCapacity != 0 ? (oldCapacity + res) : 1);
 			return newCapacity;
 		}

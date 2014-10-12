@@ -48,6 +48,24 @@ namespace TinySTL{
 		}
 		return first;
 	}
+	//*********** [min] ********************
+	template <class T> 
+	const T& min(const T& a, const T& b){
+		return !(b < a) ? a : b;
+	}
+	template <class T, class Compare>
+	const T& min(const T& a, const T& b, Compare comp){
+		return !comp(b, a) ? a : b;
+	}
+	//*********** [max] ********************
+	template <class T> 
+	const T& max(const T& a, const T& b){
+		return (a < b) ? b : a;
+	}
+	template <class T, class Compare>
+	const T& max(const T& a, const T& b, Compare comp){
+		return (copm(a, b)) ? b : a;
+	}
 }
 
 #endif
