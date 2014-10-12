@@ -4,7 +4,7 @@
 #include <cstring>
 
 namespace TinySTL{
-	//********* fill ********************
+	//********* [fill] ********************
 	template<class ForwardIterator, class T>
 	void fill(ForwardIterator first, ForwardIterator last, const T& value)
 	{
@@ -19,7 +19,7 @@ namespace TinySTL{
 	{
 		memset(first, static_cast<unsigned char>(value), (last - first) * sizeof(wchar_t));
 	}
-	//********* fill_n ********************
+	//********* [fill_n] ********************
 	template<class OutputIterator, class Size, class T>
 	OutputIterator fill_n(OutputIterator first, Size n, const T& value)
 	{
@@ -38,6 +38,15 @@ namespace TinySTL{
 	{
 		memset(first, static_cast<unsigned char>(value), n * sizeof(wchar_t));
 		return first + n;
+	}
+	//************ [find] ****************
+	template<class InputIterator, class T>
+	InputIterator find(InputIterator first, InputIterator last, const T& val){
+		for (; first != last; ++first){
+			if (*first == val)
+				break;
+		}
+		return first;
 	}
 }
 
