@@ -34,7 +34,7 @@ namespace TinySTL{
 		string() :start_(0), finish_(0), endOfStorage_(0){}
 		string(const string& str);
 		string(string&& str);
-		string(const string& str, size_t pos, size_t len = npos);//ok
+		string(const string& str, size_t pos, size_t len = npos);
 		string(const char* s);
 		string(const char* s, size_t n);
 		string(size_t n, char c);
@@ -85,7 +85,7 @@ namespace TinySTL{
 
 		void push_back(char c){ insert(end(), c); }
 		string& insert(size_t pos, const string& str);
-		string& insert(size_t pos, const string& str, size_t subpos, size_t sublen = npos);//ok
+		string& insert(size_t pos, const string& str, size_t subpos, size_t sublen = npos);
 		string& insert(size_t pos, const char* s);
 		string& insert(size_t pos, const char* s, size_t n);
 		string& insert(size_t pos, size_t n, char c);
@@ -94,7 +94,7 @@ namespace TinySTL{
 		template <class InputIterator>
 		iterator insert(iterator p, InputIterator first, InputIterator last);
 		string& append(const string& str);
-		string& append(const string& str, size_t subpos, size_t sublen = npos);//ok
+		string& append(const string& str, size_t subpos, size_t sublen = npos);
 		string& append(const char* s);
 		string& append(const char* s, size_t n);
 		string& append(size_t n, char c);
@@ -105,13 +105,13 @@ namespace TinySTL{
 		string& operator+= (char c);
 
 		void pop_back(){ erase(end() - 1, end()); }
-		string& erase(size_t pos = 0, size_t len = npos);//ok
+		string& erase(size_t pos = 0, size_t len = npos);
 		iterator erase(iterator p);
 		iterator erase(iterator first, iterator last);
 
 		string& replace(size_t pos, size_t len, const string& str);
 		string& replace(iterator i1, iterator i2, const string& str);
-		string& replace(size_t pos, size_t len, const string& str, size_t subpos, size_t sublen = npos);//ok
+		string& replace(size_t pos, size_t len, const string& str, size_t subpos, size_t sublen = npos);
 		string& replace(size_t pos, size_t len, const char* s);
 		string& replace(iterator i1, iterator i2, const char* s);
 		string& replace(size_t pos, size_t len, const char* s, size_t n);
@@ -135,30 +135,29 @@ namespace TinySTL{
 		size_t find(const char* s, size_t pos = 0) const;
 		size_t find(const char* s, size_t pos, size_t n) const;
 		size_t find(char c, size_t pos = 0) const;
-		size_t rfind(const string& str, size_t pos = npos) const;//ok
+		size_t rfind(const string& str, size_t pos = npos) const;
 		size_t rfind(const char* s, size_t pos = npos) const;
 		size_t rfind(const char* s, size_t pos, size_t n) const;
-		size_t rfind(char c, size_t pos = npos) const;//ok
+		size_t rfind(char c, size_t pos = npos) const;
 		size_t find_first_of(const string& str, size_t pos = 0) const;
 		size_t find_first_of(const char* s, size_t pos = 0) const;
 		size_t find_first_of(const char* s, size_t pos, size_t n) const;
 		size_t find_first_of(char c, size_t pos = 0) const;
-		size_t find_last_of(const string& str, size_t pos = npos) const;//ok
-		size_t find_last_of(const char* s, size_t pos = npos) const;//ok
+		size_t find_last_of(const string& str, size_t pos = npos) const;
+		size_t find_last_of(const char* s, size_t pos = npos) const;
 		size_t find_last_of(const char* s, size_t pos, size_t n) const;
-		size_t find_last_of(char c, size_t pos = npos) const;//ok
+		size_t find_last_of(char c, size_t pos = npos) const;
 		size_t find_first_not_of(const string& str, size_t pos = 0) const;
 		size_t find_first_not_of(const char* s, size_t pos = 0) const;
 		size_t find_first_not_of(const char* s, size_t pos, size_t n) const;
 		size_t find_first_not_of(char c, size_t pos = 0) const;
-		size_t find_last_not_of(const string& str, size_t pos = npos) const;//ok
-		size_t find_last_not_of(const char* s, size_t pos = npos) const;//ok
+		size_t find_last_not_of(const string& str, size_t pos = npos) const;
+		size_t find_last_not_of(const char* s, size_t pos = npos) const;
 		size_t find_last_not_of(const char* s, size_t pos, size_t n) const;
-		size_t find_last_not_of(char c, size_t pos = npos) const;//ok
+		size_t find_last_not_of(char c, size_t pos = npos) const;
 
 		string substr(size_t pos = 0, size_t len = npos) const{
-			if (len == npos)
-				len = size() - pos;
+			len = changeVarWhenEuqalNPOS(len, size(), pos);
 			return string(begin() + pos, begin() + pos + len);
 		}
 
@@ -571,7 +570,7 @@ namespace TinySTL{
 		pos = changeVarWhenEuqalNPOS(pos, size(), 1);
 		return rfind_aux(str.begin(), pos, lengthOfS, 0);
 	}
-	size_t string::rfind(const char* s, size_t pos) const{//ok
+	size_t string::rfind(const char* s, size_t pos) const{
 		pos = changeVarWhenEuqalNPOS(pos, size(), 1);
 		return rfind(s, pos, pos + 1);
 	}
@@ -696,6 +695,129 @@ namespace TinySTL{
 			os << ch;
 		}
 		return os;
+	}
+	string operator+ (const string& lhs, const string& rhs){
+		string res(lhs);
+		return res += rhs;
+	}
+	string operator+ (const string& lhs, const char* rhs){
+		string res(lhs);
+		return res += rhs;
+	}
+	string operator+ (const char* lhs, const string& rhs){
+		string res(lhs);
+		return res += rhs;
+	}
+	string operator+ (const string& lhs, char rhs){
+		string res(lhs);
+		return res += rhs;
+	}
+	string operator+ (char lhs, const string& rhs){
+		string res(1, lhs);
+		return res += rhs;
+	}
+	bool operator== (const string& lhs, const string& rhs){
+		if (lhs.size() == rhs.size()){
+			for (auto cit1 = lhs.cbegin(), cit2 = rhs.cbegin();
+				cit1 != lhs.cend() && cit2 != rhs.cend();
+				++cit1, ++cit2){
+				if (*cit1 != *cit2)
+					return false;
+			}
+			return true;
+		}
+		return false;
+	}
+	bool operator== (const char*   lhs, const string& rhs){
+		return rhs == lhs;
+	}
+	bool operator== (const string& lhs, const char*   rhs){
+		size_t len = strlen(rhs);
+		if (lhs.size() == len){
+			const char *p = rhs;
+			for (string::const_iterator cit = lhs.cbegin();
+				cit != lhs.cend() && p != rhs + len;
+				++cit, ++p){
+				if (*cit != *p)
+					return false;
+			}
+			return true;
+		}
+		return false;
+	}
+	bool operator!= (const string& lhs, const string& rhs){
+		return !(lhs == rhs);
+	}
+	bool operator!= (const char*   lhs, const string& rhs){
+		return !(lhs == rhs);
+	}
+	bool operator!= (const string& lhs, const char*   rhs){
+		return !(lhs == rhs);
+	}
+	bool operator<  (const string& lhs, const string& rhs){
+		return !(lhs >= rhs);
+	}
+	bool operator<  (const char*   lhs, const string& rhs){
+		return !(lhs >= rhs);
+	}
+	bool operator<  (const string& lhs, const char*   rhs){
+		return !(lhs >= rhs);
+	}
+
+	namespace{
+		template<class Iterator1, class Iterator2>
+		bool lessEqual_aux(Iterator1 first1, Iterator1 last1, Iterator2 first2, Iterator2 last2){
+			for (; first1 != last1 && first2 != last2; ++first1, ++first2){
+				if (*first1 > *first2)
+					return false;
+			}
+			if ((first1 == last1 && first2 == last2)// ==
+				|| (first1 == last1))// <
+				return true;
+			else
+				return false;
+		}
+	}
+	bool operator<= (const string& lhs, const string& rhs){
+		return lessEqual_aux(lhs.cbegin(), lhs.cend(), rhs.cbegin(), rhs.cend());
+	}
+	bool operator<= (const char*   lhs, const string& rhs){
+		return lessEqual_aux(lhs, lhs + strlen(lhs), rhs.cbegin(), rhs.cend());
+	}
+	bool operator<= (const string& lhs, const char*   rhs){
+		return lessEqual_aux(lhs.cbegin(), lhs.cend(), rhs, rhs + strlen(rhs));
+	}
+	bool operator>  (const string& lhs, const string& rhs){
+		return !(lhs <= rhs);
+	}
+	bool operator>  (const char*   lhs, const string& rhs){
+		return !(lhs <= rhs);
+	}
+	bool operator>  (const string& lhs, const char*   rhs){
+		return !(lhs <= rhs);
+	}
+	namespace{
+		template<class Iterator1, class Iterator2>
+		bool greaterEqual_aux(Iterator1 first1, Iterator1 last1, Iterator2 first2, Iterator2 last2){
+			for (; first1 != last1 && first2 != last2; ++first1, ++first2){
+				if (*first1 < *first2)
+					return false;
+			}
+			if ((first1 == last1 && first2 == last2)// ==
+				|| (first2 == last2))// >
+				return true;
+			else
+				return false;
+		}
+	}
+	bool operator>= (const string& lhs, const string& rhs){
+		return greaterEqual_aux(lhs.cbegin(), lhs.cend(), rhs.cbegin(), rhs.cend());
+	}
+	bool operator>= (const char*   lhs, const string& rhs){
+		return greaterEqual_aux(lhs, lhs + strlen(lhs), rhs.cbegin(), rhs.cend());
+	}
+	bool operator>= (const string& lhs, const char*   rhs){
+		return greaterEqual_aux(lhs.cbegin(), lhs.cend(), rhs, rhs + strlen(rhs));
 	}
 	void swap(string& x, string& y){
 		x.swap(y);
