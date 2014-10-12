@@ -699,7 +699,7 @@ namespace TinySTL{
 	std::istream& operator >> (std::istream& is, string& str){
 		char ch;
 		string::size_type oldSize = str.size(), index = 0;
-		bool hasPrevBlank = false, badState = false;
+		bool hasPrevBlank = false;
 		while (is.get(ch)){//跳过前导空白
 			if (isblank(ch) || ch == '\n')
 				hasPrevBlank = true;
@@ -707,20 +707,28 @@ namespace TinySTL{
 				break;
 		}
 		is.putback(ch);
+		str.clear();
 		while (is.get(ch)){
 			if (ch != EOF && !isblank(ch) && ch != '\n'){
-				if (++index <= oldSize)
-					str[index - 1] = ch;
-				else
-					str.push_back(ch);
-			}else{//istream读取出错
-				badState = true;
+				str.push_back(ch);
+			}else
 				break;
-			}
 		}
-		if (index < oldSize)
-			str.erase(str.begin() + index, str.end());
 		return is;
+	}
+	std::istream& getline(std::istream& is, string& str, char delim){
+		char ch;
+		str.clear();
+		while (is.get(ch)){
+			if (ch == delim)
+				break;
+			else
+				str.push_back(ch);
+		}
+		return is;
+	}
+	std::istream& getline(std::istream& is, string& str){
+		return getline(is, str, '\n');
 	}
 	string operator+ (const string& lhs, const string& rhs){
 		string res(lhs);
