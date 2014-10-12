@@ -89,9 +89,13 @@
     <ClInclude Include="Bitmap.h" />
     <ClInclude Include="CircularBuffer.h" />
     <ClInclude Include="Construct.h" />
+    <ClInclude Include="Deque.h" />
+    <ClInclude Include="Functional.h" />
     <ClInclude Include="Iterator.h" />
     <ClInclude Include="Profiler\Profiler.h" />
+    <ClInclude Include="Queue.h" />
     <ClInclude Include="ReverseIterator.h" />
+    <ClInclude Include="Stack.h" />
     <ClInclude Include="String.h" />
     <ClInclude Include="TypeTraits.h" />
     <ClInclude Include="UninitializedFunctions.h" />
