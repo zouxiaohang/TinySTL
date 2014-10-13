@@ -25,6 +25,7 @@ TinySTL
   * Disjoint-set data structure
   * k-d tree
   * R-tree
+  * Matrix
   * Graph
 
 ##完成进度：
