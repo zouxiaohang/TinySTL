@@ -40,7 +40,7 @@ namespace TinySTL{
 	}
 	template<class T>
 	T *allocator<T>::allocate(size_t n){
-		assert(n != 0);
+		if (n == 0) return 0;
 		return static_cast<T *>(alloc::allocate(sizeof(T) * n));
 	}
 	template<class T>
