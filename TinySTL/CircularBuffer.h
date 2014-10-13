@@ -77,20 +77,24 @@ namespace TinySTL{
 				return index;
 			}
 		public:
-			friend cb_iter operator +(const cb_iter& cit, std::ptrdiff_t i);
-			friend cb_iter operator -(const cb_iter& cit, std::ptrdiff_t i);
+			template<class T, size_t N, class Alloc>
+			friend cb_iter<T, N, Alloc> operator +(const cb_iter<T, N, Alloc>& cit, std::ptrdiff_t i);
+			template<class T, size_t N, class Alloc>
+			friend cb_iter<T, N, Alloc> operator -(const cb_iter<T, N, Alloc>& cit, std::ptrdiff_t i);
 		};
 		template<class T, size_t N, class Alloc>
 		cb_iter<T, N, Alloc> operator +(const cb_iter<T, N, Alloc>& cit, std::ptrdiff_t i){
-			auto real_i = i % N;
-			cb_iter<T, N, Alloc> res = *this;
+			int real_i = i % (std::ptrdiff_t)N;//assume i >= 0
+			if (real_i < 0)
+				real_i += 5;
+			cb_iter<T, N, Alloc> res = cit;
 			res.setIndex_(res.index_ + real_i);
 			res.setPtr_(res.ptr_ + res.index_);
 			return res;
 		}
 		template<class T, size_t N, class Alloc>
 		cb_iter<T, N, Alloc> operator -(const cb_iter<T, N, Alloc>& cit, std::ptrdiff_t i){
-			cb_iter<T, N, Alloc> res = *this;
+			cb_iter<T, N, Alloc> res = cit;
 			return (res + (-i));
 		}
 	}//end of anonymous namespace
