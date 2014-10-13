@@ -41,7 +41,7 @@ TinySTL
     * find：100%
     * min、max：100%
     * swap：100%
-* circular_buffer：90%   
+* circular_buffer：100%   
 * bitmap：100%
 * string：100%
 
