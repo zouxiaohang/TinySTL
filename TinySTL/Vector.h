@@ -37,9 +37,9 @@ namespace TinySTL{
 
 			bool operator == (const viter& vit)const{ return ptr_ == vit.ptr_; }
 			bool operator != (const viter& vit)const{ return !(*this == vit); }
-			viter operator + (const difference_type i){ return viter(ptr_ + i); }
+			viter operator + (const difference_type i)const{ return viter(ptr_ + i); }
 			viter& operator += (const difference_type i){ ptr_ += i; return *this; }
-			viter operator - (const difference_type i){ return viter(ptr_ - i); }
+			viter operator - (const difference_type i)const{ return viter(ptr_ - i); }
 			viter& operator -= (const difference_type i){ ptr_ -= i; return *this; }
 			difference_type operator - (const viter& vit)const{ return (ptr_ - vit.ptr_); }
 
@@ -89,9 +89,12 @@ namespace TinySTL{
 	public:
 		typedef T									value_type;
 		typedef viter<T>							iterator;
-		typedef reverse_iterator<viter<T>>			reverse_iterator;
+		typedef const viter<T>						const_iterator;
+		typedef reverse_iterator<T*>				reverse_iterator;
+		typedef const reverse_iterator				const_reverse_iterator;
 		typedef iterator							pointer;
 		typedef T&									reference;
+		typedef const T&							const_reference;
 		typedef size_t								size_type;
 		typedef typename iterator::difference_type	difference_type;
 	public:
@@ -116,9 +119,15 @@ namespace TinySTL{
 
 		//迭代器相关
 		iterator begin(){ return iterator(start_); }
+		const_iterator begin()const{ return const_iterator(start_); }
+		const_iterator cbegin()const{ return const_iterator(start_); }
 		iterator end(){ return iterator(finish_); }
-		reverse_iterator rbegin(){ return reverse_iterator(end()); }
-		reverse_iterator rend(){ return reverse_iterator(begin()); }
+		const_iterator end()const{ return const_iterator(finish_); }
+		const_iterator cend()const{ return const_iterator(finish_); }
+		reverse_iterator rbegin(){ return reverse_iterator(finish_); }
+		const_reverse_iterator crbegin(){ return const_reverse_iterator(finish_); }
+		reverse_iterator rend(){ return reverse_iterator(start_); }
+		const_reverse_iterator crend(){ return const_reverse_iterator(start_); }
 
 		//与容量相关
 		difference_type size()const{ return finish_ - start_; }

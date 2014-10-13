@@ -21,7 +21,7 @@ namespace TinySTL{
 	public:
 		//构造。复制，析构相关
 		reverse_iterator() :base_(0), cur_(0){}
-		explicit reverse_iterator(iterator_type it) :base_(it), cur_(it - 1){}
+		explicit reverse_iterator(const iterator_type& it) :base_(it), cur_(it - 1){}
 		template <class Iter>
 		reverse_iterator(const reverse_iterator<Iter>& rev_it){ 
 			base_ = (iterator_type)rev_it.base(); 

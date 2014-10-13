@@ -17,20 +17,31 @@
 #include "Vector.h"
 #include "Profiler\Profiler.h"
 
+#include "Queue.h"
+
 using namespace TinySTL::Profiler;
-
+class mycomparison
+{
+	bool reverse;
+public:
+	mycomparison(const bool& revparam = false)
+	{
+		reverse = revparam;
+	}
+	bool operator() (const int& lhs, const int&rhs) const
+	{
+		if (reverse) return (lhs>rhs);
+		else return (lhs<rhs);
+	}
+};
 int main(){
-	/*char array[] = "+C";
-	TinySTL::string s("LoveC++");
-	TinySTL::string str("ZXHLoveC++VeryMuch");
-	cout << str.find_first_of(array, 0, str.size()) << endl;*/
-	TinySTL::string name("zxh");
-	//std::string name("zxh");
+	int array[] = { 1, 2, 3, 4, 5 };
+	TinySTL::vector<int> myvector(array, array+5);
 
-	std::cout << "Please, enter your full name: ";
-	TinySTL::getline(std::cin, name,'i');
-	//std::getline(std::cin, name);
-	std::cout << name << "\n";
+	std::cout << "myvector backwards:";
+	for (auto rit = myvector.crbegin(); rit != myvector.crend(); ++rit)
+		std::cout << ' ' << *rit;
+	std::cout << '\n';
 	system("pause");
 	return 0;
 }
