@@ -125,9 +125,9 @@ namespace TinySTL{
 		const_iterator end()const{ return const_iterator(finish_); }
 		const_iterator cend()const{ return const_iterator(finish_); }
 		reverse_iterator rbegin(){ return reverse_iterator(finish_); }
-		const_reverse_iterator crbegin(){ return const_reverse_iterator(finish_); }
+		const_reverse_iterator crbegin()const{ return const_reverse_iterator(finish_); }
 		reverse_iterator rend(){ return reverse_iterator(start_); }
-		const_reverse_iterator crend(){ return const_reverse_iterator(start_); }
+		const_reverse_iterator crend()const{ return const_reverse_iterator(start_); }
 
 		//与容量相关
 		difference_type size()const{ return finish_ - start_; }
