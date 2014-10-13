@@ -25,6 +25,7 @@ TinySTL
   * Disjoint-set data structure
   * k-d tree
   * R-tree
+  * Matrix
   * Graph
 
 ##完成进度：
@@ -38,6 +39,8 @@ TinySTL
     * fill：100% 
     * fill_n：100% 
     * find：100%
+    * min、max：100%
+    * swap：100%
 * circular_buffer：90%   
 * bitmap：100%
 * string：100%
