@@ -23,8 +23,18 @@ namespace TinySTL{
 			cbPtr container_;
 		public:
 			cb_iter() :ptr_(0), index_(0), container_(0){}
-			explicit cb_iter(T *ptr, cbPtr container) :
+			cb_iter(T *ptr, cbPtr container) :
 				ptr_(ptr), index_(ptr - container->start_), container_(container){}
+			cb_iter(const cb_iter& cit) :
+				ptr_(cit.ptr_), index_(cit.index_), container_(cit.container_){}
+			cb_iter& operator = (const cb_iter& cit){
+				if (this != &cit){
+					ptr_ = cit.ptr_;
+					index_ = cit.index_;
+					container_ = cit.container_;
+				}
+				return *this;
+			}
 		public:
 			operator T*(){ return ptr_; }
 			T& operator *(){ return *ptr_; }
@@ -57,33 +67,6 @@ namespace TinySTL{
 			bool operator != (const cb_iter& it)const{
 				return !((*this) == it);
 			}
-			//fuck
-			//fuck
-			//fuck
-			//fuck
-			//wish to do like this, but buggy
-			//for (auto it = cb.first(); it <= cb.last(); ++it)
-			//	{ cout << *it << endl; }
-			//fuck
-			//fuck
-			//fuck
-			bool operator <= (const cb_iter& it)const{//fuck
-				if (*this == it) return true;
-				auto indexOfThis = ptr_ - container_->start_;
-				auto indexOfIt = it.ptr_ - it.container_->start_;
-
-				if (indexOfThis < indexOfIt){
-					if (container_->indexOfHead < indexOfThis || container_->indexOfHead > indexOfIt)
-						return true;
-					else if (container_->indexOfHead < indexOfIt && container_->indexOfHead > indexOfThis)
-						return false;
-				}else{//indexOfThis > indexOfIt
-					if (container_->indexOfHead < indexOfIt || container_->indexOfHead > indexOfThis)
-						return false;
-					else if (container_->indexOfHead < indexOfThis && container_->indexOfHead > indexOfIt)
-						return true;
-				}
-			}
 		private:
 			void setIndex_(int index){ index_ = index; }
 			void setPtr_(T *ptr){ ptr_ = ptr; }
@@ -93,7 +76,23 @@ namespace TinySTL{
 				index = (index == -1 ? index + N : index);
 				return index;
 			}
+		public:
+			friend cb_iter operator +(const cb_iter& cit, std::ptrdiff_t i);
+			friend cb_iter operator -(const cb_iter& cit, std::ptrdiff_t i);
 		};
+		template<class T, size_t N, class Alloc>
+		cb_iter<T, N, Alloc> operator +(const cb_iter<T, N, Alloc>& cit, std::ptrdiff_t i){
+			auto real_i = i % N;
+			cb_iter<T, N, Alloc> res = *this;
+			res.setIndex_(res.index_ + real_i);
+			res.setPtr_(res.ptr_ + res.index_);
+			return res;
+		}
+		template<class T, size_t N, class Alloc>
+		cb_iter<T, N, Alloc> operator -(const cb_iter<T, N, Alloc>& cit, std::ptrdiff_t i){
+			cb_iter<T, N, Alloc> res = *this;
+			return (res + (-i));
+		}
 	}//end of anonymous namespace
 
 	//circular buffer
