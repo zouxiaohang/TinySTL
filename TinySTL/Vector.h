@@ -42,11 +42,6 @@ namespace TinySTL{
 			viter operator - (const difference_type i)const{ return viter(ptr_ - i); }
 			viter& operator -= (const difference_type i){ ptr_ -= i; return *this; }
 			difference_type operator - (const viter& vit)const{ return (ptr_ - vit.ptr_); }
-
-			friend viter operator + (const viter& vit, const difference_type i);
-			friend viter operator + (const difference_type i, const viter& vit);
-			friend viter operator - (const viter& vit, const difference_type i);
-			friend viter operator - (const difference_type i, const viter& vit);
 		};
 		template<class T>
 		viter<T>::viter(const viter& vit){
@@ -58,22 +53,6 @@ namespace TinySTL{
 				ptr_ = vit.ptr_;
 			}
 			return *this;
-		}
-		template<class T>
-		viter<T> operator + (const viter<T>& vit, const typename viter<T>::difference_type i){
-			return vit + i;
-		}
-		template<class T>
-		viter<T> operator + (const typename viter<T>::difference_type i, const viter<T>& vit){
-			return vit + i;
-		}
-		template<class T>
-		viter<T> operator - (const viter<T>& vit, const typename viter<T>::difference_type i){
-			return vit + i;
-		}
-		template<class T>
-		viter<T> operator - (const typename viter<T>::difference_type i, const viter<T>& vit){
-			return vit + i;
 		}
 	}// end of anonymous namespace
 
@@ -209,8 +188,8 @@ namespace TinySTL{
 		void reallocateAndFillN(iterator position, const size_type& n, const value_type& val);
 		size_type getNewCapacity(size_type len)const{
 			size_type oldCapacity = endOfStorage_ - start_;
-			auto res = std::max(oldCapacity, len);
-			size_type newCapacity = (oldCapacity != 0 ? (oldCapacity + res) : 1);
+			auto res = TinySTL::max(oldCapacity, len);
+			size_type newCapacity = (oldCapacity != 0 ? (oldCapacity + res) : len);
 			return newCapacity;
 		}
 	public:
@@ -356,7 +335,7 @@ namespace TinySTL{
 		difference_type locationNeed = last - first;
 
 		if (locationLeft >= locationNeed){
-			auto tempPtr = end() - 1;
+			iterator tempPtr = end() - 1;
 			for (; tempPtr - position >= 0; --tempPtr){//move the [position, finish_) back
 				*(tempPtr + locationNeed) = *tempPtr;
 			}
