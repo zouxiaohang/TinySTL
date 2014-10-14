@@ -39,7 +39,12 @@ TinySTL
     * fill：100% 
     * fill_n：100% 
     * find：100%
+    * is_heap：100%
     * min、max：100%
+    * make_heap：100%
+    * pop_heap：100%
+    * push_heap：100%
+    * sort_heap：100%
     * swap：100%
 * circular_buffer：100%   
 * bitmap：100%
