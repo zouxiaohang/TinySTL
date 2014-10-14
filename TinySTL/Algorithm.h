@@ -73,28 +73,30 @@ namespace TinySTL{
 	}
 	//********** [make_heap] ***************
 	//********* [Algorithm Complexity: O(N)] ****************
-	//template<class RandomAccessIterator, class Compare>
-	////heap上溯算法
-	//static void up(RandomAccessIterator first, RandomAccessIterator last, Compare comp){//[first, last]
-	//	if (first != last){
-	//		auto range = last - first + 1;
-	//		for (auto cur = last; rait > first; range /= 2){
-	//			auto parent = first + (range / 2 - 1);
-	//			if (comp(*parent, *cur))
-	//				TinySTL::swap(*parent, *cur);
-	//			cur = parent;
-	//		}
-	//	}
-	//}
+	template<class RandomAccessIterator, class Compare>
+	//heap上溯算法
+	static void up(RandomAccessIterator first, RandomAccessIterator last, 
+		RandomAccessIterator head, Compare comp){//1.[first, last], 2.headr points the header of the heap
+		if (first != last){
+			int index = last - head;
+			auto parentIndex = (index - 1) / 2;
+			for (auto cur = last; parentIndex >= 0 && cur != head; parentIndex = (index - 1) / 2){
+				auto parent = head + parentIndex;//get parent
+				if (comp(*parent, *cur))
+					TinySTL::swap(*parent, *cur);
+				cur = parent;
+				index = cur - head;
+			}
+		}
+	}
 	template<class RandomAccessIterator, class Compare>
 	//heap下降算法
 	static void down(RandomAccessIterator first, RandomAccessIterator last, 
 		RandomAccessIterator head, Compare comp){//1.[first, last], 2.headr points the header of the heap
 		if (first != last){
-			const auto range = last - head + 1;
 			auto index = first - head;
 			auto leftChildIndex = index * 2 + 1;
-			for (auto cur = first; leftChildIndex < range && cur < last; leftChildIndex = index * 2 + 1){
+			for (auto cur = first; leftChildIndex < (last - head + 1) && cur < last; leftChildIndex = index * 2 + 1){
 				auto child = head + leftChildIndex;//get the left child
 				if ((child + 1) <= last && *(child + 1) > *child)//cur has a right child
 					child = child + 1;
@@ -114,15 +116,20 @@ namespace TinySTL{
 	void make_heap(RandomAccessIterator first, RandomAccessIterator last, Compare comp){
 		const auto range = last - first;
 		for (auto cur = first + range / 2 - 1; cur >= first; --cur){
-			down(cur, last - 1, first, comp);
+			TinySTL::down(cur, last - 1, first, comp);
 			if (cur == first) return;
 		}
 	}
 	//********* [push_heap] ***************
 	template <class RandomAccessIterator>
-	void push_heap(RandomAccessIterator first, RandomAccessIterator last);
+	void push_heap(RandomAccessIterator first, RandomAccessIterator last){
+		TinySTL::push_heap(first, last,
+			TinySTL::less<typename TinySTL::iterator_traits<RandomAccessIterator>::value_type>());
+	}
 	template <class RandomAccessIterator, class Compare>
-	void push_heap(RandomAccessIterator first, RandomAccessIterator last, Compare comp);
+	void push_heap(RandomAccessIterator first, RandomAccessIterator last, Compare comp){
+		TinySTL::up(first, last - 1, first, comp);
+	}
 	//********* [pop_heap] ***************
 	template <class RandomAccessIterator>
 	void pop_heap(RandomAccessIterator first, RandomAccessIterator last){
@@ -133,7 +140,7 @@ namespace TinySTL{
 	void pop_heap(RandomAccessIterator first, RandomAccessIterator last, Compare comp){
 		TinySTL::swap(*first, *(last - 1));
 		if (last - first >= 2)
-			down(first, last - 2, first, comp);
+			TinySTL::down(first, last - 2, first, comp);
 	}
 	//********* [sort_heap] ***************
 	template <class RandomAccessIterator>
