@@ -73,19 +73,19 @@ namespace TinySTL{
 	}
 	//********** [make_heap] ***************
 	//********* [Algorithm Complexity: O(N)] ****************
-	template<class RandomAccessIterator, class Compare>
-	//heap上溯算法
-	static void up(RandomAccessIterator first, RandomAccessIterator last, Compare comp){//[first, last]
-		if (first != last){
-			auto range = last - first + 1;
-			for (auto cur = last; rait > first; range /= 2){
-				auto parent = first + (range / 2 - 1);
-				if (comp(*parent, *cur))
-					TinySTL::swap(*parent, *cur);
-				cur = parent;
-			}
-		}
-	}
+	//template<class RandomAccessIterator, class Compare>
+	////heap上溯算法
+	//static void up(RandomAccessIterator first, RandomAccessIterator last, Compare comp){//[first, last]
+	//	if (first != last){
+	//		auto range = last - first + 1;
+	//		for (auto cur = last; rait > first; range /= 2){
+	//			auto parent = first + (range / 2 - 1);
+	//			if (comp(*parent, *cur))
+	//				TinySTL::swap(*parent, *cur);
+	//			cur = parent;
+	//		}
+	//	}
+	//}
 	template<class RandomAccessIterator, class Compare>
 	//heap下降算法
 	static void down(RandomAccessIterator first, RandomAccessIterator last, 
@@ -125,9 +125,16 @@ namespace TinySTL{
 	void push_heap(RandomAccessIterator first, RandomAccessIterator last, Compare comp);
 	//********* [pop_heap] ***************
 	template <class RandomAccessIterator>
-	void pop_heap(RandomAccessIterator first, RandomAccessIterator last);
+	void pop_heap(RandomAccessIterator first, RandomAccessIterator last){
+		TinySTL::pop_heap(first, last, 
+			TinySTL::less<typename TinySTL::iterator_traits<RandomAccessIterator>::value_type>());
+	}
 	template <class RandomAccessIterator, class Compare>
-	void pop_heap(RandomAccessIterator first, RandomAccessIterator last, Compare comp);
+	void pop_heap(RandomAccessIterator first, RandomAccessIterator last, Compare comp){
+		TinySTL::swap(*first, *(last - 1));
+		if (last - first >= 2)
+			down(first, last - 2, first, comp);
+	}
 	//********* [sort_heap] ***************
 	template <class RandomAccessIterator>
 	void sort_heap(RandomAccessIterator first, RandomAccessIterator last);
