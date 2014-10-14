@@ -5,6 +5,7 @@
 
 namespace TinySTL{
 	//********* [fill] ********************
+	//********* [Algorithm Complexity: O(N)] ****************
 	template<class ForwardIterator, class T>
 	void fill(ForwardIterator first, ForwardIterator last, const T& value)
 	{
@@ -20,6 +21,7 @@ namespace TinySTL{
 		memset(first, static_cast<unsigned char>(value), (last - first) * sizeof(wchar_t));
 	}
 	//********* [fill_n] ********************
+	//********* [Algorithm Complexity: O(N)] ****************
 	template<class OutputIterator, class Size, class T>
 	OutputIterator fill_n(OutputIterator first, Size n, const T& value)
 	{
@@ -40,6 +42,7 @@ namespace TinySTL{
 		return first + n;
 	}
 	//************ [find] ****************
+	//********* [Algorithm Complexity: O(N)] ****************
 	template<class InputIterator, class T>
 	InputIterator find(InputIterator first, InputIterator last, const T& val){
 		for (; first != last; ++first){
@@ -49,6 +52,7 @@ namespace TinySTL{
 		return first;
 	}
 	//*********** [min] ********************
+	//********* [Algorithm Complexity: O(1)] ****************
 	template <class T> 
 	const T& min(const T& a, const T& b){
 		return !(b < a) ? a : b;
@@ -58,6 +62,7 @@ namespace TinySTL{
 		return !comp(b, a) ? a : b;
 	}
 	//*********** [max] ********************
+	//********* [Algorithm Complexity: O(1)] ****************
 	template <class T> 
 	const T& max(const T& a, const T& b){
 		return (a < b) ? b : a;
@@ -67,7 +72,9 @@ namespace TinySTL{
 		return (copm(a, b)) ? b : a;
 	}
 	//********** [make_heap] ***************
+	//********* [Algorithm Complexity: O(N)] ****************
 	template<class RandomAccessIterator, class Compare>
+	//heap上溯算法
 	static void up(RandomAccessIterator first, RandomAccessIterator last, Compare comp){//[first, last]
 		if (first != last){
 			auto range = last - first + 1;
@@ -80,20 +87,21 @@ namespace TinySTL{
 		}
 	}
 	template<class RandomAccessIterator, class Compare>
-	static void down(RandomAccessIterator first, RandomAccessIterator last, Compare comp){//[first, last]
+	//heap下降算法
+	static void down(RandomAccessIterator first, RandomAccessIterator last, 
+		RandomAccessIterator head, Compare comp){//1.[first, last], 2.headr points the header of the heap
 		if (first != last){
-			decltype(last - first) range = 1;
-			for (auto cur = first; cur < last;range = cur - first + 1){
-				auto child = first + (range * 2 - 1);//get the left child
-				if (child <= last){
-					if ((child + 1) <= last && *(child + 1) > *child)
-						child = child + 1;//right child
-					if (comp(*cur, *child))
-						TinySTL::swap(*cur, *child);
-					cur = child;
-				}
-				else 
-					break;
+			const auto range = last - head + 1;
+			auto index = first - head;
+			auto leftChildIndex = index * 2 + 1;
+			for (auto cur = first; leftChildIndex < range && cur < last; leftChildIndex = index * 2 + 1){
+				auto child = head + leftChildIndex;//get the left child
+				if ((child + 1) <= last && *(child + 1) > *child)//cur has a right child
+					child = child + 1;
+				if (comp(*cur, *child))
+					TinySTL::swap(*cur, *child);
+				cur = child;
+				index = cur - head;
 			}
 		}
 	}
@@ -105,8 +113,9 @@ namespace TinySTL{
 	template <class RandomAccessIterator, class Compare>
 	void make_heap(RandomAccessIterator first, RandomAccessIterator last, Compare comp){
 		const auto range = last - first;
-		for (auto rait = first + range - 1; rait > first; --rait){
-			down(first, rait, comp);
+		for (auto cur = first + range / 2 - 1; cur >= first; --cur){
+			down(cur, last - 1, first, comp);
+			if (cur == first) return;
 		}
 	}
 	//********* [push_heap] ***************
@@ -126,9 +135,23 @@ namespace TinySTL{
 	void sort_heap(RandomAccessIterator first, RandomAccessIterator last, Compare comp);
 	//********* [is_heap] ***************
 	template <class RandomAccessIterator>
-	bool is_heap(RandomAccessIterator first, RandomAccessIterator last);
+	bool is_heap(RandomAccessIterator first, RandomAccessIterator last){
+		return TinySTL::is_heap(first, last,
+			TinySTL::less<typename TinySTL::iterator_traits<RandomAccessIterator>::value_type>());
+	}
 	template <class RandomAccessIterator, class Compare>
-	bool is_heap(RandomAccessIterator first, RandomAccessIterator last, Compare comp);
+	bool is_heap(RandomAccessIterator first, RandomAccessIterator last, Compare comp){
+		const auto range = last - first;
+		auto index = range / 2 - 1;
+		for (auto cur = first + range / 2 - 1; cur >= first; --cur, --index){
+			if (*(first + (index * 2 + 1)) > *cur ||//left child > cur
+				((first + (index * 2 + 2)) <= last && *(first + (index * 2 + 2)) > *cur))//right child > cur
+				return false;
+			if (cur == first)
+				break;
+		}
+		return true;
+	}
 }
 
 
