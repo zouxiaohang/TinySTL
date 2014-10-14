@@ -144,9 +144,16 @@ namespace TinySTL{
 	}
 	//********* [sort_heap] ***************
 	template <class RandomAccessIterator>
-	void sort_heap(RandomAccessIterator first, RandomAccessIterator last);
+	void sort_heap(RandomAccessIterator first, RandomAccessIterator last){
+		return TinySTL::sort_heap(first, last,
+			TinySTL::less<typename TinySTL::iterator_traits<RandomAccessIterator>::value_type>());
+	}
 	template <class RandomAccessIterator, class Compare>
-	void sort_heap(RandomAccessIterator first, RandomAccessIterator last, Compare comp);
+	void sort_heap(RandomAccessIterator first, RandomAccessIterator last, Compare comp){
+		for (auto cur = last; cur != first; --cur){
+			TinySTL::pop_heap(first, cur, comp);
+		}
+	}
 	//********* [is_heap] ***************
 	template <class RandomAccessIterator>
 	bool is_heap(RandomAccessIterator first, RandomAccessIterator last){
