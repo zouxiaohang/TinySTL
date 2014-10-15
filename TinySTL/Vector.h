@@ -133,9 +133,9 @@ namespace TinySTL{
 		}
 		void swap(vector& v){
 			if (this != &v){
-				std::swap(start_, v.start_);
-				std::swap(finish_, v.finish_);
-				std::swap(endOfStorage_, v.endOfStorage_);
+				TinySTL::swap(start_, v.start_);
+				TinySTL::swap(finish_, v.finish_);
+				TinySTL::swap(endOfStorage_, v.endOfStorage_);
 			}
 		}
 		void push_back(const value_type& value);
