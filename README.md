@@ -50,6 +50,7 @@ TinySTL
 * circular_buffer：100%   
 * bitmap：100%
 * string：100%
+* priority_queue：100%
 
 #TinySTL测试:
 ###测试环境：Windows 7 && VS2013 && release模式
