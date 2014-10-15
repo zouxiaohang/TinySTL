@@ -1,6 +1,6 @@
 TinySTL
 =======
-采用C++11实现一款简易的STL标准库
+采用C++11实现一款简易的STL标准库，既是C++STL的一个子又是一个超集
 
 目的：练习数据结构与算法和C++ Template编程
 
@@ -27,6 +27,7 @@ TinySTL
   * R-tree
   * Matrix
   * Graph
+  * ThreadPool
 
 ##完成进度：
 * STL的几大基本组件
