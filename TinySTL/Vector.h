@@ -11,51 +11,6 @@
 #include "UninitializedFunctions.h"
 
 namespace TinySTL{
-	
-	namespace {
-		template<class T>
-		class viter : public TinySTL::iterator<TinySTL::random_access_iterator_tag, T>{
-		private:
-			T * ptr_;
-		private:
-			T *getPtr(){ return ptr_; }
-		public:
-			viter() :ptr_(0){}
-			explicit viter(T *ptr):ptr_(ptr){}
-			viter(const viter& vit);
-			viter& operator = (const viter& vit);
-
-			operator T* (){ return ptr_; }//change to the primitive pointer type
-
-			T& operator *(){ return *ptr_; }
-			T *operator ->(){ return &(operator *()); }
-			
-			viter& operator ++(){ ++ptr_; return *this; }
-			viter operator ++(int){ viter temp = *this; ++(*this); return temp; }
-			viter& operator --(){ --ptr_; return *this; }
-			viter operator --(int){ viter temp = *this; --(*this); return temp; }
-
-			bool operator == (const viter& vit)const{ return ptr_ == vit.ptr_; }
-			bool operator != (const viter& vit)const{ return !(*this == vit); }
-			viter operator + (const difference_type i)const{ return viter(ptr_ + i); }
-			viter& operator += (const difference_type i){ ptr_ += i; return *this; }
-			viter operator - (const difference_type i)const{ return viter(ptr_ - i); }
-			viter& operator -= (const difference_type i){ ptr_ -= i; return *this; }
-			difference_type operator - (const viter& vit)const{ return (ptr_ - vit.ptr_); }
-		};
-		template<class T>
-		viter<T>::viter(const viter& vit){
-				ptr_ = vit.ptr_;
-		}
-		template<class T>
-		viter<T>& viter<T>::operator = (const viter& vit){
-			if (this != &vit){
-				ptr_ = vit.ptr_;
-			}
-			return *this;
-		}
-	}// end of anonymous namespace
-
 	//********* vector *************
 	template<class T, class Alloc = allocator<T>>
 	class vector{
@@ -67,15 +22,15 @@ namespace TinySTL{
 		typedef Alloc dataAllocator;
 	public:
 		typedef T									value_type;
-		typedef viter<T>							iterator;
-		typedef const viter<T>						const_iterator;
+		typedef T*							iterator;
+		typedef const iterator					const_iterator;
 		typedef reverse_iterator<T*>				reverse_iterator;
 		typedef const reverse_iterator				const_reverse_iterator;
 		typedef iterator							pointer;
 		typedef T&									reference;
 		typedef const T&							const_reference;
 		typedef size_t								size_type;
-		typedef typename iterator::difference_type	difference_type;
+		typedef ptrdiff_t	difference_type;
 	public:
 		//构造，复制，析构相关函数
 		vector()
@@ -97,12 +52,12 @@ namespace TinySTL{
 		bool operator != (const vector& v);
 
 		//迭代器相关
-		iterator begin(){ return iterator(start_); }
-		const_iterator begin()const{ return const_iterator(start_); }
-		const_iterator cbegin()const{ return const_iterator(start_); }
-		iterator end(){ return iterator(finish_); }
-		const_iterator end()const{ return const_iterator(finish_); }
-		const_iterator cend()const{ return const_iterator(finish_); }
+		iterator begin(){ return (start_); }
+		const_iterator begin()const{ return (start_); }
+		const_iterator cbegin()const{ return (start_); }
+		iterator end(){ return (finish_); }
+		const_iterator end()const{ return (finish_); }
+		const_iterator cend()const{ return (finish_); }
 		reverse_iterator rbegin(){ return reverse_iterator(finish_); }
 		const_reverse_iterator crbegin()const{ return const_reverse_iterator(finish_); }
 		reverse_iterator rend(){ return reverse_iterator(start_); }
@@ -375,8 +330,9 @@ namespace TinySTL{
 	}
 	template<class T, class Alloc>
 	typename vector<T, Alloc>::iterator vector<T, Alloc>::insert(iterator position, const value_type& val){
+		const auto index = position - begin();
 		insert(position, 1, val);
-		return position;
+		return begin() + index;
 	}
 	template<class T, class Alloc>
 	void vector<T, Alloc>::push_back(const value_type& value){
