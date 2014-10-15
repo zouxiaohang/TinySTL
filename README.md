@@ -1,6 +1,6 @@
 TinySTL
 =======
-采用C++11实现一款简易的STL标准库
+采用C++11实现一款简易的STL标准库，既是C++STL的一个子集又是一个超集
 
 目的：练习数据结构与算法和C++ Template编程
 
@@ -27,6 +27,7 @@ TinySTL
   * R-tree
   * Matrix
   * Graph
+  * ThreadPool
 
 ##完成进度：
 * STL的几大基本组件
@@ -39,11 +40,17 @@ TinySTL
     * fill：100% 
     * fill_n：100% 
     * find：100%
+    * is_heap：100%
     * min、max：100%
+    * make_heap：100%
+    * pop_heap：100%
+    * push_heap：100%
+    * sort_heap：100%
     * swap：100%
 * circular_buffer：100%   
 * bitmap：100%
 * string：100%
+* priority_queue：100%
 
 #TinySTL测试:
 ###测试环境：Windows 7 && VS2013 && release模式
@@ -127,4 +134,37 @@ TinySTL
 ######i = 10000000 -> (TinySTL::string：39ms \\ std::string：229ms)
 ######i = 100000000 -> (TinySTL::string：484ms \\ std::string：1965ms)
 
+####(6):priority_queue&lt;int>
+
+    //std::priority_queue<int> pq;
+    TinySTL::priority_queue<int> pq;
+	ProfilerInstance::start();
+	int i = 0;
+	for (; i != 100000; ++i){
+		pq.push(i);
+	}
+	ProfilerInstance::finish();
+	ProfilerInstance::dumpDuringTime();
+    
+######i = 100000 -> (TinySTL::priority_queue&lt;int>：13ms \\ std::priority_queue&lt;int>：12ms)
+######i = 1000000 -> (TinySTL::priority_queue&lt;int>：97ms \\ std::priority_queue&lt;int>：67ms)
+######i = 10000000 -> (TinySTL::priority_queue&lt;int>：1032ms \\ std::priority_queue&lt;int>：752ms)  
+
+    TinySTL::vector<int> v;
+    int i = 0;
+	for (; i != 100000; ++i){
+		v.push_back(i);
+	}
+	//std::priority_queue<int> pq(v.begin(), v.end());
+	TinySTL::priority_queue<int> pq(v.begin(), v.end());
+	ProfilerInstance::start();
+	for (i = 0; i != 100000; ++i){
+		pq.pop();
+	}
+	ProfilerInstance::finish();
+	ProfilerInstance::dumpDuringTime();
+    
+######i = 100000 -> (TinySTL::priority_queue&lt;int>：19ms \\ std::priority_queue&lt;int>：7ms)
+######i = 1000000 -> (TinySTL::priority_queue&lt;int>：137ms \\ std::priority_queue&lt;int>：92ms)
+######i = 10000000 -> (TinySTL::priority_queue&lt;int>：1532ms \\ std::priority_queue&lt;int>：1214ms)
 
