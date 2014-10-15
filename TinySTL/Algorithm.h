@@ -121,6 +121,7 @@ namespace TinySTL{
 		}
 	}
 	//********* [push_heap] ***************
+	//********* [Algorithm Complexity: O(lgN)] ****************
 	template <class RandomAccessIterator>
 	void push_heap(RandomAccessIterator first, RandomAccessIterator last){
 		TinySTL::push_heap(first, last,
@@ -131,6 +132,7 @@ namespace TinySTL{
 		TinySTL::up(first, last - 1, first, comp);
 	}
 	//********* [pop_heap] ***************
+	//********* [Algorithm Complexity: O(lgN)] ****************
 	template <class RandomAccessIterator>
 	void pop_heap(RandomAccessIterator first, RandomAccessIterator last){
 		TinySTL::pop_heap(first, last, 
@@ -143,6 +145,7 @@ namespace TinySTL{
 			TinySTL::down(first, last - 2, first, comp);
 	}
 	//********* [sort_heap] ***************
+	//********* [Algorithm Complexity: O(N)] ****************
 	template <class RandomAccessIterator>
 	void sort_heap(RandomAccessIterator first, RandomAccessIterator last){
 		return TinySTL::sort_heap(first, last,
@@ -155,6 +158,7 @@ namespace TinySTL{
 		}
 	}
 	//********* [is_heap] ***************
+	//********* [Algorithm Complexity: O(N)] ****************
 	template <class RandomAccessIterator>
 	bool is_heap(RandomAccessIterator first, RandomAccessIterator last){
 		return TinySTL::is_heap(first, last,
