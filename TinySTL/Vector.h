@@ -77,7 +77,7 @@ namespace TinySTL{
 		//访问元素相关
 		value_type& operator[](const difference_type i){ return *(begin() + i); }
 		value_type& front(){ return *(begin()); }
-		value_type& back(){ return *(--end()); }
+		value_type& back(){ return *(end() - 1); }
 		pointer data(){ return start_; }
 
 		//修改容器相关的操作
