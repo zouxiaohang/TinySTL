@@ -247,7 +247,7 @@ namespace TinySTL{
 			auto temp = (last - lenOfRemoved);
 			*temp = *(last++);
 		}
-		return viter<T>(first);
+		return (first);
 	}
 	template<class T, class Alloc>
 	template<class InputIterator>
