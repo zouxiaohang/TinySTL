@@ -187,6 +187,16 @@ namespace TinySTL{
 		}
 		return true;
 	}
+	//********** [any_of] *************************
+	//********* [Algorithm Complexity: O(N)] ****************
+	template <class InputIterator, class UnaryPredicate>
+	bool any_of(InputIterator first, InputIterator last, UnaryPredicate pred){
+		for (; first != last; ++first){
+			if (pred(*first))
+				return true;
+		}
+		return false;
+	}
 }
 
 
