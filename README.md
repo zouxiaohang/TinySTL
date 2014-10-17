@@ -48,6 +48,9 @@ TinySTL
     * push_heap：100%
     * sort_heap：100%
     * swap：100%
+    * all_of：100%
+    * any_of：100%
+    * none_of：100%
 * circular_buffer：100%   
 * bitmap：100%
 * string：100%
