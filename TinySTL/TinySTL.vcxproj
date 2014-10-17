@@ -86,6 +86,7 @@
     <ClInclude Include="Algorithm.h" />
     <ClInclude Include="Alloc.h" />
     <ClInclude Include="Allocator.h" />
+    <ClInclude Include="BinarySearchTree.h" />
     <ClInclude Include="Bitmap.h" />
     <ClInclude Include="CircularBuffer.h" />
     <ClInclude Include="Construct.h" />
