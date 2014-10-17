@@ -32,7 +32,9 @@ namespace TinySTL{
 		binary_search_tree() :root_(0){}
 		binary_search_tree(const binary_search_tree&) = delete;
 		binary_search_tree& operator=(const binary_search_tree&) = delete;
-		~binary_search_tree(){}//TODO
+		~binary_search_tree(){
+			deallocateAllNodes(root_);
+		}
 
 		void insert(const T& val);
 
@@ -40,6 +42,13 @@ namespace TinySTL{
 		void print_inorder(const string& delim = " ", std::ostream& os = std::cout)const;
 		void print_postorder(const string& delim = " ", std::ostream& os = std::cout)const;
 	private:
+		void deallocateAllNodes(node *ptr){
+			if (ptr){
+				deallocateAllNodes(ptr->left_);
+				deallocateAllNodes(ptr->right_);
+				nodeAllocator::deallocate(ptr);
+			}
+		}
 		void insert_elem(const T& val, node *&ptr);
 		void print_preorder_aux(const string& delim, std::ostream& os, const node *ptr)const;
 		void print_inorder_aux(const string& delim, std::ostream& os, const node *ptr)const;
