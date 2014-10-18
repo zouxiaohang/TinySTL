@@ -26,7 +26,7 @@ namespace TinySTL{
 	public:
 		typedef T vaule_type;
 		typedef bst_iter<node> iterator;
-		typedef T& reference;
+		typedef const T& const_reference;
 	private:
 		node *root_;
 	public:
@@ -173,16 +173,16 @@ namespace TinySTL{
 		class bst_iter{
 		private:
 			typedef typename binary_search_tree<typename T::value_type>::vaule_type value_type;
-			typedef typename binary_search_tree<typename T::value_type>::reference reference;
-			typedef typename T::value_type *pointer;
+			typedef typename binary_search_tree<typename T::value_type>::const_reference const_reference;
+			typedef typename const T::value_type *const_pointer;
 		private:
-			T *ptr_;
+			const T *ptr_;
 		public:
-			bst_iter(T *ptr) :ptr_(ptr){}
+			bst_iter(const T *ptr) :ptr_(ptr){}
 
-			operator T*(){ return ptr_; }
-			reference operator*(){ return ptr_->data_; }
-			pointer operator ->(){ return &(operator*()); }
+			operator const T*(){ return ptr_; }
+			const_reference operator*(){ return ptr_->data_; }
+			const_pointer operator ->(){ return &(operator*()); }
 		};
 	}
 }
