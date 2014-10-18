@@ -1,5 +1,7 @@
 #include <algorithm>
+#include <atomic>
 #include <cassert>
+#include <condition_variable>
 #include <iostream>
 #include <list>
 #include <mutex>
@@ -7,6 +9,8 @@
 #include <string>
 #include <vector>
 #include <iterator>
+#include <queue>
+#include <random>
 #include <thread>
 #include <utility>
 
@@ -17,31 +21,32 @@
 #include "Vector.h"
 #include "Profiler\Profiler.h"
 
+#include "BinarySearchTree.h"
+#include "CircularBuffer.h"
+#include "Deque.h"
 #include "Queue.h"
+#include "Stack.h"
 
+using namespace std;
 using namespace TinySTL::Profiler;
-class mycomparison
-{
-	bool reverse;
-public:
-	mycomparison(const bool& revparam = false)
-	{
-		reverse = revparam;
-	}
-	bool operator() (const int& lhs, const int&rhs) const
-	{
-		if (reverse) return (lhs>rhs);
-		else return (lhs<rhs);
-	}
-};
-int main(){
-	int array[] = { 1, 2, 3, 4, 5 };
-	TinySTL::vector<int> myvector(array, array+5);
 
-	std::cout << "myvector backwards:";
-	for (auto rit = myvector.crbegin(); rit != myvector.crend(); ++rit)
-		std::cout << ' ' << *rit;
-	std::cout << '\n';
+int main(){
+	//TinySTL::deque<int> dq;
+	//int array[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 };
+	int array[] = { 5, 3, 2, 7, 6, 8, 8 };
+	TinySTL::binary_search_tree<int> bst;
+	bst.insert(array, array + 7);
+	//std::vector<int> vec;
+	TinySTL::vector<int> vec;
+	ProfilerInstance::start();
+	int i = 0;
+	for (; i != 1000000; ++i){
+		vec.push_back(i);
+	}
+	ProfilerInstance::finish();
+	ProfilerInstance::dumpDuringTime();
+	cout << ProfilerInstance::millisecond() << endl;
+
 	system("pause");
 	return 0;
 }

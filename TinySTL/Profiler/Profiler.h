@@ -15,13 +15,18 @@ namespace TinySTL{
 		public:
 			typedef std::chrono::steady_clock SteadyClock;
 			typedef SteadyClock::time_point TimePoint;
+			typedef std::chrono::duration<double> DurationTime;
 		private:
+			static DurationTime duringTime;
 			static TimePoint startTime;
 			static TimePoint finishTime;
 		public:
 			static void start();
 			static void finish();
 			static void dumpDuringTime(std::ostream& os = std::cout);
+
+			static double second();
+			static double millisecond();
 		};
 	}
 }
