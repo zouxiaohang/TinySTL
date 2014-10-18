@@ -222,14 +222,14 @@ namespace TinySTL{
 		private:
 			const T *ptr_;
 			cntrPtr container_;
-			stack<const T *> stack_;//保存从root到ptr_的父节点的路径
+			stack<const T *> parent_;//保存从root到ptr_的父节点的路径
 			std::set<const T *> visited_;
 		public:
 			bst_iter(const T *ptr, cntrPtr container)
 				:ptr_(ptr), container_(container){
 				auto temp = container_->root_;
 				while (temp &&ptr_ && temp != ptr_ && temp->data_ != ptr_->data_){
-					stack_.push(temp);
+					parent_.push(temp);
 					if (temp->data_ < ptr_->data_)
 						temp = temp->right_;
 					else if (temp->data_ > ptr_->data_)
@@ -253,18 +253,18 @@ namespace TinySTL{
 		};//end of bst_iter
 		template<class T>
 		bst_iter<T>& bst_iter<T>::operator ++(){
-			visited_.insert(ptr_);
+			visited_.insert(ptr_);//设为已访问
 			if (ptr_->right_ != 0){
-				stack_.push(ptr_);
+				parent_.push(ptr_);
 				ptr_ = ptr_->right_;
 				while (ptr_ != 0 && ptr_->left_ != 0){
-					stack_.push(ptr_);
+					parent_.push(ptr_);
 					ptr_ = ptr_->left_;
 				}
 			}else{
-				if (!stack_.empty() && visited_.count(stack_.top()) == 0){
-					ptr_ = stack_.top();
-					stack_.pop();
+				if (!parent_.empty() && visited_.count(parent_.top()) == 0){//父节点未访问
+					ptr_ = parent_.top();
+					parent_.pop();
 				}else{
 					ptr_ = 0;
 				}
@@ -275,6 +275,30 @@ namespace TinySTL{
 		bst_iter<T> bst_iter<T>::operator ++(int){
 			auto res = *this;
 			++*this;
+			return res;
+		}
+		template<class T>
+		bst_iter<T>& bst_iter<T>::operator --(){
+			visited_.erase(ptr_);//设为未访问
+			if (ptr_->left_ != 0){
+				parent_.push(ptr_);
+				ptr_ = ptr_->left_;
+				while (ptr_ && ptr_->right_){
+					parent_.push(ptr_);
+					ptr_ = ptr_->right_;
+				}
+			}else{
+				if (!parent_.empty() && visited_.count(parent_.top()) == 1){//父节点已经访问了
+					ptr_ = parent_.top();
+					parent_.pop();
+				}
+			}
+			return *this;
+		}
+		template<class T>
+		bst_iter<T> bst_iter<T>::operator --(int){
+			auto res = *this;
+			--*this;
 			return res;
 		}
 		template<class T>
