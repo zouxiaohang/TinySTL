@@ -207,6 +207,14 @@ namespace TinySTL{
 		}
 		return true;
 	}
+	//********** [for_each] *************************
+	//********* [Algorithm Complexity: O(N)] ****************
+	template <class InputIterator, class Function>
+	Function for_each(InputIterator first, InputIterator last, Function fn){
+		for (; first != last; ++first)
+			fn(*first);
+		return fn;
+	}
 }
 
 
