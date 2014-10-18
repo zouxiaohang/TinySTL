@@ -2,7 +2,10 @@
 #define _BINARY_SEARCH_TREE_H_
 
 #include "Allocator.h"
+#include "Stack.h"
 #include "String.h"
+
+#include <set>
 
 namespace TinySTL{
 	namespace {
@@ -29,8 +32,9 @@ namespace TinySTL{
 		typedef const T& const_reference;
 	private:
 		node *root_;
+		size_t size_;
 	public:
-		binary_search_tree() :root_(0){}
+		binary_search_tree() :root_(0), size_(0){}
 		binary_search_tree(const binary_search_tree&) = delete;
 		binary_search_tree& operator=(const binary_search_tree&) = delete;
 		~binary_search_tree(){
@@ -43,6 +47,10 @@ namespace TinySTL{
 		void erase(const T& val);
 
 		bool empty()const{ return root_ == 0; }
+		size_t size()const{ return size_; }
+
+		const_iterator cbegin(){ return find_min(); }
+		const_iterator cend(){ return const_iterator(0, this); }
 
 		const_iterator find_min();
 		const_iterator find_max();
@@ -74,20 +82,22 @@ namespace TinySTL{
 			return;
 		if (ptr->data_ != val){
 			if (val < ptr->data_)
-				erase_elem(val, ptr->left_);
+				return erase_elem(val, ptr->left_);
 			else
-				erase_elem(val, ptr->right_);
+				return erase_elem(val, ptr->right_);
 		}else{ // found
 			if (ptr->left_ != 0 && ptr->right_ != 0){// has two children
 				auto pos = const_cast<node *>(find_min_aux(ptr->right_).ptr_);
 				ptr->data_ = pos->data_;
-				erase_elem(pos->data_, ptr->right_);
+				return erase_elem(pos->data_, ptr->right_);
 			}else{ //has one or no child
-				nodeAllocator::deallocate(ptr);
+				auto temp = ptr;
 				if (ptr->left_ == 0)
 					ptr = ptr->right_;
 				else
 					ptr = ptr->left_;
+				nodeAllocator::deallocate(temp);
+				--size_;
 			}
 		}
 	}
@@ -101,6 +111,7 @@ namespace TinySTL{
 			ptr = nodeAllocator::allocate();
 			ptr->data_ = val;
 			ptr->left_ = ptr->right_ = 0;
+			++size_;
 		}
 		else{
 			if (val < ptr->data_){
@@ -162,7 +173,7 @@ namespace TinySTL{
 		while (ptr && ptr->left_ != 0){
 			ptr = ptr->left_;
 		}
-		return const_iterator(ptr);
+		return const_iterator(ptr, this);
 	}
 	template<class T>
 	typename binary_search_tree<T>::const_iterator binary_search_tree<T>::find_min(){
@@ -173,7 +184,7 @@ namespace TinySTL{
 		while (ptr && ptr->right_ != 0){
 			ptr = ptr->right_;
 		}
-		return const_iterator(ptr);
+		return const_iterator(ptr, this);
 	}
 	template<class T>
 	typename binary_search_tree<T>::const_iterator binary_search_tree<T>::find_max(){
@@ -189,7 +200,7 @@ namespace TinySTL{
 			else
 				ptr = ptr->right_;
 		}
-		return const_iterator(ptr);
+		return const_iterator(ptr, this);
 	}
 	template<class T>
 	typename binary_search_tree<T>::const_iterator binary_search_tree<T>::find(const T& val){
@@ -207,20 +218,65 @@ namespace TinySTL{
 			typedef typename binary_search_tree<typename T::value_type>::vaule_type value_type;
 			typedef typename binary_search_tree<typename T::value_type>::const_reference const_reference;
 			typedef typename const T::value_type *const_pointer;
+			typedef binary_search_tree<typename T::value_type> * cntrPtr;
 		private:
 			const T *ptr_;
+			cntrPtr container_;
+			stack<const T *> stack_;//保存从root到ptr_的父节点的路径
+			std::set<const T *> visited_;
 		public:
-			bst_iter(const T *ptr) :ptr_(ptr){}
+			bst_iter(const T *ptr, cntrPtr container)
+				:ptr_(ptr), container_(container){
+				auto temp = container_->root_;
+				while (temp &&ptr_ && temp != ptr_ && temp->data_ != ptr_->data_){
+					stack_.push(temp);
+					if (temp->data_ < ptr_->data_)
+						temp = temp->right_;
+					else if (temp->data_ > ptr_->data_)
+						temp = temp->left_;
+				}
+			}
 
 			operator const T*(){ return ptr_; }
 			const_reference operator*(){ return ptr_->data_; }
 			const_pointer operator ->(){ return &(operator*()); }
+
+			bst_iter& operator ++();
+			bst_iter operator ++(int);
+			bst_iter& operator --();
+			bst_iter operator --(int);
 		public:
 			template<class T>
 			friend bool operator ==(const bst_iter<T>& it1, const bst_iter<T>& it2);
 			template<class T>
 			friend bool operator !=(const bst_iter<T>& it1, const bst_iter<T>& it2);
-		};
+		};//end of bst_iter
+		template<class T>
+		bst_iter<T>& bst_iter<T>::operator ++(){
+			visited_.insert(ptr_);
+			if (ptr_->right_ != 0){
+				stack_.push(ptr_);
+				ptr_ = ptr_->right_;
+				while (ptr_ != 0 && ptr_->left_ != 0){
+					stack_.push(ptr_);
+					ptr_ = ptr_->left_;
+				}
+			}else{
+				if (!stack_.empty() && visited_.count(stack_.top()) == 0){
+					ptr_ = stack_.top();
+					stack_.pop();
+				}else{
+					ptr_ = 0;
+				}
+			}
+			return *this;
+		}
+		template<class T>
+		bst_iter<T> bst_iter<T>::operator ++(int){
+			auto res = *this;
+			++*this;
+			return res;
+		}
 		template<class T>
 		bool operator ==(const bst_iter<T>& it1, const bst_iter<T>& it2){
 			return it1.ptr_ == it2.ptr_;
