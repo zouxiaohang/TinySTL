@@ -25,7 +25,7 @@ namespace TinySTL{
 		typedef TinySTL::allocator<node> nodeAllocator;
 	public:
 		typedef T vaule_type;
-		typedef bst_iter<node> iterator;
+		typedef bst_iter<node> const_iterator;
 		typedef const T& const_reference;
 	private:
 		node *root_;
@@ -43,9 +43,9 @@ namespace TinySTL{
 
 		bool empty()const{ return root_ == 0; }
 
-		iterator find_min();
-		iterator find_max();
-		iterator find(const T& val);
+		const_iterator find_min();
+		const_iterator find_max();
+		const_iterator find(const T& val);
 
 		void print_preorder(const string& delim = " ", std::ostream& os = std::cout)const;
 		void print_inorder(const string& delim = " ", std::ostream& os = std::cout)const;
@@ -59,9 +59,9 @@ namespace TinySTL{
 			}
 		}
 		void insert_elem(const T& val, node *&ptr);
-		iterator find_min_aux(node *ptr);
-		iterator find_max_aux(node *ptr);
-		iterator find_aux(const T& val, node *ptr);
+		const_iterator find_min_aux(const node *ptr);
+		const_iterator find_max_aux(const node *ptr);
+		const_iterator find_aux(const T& val, const node *ptr);
 		void print_preorder_aux(const string& delim, std::ostream& os, const node *ptr)const;
 		void print_inorder_aux(const string& delim, std::ostream& os, const node *ptr)const;
 		void print_postorder_aux(const string& delim, std::ostream& os, const node *ptr)const;
@@ -129,29 +129,29 @@ namespace TinySTL{
 		print_postorder_aux(delim, os, root_);
 	}
 	template<class T>
-	typename binary_search_tree<T>::iterator binary_search_tree<T>::find_min_aux(node *ptr){
+	typename binary_search_tree<T>::const_iterator binary_search_tree<T>::find_min_aux(const node *ptr){
 		while (ptr && ptr->left_ != 0){
 			ptr = ptr->left_;
 		}
-		return iterator(ptr);
+		return const_iterator(ptr);
 	}
 	template<class T>
-	typename binary_search_tree<T>::iterator binary_search_tree<T>::find_min(){
+	typename binary_search_tree<T>::const_iterator binary_search_tree<T>::find_min(){
 		return find_min_aux(root_);
 	}
 	template<class T>
-	typename binary_search_tree<T>::iterator binary_search_tree<T>::find_max_aux(node *ptr){
+	typename binary_search_tree<T>::const_iterator binary_search_tree<T>::find_max_aux(const node *ptr){
 		while (ptr && ptr->right_ != 0){
 			ptr = ptr->right_;
 		}
-		return iterator(ptr);
+		return const_iterator(ptr);
 	}
 	template<class T>
-	typename binary_search_tree<T>::iterator binary_search_tree<T>::find_max(){
+	typename binary_search_tree<T>::const_iterator binary_search_tree<T>::find_max(){
 		return find_max_aux(root_);
 	}
 	template<class T>
-	typename binary_search_tree<T>::iterator binary_search_tree<T>::find_aux(const T& val, node *ptr){
+	typename binary_search_tree<T>::const_iterator binary_search_tree<T>::find_aux(const T& val, const node *ptr){
 		while (ptr){
 			if (val == ptr->data_)
 				break;
@@ -160,10 +160,10 @@ namespace TinySTL{
 			else
 				ptr = ptr->right_;
 		}
-		return iterator(ptr);
+		return const_iterator(ptr);
 	}
 	template<class T>
-	typename binary_search_tree<T>::iterator binary_search_tree<T>::find(const T& val){
+	typename binary_search_tree<T>::const_iterator binary_search_tree<T>::find(const T& val){
 		return find_aux(val, root_);
 	}
 
