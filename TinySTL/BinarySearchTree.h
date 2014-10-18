@@ -40,6 +40,7 @@ namespace TinySTL{
 		void insert(const T& val);
 		template<class Iterator>
 		void insert(Iterator first, Iterator last);
+		void erase(const T& val);
 
 		bool empty()const{ return root_ == 0; }
 
@@ -58,6 +59,7 @@ namespace TinySTL{
 				nodeAllocator::deallocate(ptr);
 			}
 		}
+		void erase_elem(const T& val, node *&ptr);
 		void insert_elem(const T& val, node *&ptr);
 		const_iterator find_min_aux(const node *ptr);
 		const_iterator find_max_aux(const node *ptr);
@@ -66,6 +68,33 @@ namespace TinySTL{
 		void print_inorder_aux(const string& delim, std::ostream& os, const node *ptr)const;
 		void print_postorder_aux(const string& delim, std::ostream& os, const node *ptr)const;
 	};//end of bst class
+	template<class T>
+	void binary_search_tree<T>::erase_elem(const T& val, node *&ptr){
+		if (ptr == 0)
+			return;
+		if (ptr->data_ != val){
+			if (val < ptr->data_)
+				erase_elem(val, ptr->left_);
+			else
+				erase_elem(val, ptr->right_);
+		}else{ // found
+			if (ptr->left_ != 0 && ptr->right_ != 0){// has two children
+				auto pos = const_cast<node *>(find_min_aux(ptr->right_).ptr_);
+				ptr->data_ = pos->data_;
+				erase_elem(pos->data_, ptr->right_);
+			}else{ //has one or no child
+				nodeAllocator::deallocate(ptr);
+				if (ptr->left_ == 0)
+					ptr = ptr->right_;
+				else
+					ptr = ptr->left_;
+			}
+		}
+	}
+	template<class T>
+	void binary_search_tree<T>::erase(const T& val){
+		erase_elem(val, root_);
+	}
 	template<class T>
 	void binary_search_tree<T>::insert_elem(const T& val, node *&ptr){//重复的元素不插入
 		if (ptr == 0){
@@ -172,6 +201,9 @@ namespace TinySTL{
 		template<class T>//T = node
 		class bst_iter{
 		private:
+			template<class T>
+			friend class binary_search_tree;
+		private:
 			typedef typename binary_search_tree<typename T::value_type>::vaule_type value_type;
 			typedef typename binary_search_tree<typename T::value_type>::const_reference const_reference;
 			typedef typename const T::value_type *const_pointer;
@@ -183,7 +215,20 @@ namespace TinySTL{
 			operator const T*(){ return ptr_; }
 			const_reference operator*(){ return ptr_->data_; }
 			const_pointer operator ->(){ return &(operator*()); }
+		public:
+			template<class T>
+			friend bool operator ==(const bst_iter<T>& it1, const bst_iter<T>& it2);
+			template<class T>
+			friend bool operator !=(const bst_iter<T>& it1, const bst_iter<T>& it2);
 		};
+		template<class T>
+		bool operator ==(const bst_iter<T>& it1, const bst_iter<T>& it2){
+			return it1.ptr_ == it2.ptr_;
+		}
+		template<class T>
+		bool operator !=(const bst_iter<T>& it1, const bst_iter<T>& it2){
+			return !(it1 == it2);
+		}
 	}
 }
 
