@@ -49,6 +49,7 @@ namespace TinySTL{
 
 		bool empty()const{ return root_ == 0; }
 		size_t size()const{ return size_; }
+		size_t height()const{ return height_aux(root_, 0); }
 		const_iterator root(){ return const_iterator(root_, this); }
 
 		const_iterator cbegin(){ return find_min(); }
@@ -70,6 +71,7 @@ namespace TinySTL{
 				nodeAllocator::deallocate(ptr);
 			}
 		}
+		size_t height_aux(const node *p, size_t h)const;
 		void erase_elem(const T& val, node *&ptr);
 		void insert_elem(const T& val, node *&ptr);
 		const_iterator find_min_aux(const node *ptr);
@@ -79,6 +81,14 @@ namespace TinySTL{
 		void print_inorder_aux(const string& delim, std::ostream& os, const node *ptr)const;
 		void print_postorder_aux(const string& delim, std::ostream& os, const node *ptr)const;
 	};//end of bst class
+	template<class T>
+	size_t binary_search_tree<T>::height_aux(const node *p, size_t h)const{
+		if (p == 0)
+			return h;
+		else{
+			return TinySTL::max(height_aux(p->left_, h), height_aux(p->right_, h)) + 1;
+		}
+	}
 	template<class T>
 	void binary_search_tree<T>::erase_elem(const T& val, node *&ptr){
 		if (ptr == 0)
