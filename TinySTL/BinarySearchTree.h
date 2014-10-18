@@ -48,6 +48,7 @@ namespace TinySTL{
 
 		bool empty()const{ return root_ == 0; }
 		size_t size()const{ return size_; }
+		const_iterator root(){ return const_iterator(root_, this); }
 
 		const_iterator cbegin(){ return find_min(); }
 		const_iterator cend(){ return const_iterator(0, this); }
@@ -87,9 +88,12 @@ namespace TinySTL{
 				return erase_elem(val, ptr->right_);
 		}else{ // found
 			if (ptr->left_ != 0 && ptr->right_ != 0){// has two children
-				auto pos = const_cast<node *>(find_min_aux(ptr->right_).ptr_);
+				size_t choose = size_ % 2;
+				//随机选择删除左右，使得删除操作更平衡
+				auto pos = (choose == 0?
+					const_cast<node *>(find_min_aux(ptr->right_).ptr_) : const_cast<node *>(find_max_aux(ptr->left_).ptr_));
 				ptr->data_ = pos->data_;
-				return erase_elem(pos->data_, ptr->right_);
+				return (choose == 0 ? erase_elem(pos->data_, ptr->right_) : erase_elem(pos->data_, ptr->left_));
 			}else{ //has one or no child
 				auto temp = ptr;
 				if (ptr->left_ == 0)
@@ -240,6 +244,9 @@ namespace TinySTL{
 			operator const T*(){ return ptr_; }
 			const_reference operator*(){ return ptr_->data_; }
 			const_pointer operator ->(){ return &(operator*()); }
+
+			bst_iter left()const{ return bst_iter(ptr_->left_, container_); }
+			bst_iter right()const{ return bst_iter(ptr_->right_, container_); }
 
 			bst_iter& operator ++();
 			bst_iter operator ++(int);
