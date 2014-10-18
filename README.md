@@ -56,6 +56,7 @@ TinySTL
 * string：100%
 * priority_queue：100%
 * stack：100%
+* binary_search_tree：100%
 
 #TinySTL测试:
 ###测试环境：Windows 7 && VS2013 && release模式
@@ -172,4 +173,23 @@ TinySTL
 ######i = 100000 -> (TinySTL::priority_queue&lt;int>：19ms \\ std::priority_queue&lt;int>：7ms)
 ######i = 1000000 -> (TinySTL::priority_queue&lt;int>：137ms \\ std::priority_queue&lt;int>：92ms)
 ######i = 10000000 -> (TinySTL::priority_queue&lt;int>：1532ms \\ std::priority_queue&lt;int>：1214ms)
+
+####(7):binary_search_tree&lt;int>
+
+    TinySTL::binary_search_tree<int> bst;
+    const size_t max = 10000;
+	std::random_device rd;
+	ProfilerInstance::start();
+	size_t i = 0;
+	for (; i != max; ++i){
+		bst.insert(rd());
+		//rd();
+	}
+	ProfilerInstance::finish();
+	ProfilerInstance::dumpDuringTime();
+    
+######i = 100000 -> TinySTL::binary_search_tree&lt;int>：5ms 
+######i = 1000000 -> TinySTL::binary_search_tree&lt;int>：64ms 
+######i = 10000000 -> TinySTL::binary_search_tree&lt;int>：828ms
+#######注：真实的插入时间 = 总的插入时间 - C++11随机数生成器生成随机数的总的时间
 
