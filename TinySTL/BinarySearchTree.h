@@ -5,6 +5,7 @@
 #include "Stack.h"
 #include "String.h"
 
+#include <deque>
 #include <set>
 
 namespace TinySTL{
@@ -60,6 +61,7 @@ namespace TinySTL{
 		void print_preorder(const string& delim = " ", std::ostream& os = std::cout)const;
 		void print_inorder(const string& delim = " ", std::ostream& os = std::cout)const;
 		void print_postorder(const string& delim = " ", std::ostream& os = std::cout)const;
+		void print_levelorder(const string& delim = " ", std::ostream& os = std::cout)const;
 	private:
 		void deallocateAllNodes(node *ptr){
 			if (ptr){
@@ -135,6 +137,21 @@ namespace TinySTL{
 	void binary_search_tree<T>::insert(Iterator first, Iterator last){
 		for (; first != last; ++first)
 			insert(*first);
+	}
+	template<class T>
+	void binary_search_tree<T>::print_levelorder(const string& delim, std::ostream& os)const{
+		auto temp = root_;
+		if (temp != 0){
+			std::deque<node *> q;
+			q.push_back(temp);
+			while (!q.empty()){
+				temp = q.front();
+				q.pop_front();
+				if (temp->left_ != 0) q.push_back(temp->left_);
+				if (temp->right_ != 0) q.push_back(temp->right_);
+				os << temp->data_ << delim;
+			}
+		}
 	}
 	template<class T>
 	void binary_search_tree<T>::print_preorder_aux(const string& delim, std::ostream& os, const node *ptr)const{
