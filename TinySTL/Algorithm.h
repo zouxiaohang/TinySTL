@@ -225,6 +225,26 @@ namespace TinySTL{
 		}
 		return first;
 	}
+	//********** [find_if] *************************
+	//********* [Algorithm Complexity: O(N)] ****************
+	template <class InputIterator, class UnaryPredicate>
+	InputIterator find_if(InputIterator first, InputIterator last, UnaryPredicate pred){
+		for (; first != last; ++first){
+			if (pred(*first))
+				break;
+		}
+		return first;
+	}
+	//********** [find_if_not] *************************
+	//********* [Algorithm Complexity: O(N)] ****************
+	template <class InputIterator, class UnaryPredicate>
+	InputIterator find_if_not(InputIterator first, InputIterator last, UnaryPredicate pred){
+		for (; first != last; ++first){
+			if (!pred(*first))
+				break;
+		}
+		return first;
+	}
 }
 
 
