@@ -51,6 +51,8 @@ TinySTL
     * all_of：100%
     * any_of：100%
     * none_of：100%
+    * find_if：100%
+    * find_if_not：100%
 * circular_buffer：100%   
 * bitmap：100%
 * string：100%
