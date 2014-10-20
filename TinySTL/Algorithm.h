@@ -41,16 +41,6 @@ namespace TinySTL{
 		memset(first, static_cast<unsigned char>(value), n * sizeof(wchar_t));
 		return first + n;
 	}
-	//************ [find] ****************
-	//********* [Algorithm Complexity: O(N)] ****************
-	template<class InputIterator, class T>
-	InputIterator find(InputIterator first, InputIterator last, const T& val){
-		for (; first != last; ++first){
-			if (*first == val)
-				break;
-		}
-		return first;
-	}
 	//*********** [min] ********************
 	//********* [Algorithm Complexity: O(1)] ****************
 	template <class T> 
