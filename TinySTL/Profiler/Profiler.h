@@ -15,7 +15,7 @@ namespace TinySTL{
 		public:
 			typedef std::chrono::steady_clock SteadyClock;
 			typedef SteadyClock::time_point TimePoint;
-			typedef std::chrono::duration<double> DurationTime;
+			typedef std::chrono::duration<double, std::ratio<1, 1>> DurationTime;//µ•Œª√Î
 		private:
 			static DurationTime duringTime;
 			static TimePoint startTime;
