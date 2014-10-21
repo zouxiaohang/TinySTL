@@ -195,3 +195,7 @@ TinySTL
 ######i = 1000000 -> TinySTL::binary_search_tree&lt;int>：828ms
 #######注：真实的插入时间 = 总的插入时间 - C++11随机数生成器生成随机数的总的时间
 
+
+|container|quantity|time(ms)|  
+|---------|--------|--------|  
+|string|5|5|
