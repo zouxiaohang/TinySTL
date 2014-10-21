@@ -75,9 +75,14 @@ TinySTL
 	ProfilerInstance::finish();
 	ProfilerInstance::dumpDuringTime();
     
-######i = 100000 -> (TinySTL::vector&lt;int>：2ms \\ std::vector&lt;int>：6ms)
-######i = 1000000 -> (TinySTL::vector&lt;int>：11ms \\ std::vector&lt;int>：16ms)
-######i = 10000000 -> (TinySTL::vector&lt;int>：129ms \\ std::vector&lt;int>：210ms)  
+|container|quantity|time(ms)|  
+|---------|--------|--------|  
+|TinySTL::vector&lt;int>|10万|2|  
+|TinySTL::vector&lt;int>|100万|11|  
+|TinySTL::vector&lt;int>|1000万|129|  
+|std::vector&lt;int>|10万|6|  
+|std::vector&lt;int>|100万|16|  
+|std::vector&lt;int>|1000万|210|    
 ####(2):vector&lt;string>
 
     //std::vector<std::string> vec;
