@@ -89,15 +89,20 @@ TinySTL
     TinySTL::vector<std::string> vec;
 	ProfilerInstance::start();
 	int i = 0;
-	for (; i != 10000; ++i){
+	for (; i != 100000; ++i){
 		vec.push_back(std::string("zouxiaohang"));
 	}
 	ProfilerInstance::finish();
 	ProfilerInstance::dumpDuringTime();
     
-######i = 100000 -> (TinySTL::vector&lt;string>：18ms \\ std::vector&lt;string>：29ms)
-######i = 1000000 -> (TinySTL::vector&lt;string>：181ms \\ std::vector&lt;string>：232ms)
-######i = 10000000 -> (TinySTL::vector&lt;string>：2372ms \\ std::vector&lt;string>：1972ms)
+|container|quantity|time(ms)|  
+|---------|--------|--------|  
+|TinySTL::vector&lt;string>|10万|18|  
+|TinySTL::vector&lt;string>|100万|181|  
+|TinySTL::vector&lt;string>|1000万|2372|  
+|std::vector&lt;string>|10万|29|  
+|std::vector&lt;string>|100万|232|  
+|std::vector&lt;string>|1000万|1972|
 ####(3):circular_buffer&lt;int, N>
 
     TinySTL::circular_buffer<int, 10000> cb(10000, 0);
@@ -109,9 +114,14 @@ TinySTL
 	ProfilerInstance::finish();
 	ProfilerInstance::dumpDuringTime();
     
-######i = 10000000 -> (TinySTL::circular_buffer：75ms \\ boost::circular_buffer：22ms)
-######i = 100000000 -> (TinySTL::circular_buffer：604ms \\ boost::circular_buffer：252ms)
-######i = 1000000000 -> (TinySTL::circular_buffer：5936ms \\ boost::circular_buffer：2241ms)
+|container|quantity|time(ms)|  
+|---------|--------|--------|  
+|TinySTL::circular_buffer|1000万|75|  
+|TinySTL::circular_buffer|10000万|604|  
+|TinySTL::circular_buffer|100000万|5936|  
+|boost::circular_buffer|1000万|22|  
+|boost::circular_buffer|10000万|252|  
+|boost::circular_buffer|100000万|2241|  
 ####(4):题目：利用bitmap找出str中未出现的字母  
 
     std::string str("abcdefghijklmnpqrstuvwxyz");
@@ -143,9 +153,14 @@ TinySTL
 	ProfilerInstance::finish();
 	ProfilerInstance::dumpDuringTime();
     
-######i = 1000000 -> (TinySTL::string：7ms \\ std::string：37ms)
-######i = 10000000 -> (TinySTL::string：39ms \\ std::string：229ms)
-######i = 100000000 -> (TinySTL::string：484ms \\ std::string：1965ms)
+|container|quantity|time(ms)|  
+|---------|--------|--------|  
+|TinySTL::string|100万|7|  
+|TinySTL::string|1000万|39|  
+|TinySTL::string|10000万|484|  
+|std::string|100万|37|  
+|std::string|1000万|229|  
+|std::string|10000万|1965|  
 
 ####(6):priority_queue&lt;int>
 
@@ -159,9 +174,14 @@ TinySTL
 	ProfilerInstance::finish();
 	ProfilerInstance::dumpDuringTime();
     
-######i = 100000 -> (TinySTL::priority_queue&lt;int>：13ms \\ std::priority_queue&lt;int>：12ms)
-######i = 1000000 -> (TinySTL::priority_queue&lt;int>：97ms \\ std::priority_queue&lt;int>：67ms)
-######i = 10000000 -> (TinySTL::priority_queue&lt;int>：1032ms \\ std::priority_queue&lt;int>：752ms)  
+|container|quantity|time(ms)|  
+|---------|--------|--------|  
+|TinySTL::priority_queue&lt;int>|10万|13|  
+|TinySTL::priority_queue&lt;int>|100万|97|  
+|TinySTL::priority_queue&lt;int>|1000万|1032|  
+|std::priority_queue&lt;int>|10万|12|  
+|std::priority_queue&lt;int>|100万|67|  
+|std::priority_queue&lt;int>|1000万|752|  
 
     TinySTL::vector<int> v;
     int i = 0;
@@ -177,9 +197,14 @@ TinySTL
 	ProfilerInstance::finish();
 	ProfilerInstance::dumpDuringTime();
     
-######i = 100000 -> (TinySTL::priority_queue&lt;int>：19ms \\ std::priority_queue&lt;int>：7ms)
-######i = 1000000 -> (TinySTL::priority_queue&lt;int>：137ms \\ std::priority_queue&lt;int>：92ms)
-######i = 10000000 -> (TinySTL::priority_queue&lt;int>：1532ms \\ std::priority_queue&lt;int>：1214ms)
+|container|quantity|time(ms)|  
+|---------|--------|--------|  
+|TinySTL::priority_queue&lt;int>|10万|19|  
+|TinySTL::priority_queue&lt;int>|100万|137|  
+|TinySTL::priority_queue&lt;int>|1000万|1532|  
+|std::priority_queue&lt;int>|10万|7|  
+|std::priority_queue&lt;int>|100万|92|  
+|std::priority_queue&lt;int>|1000万|1214|  
 
 ####(7):binary_search_tree&lt;int>
 
@@ -195,12 +220,11 @@ TinySTL
 	ProfilerInstance::finish();
 	ProfilerInstance::dumpDuringTime();
     
-######i = 10000 -> TinySTL::binary_search_tree&lt;int>：5ms 
-######i = 100000 -> TinySTL::binary_search_tree&lt;int>：64ms 
-######i = 1000000 -> TinySTL::binary_search_tree&lt;int>：828ms
+|container|quantity|time(ms)|  
+|---------|--------|--------|  
+|TinySTL::binary_search_tree&lt;int>|1万|5|  
+|TinySTL::binary_search_tree&lt;int>|10万|64|  
+|TinySTL::binary_search_tree&lt;int>|100万|828|   
 #######注：真实的插入时间 = 总的插入时间 - C++11随机数生成器生成随机数的总的时间
 
 
-|container|quantity|time(ms)|  
-|---------|--------|--------|  
-|string|5|5|
