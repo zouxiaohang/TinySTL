@@ -206,13 +206,13 @@ namespace TinySTL{
 			delete[] map_;
 		}
 	private:
-		//T *getANewBuck(){
-		//	return dataAllocator::allocate(getBuckSize());
-		//}
+		T *getANewBuck(){
+			return dataAllocator::allocate(getBuckSize());
+		}
 		T** getANewMap(const size_t size){
 			T **map = new T*[size];
 			for (int i = 0; i != size; ++i)
-				map[i] = dataAllocator::allocate(getBuckSize());
+				map[i] = getANewBuck();
 			return map;
 		}
 		size_t getNewMapSize(const size_t size){
@@ -310,6 +310,13 @@ namespace TinySTL{
 	void deque<T, Alloc>::pop_back(){
 		--end_;
 		dataAllocator::destroy(end_.cur_);
+	}
+	template<class T, class Alloc>
+	void deque<T, Alloc>::swap(deque& x){
+		TinySTL::swap(beg_, x.beg_);
+		TinySTL::swap(end_, x.end_);
+		TinySTL::swap(mapSize_, x.mapSize_);
+		TinySTL::swap(map_, x.map_);
 	}
 }
 #endif
