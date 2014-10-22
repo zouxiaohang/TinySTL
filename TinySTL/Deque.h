@@ -264,7 +264,7 @@ namespace TinySTL{
 	void deque<T, Alloc>::reallocateAndCopy(){
 		auto newMapSize = getNewMapSize(mapSize_);
 		T** newMap = getANewMap(newMapSize);
-		size_t startIndex = (newMapSize < 5) ? 1 : 2;
+		size_t startIndex = newMapSize / 4;
 		for (int i = 0; i + beg_.mapIndex_ != mapSize_; ++i)
 			for (int j = 0; j != getBuckSize(); ++j)
 				newMap[startIndex + i][j] = map_[beg_.mapIndex_ + i][j];
