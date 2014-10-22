@@ -39,9 +39,12 @@ namespace TinySTL{
 			dq_iter& operator ++(){
 				if (cur_ != getBuckTail(mapIndex_))//+1后还在同一个桶里
 					++cur_;
-				else{
+				else if(mapIndex_ + 1 < container_->mapSize_){//+1后还在同一个map里
 					++mapIndex_;
 					cur_ = getBuckHead(mapIndex_);
+				}else{//+1后跳出了map
+					mapIndex_ = container_->mapSize_ - 1;
+					cur_ = container_->map_[mapIndex_] + getBuckSize();//指向map_[mapSize_-1]的尾的下一个位置
 				}
 				return *this;
 			}
@@ -53,9 +56,12 @@ namespace TinySTL{
 			dq_iter& operator --(){
 				if (cur_ != getBuckHead(mapIndex_))//当前不指向桶头
 					--cur_;
-				else{
+				else if(mapIndex_ - 1 >= 0){//-1后还在map里面
 					--mapIndex_;
 					cur_ = getBuckTail(mapIndex_);
+				}else{
+					mapIndex_ = 0;
+					cur_ = container_->map_[mapIndex_];//指向map_[0]的头
 				}
 				return *this;
 			}
@@ -73,10 +79,13 @@ namespace TinySTL{
 			}
 		private:
 			T *getBuckTail(size_t mapIndex)const{
-				return container_[mapIndex] + container_->getBuckSize() - 1;
+				return container_->map_[mapIndex] + (container_->getBuckSize() - 1);
 			}
 			T *getBuckHead(size_t mapIndex)const{
 				return container_->map_[mapIndex];
+			}
+			size_t getBuckSize()const{
+				return container_->getBuckSize();
 			}
 		public:
 			template<class T>
@@ -99,8 +108,10 @@ namespace TinySTL{
 			}
 			else{
 				n = n - m;
-				res.mapIndex_ += n / res.container_->getBuckSize();
-				res.cur_ = res.getBuckHead(res.mapIndex_) + n % res.container_->getBuckSize();
+				res.mapIndex_ += (n / it.getBuckSize() + 1);
+				auto p = res.getBuckHead(res.mapIndex_);
+				auto x = n % it.getBuckSize() - 1;
+				res.cur_ = p + x;
 			}
 			return res;
 		}
@@ -116,8 +127,8 @@ namespace TinySTL{
 				res.cur_ -= n;
 			else{
 				n = n - m;
-				res.mapIndex_ -= n / res.container_->getBuckSize();
-				res.cur_ = res.getBuckTail(res.mapIndex_) - n % res.container_->getBuckSize();
+				res.mapIndex_ -= (n / res.getBuckSize() + 1);
+				res.cur_ = res.getBuckTail(res.mapIndex_) - (n % res.getBuckSize() - 1);
 			}
 			return res;
 		}
@@ -127,8 +138,8 @@ namespace TinySTL{
 		}
 		template<class T>
 		typename dq_iter<T>::difference_type operator - (const dq_iter<T>& it1, const dq_iter<T>& it2){
-			return typename dq_iter<T>::difference_type(it1.container_->getBuckSize()) * (it1.mapIndex_ - it2.mapIndex_ - 1)
-				+ (it1.cur_ - it1.getBuckHead(it1.mapIndex_)) + (it2.getBuckTail(it2.mapIndex_) - it2.cur_);
+			return typename dq_iter<T>::difference_type(it1.getBuckSize()) * (it1.mapIndex_ - it2.mapIndex_ - 1)
+				+ (it1.cur_ - it1.getBuckHead(it1.mapIndex_)) + (it2.getBuckTail(it2.mapIndex_) - it2.cur_) + 1;
 		}
 	}
 
@@ -156,14 +167,12 @@ namespace TinySTL{
 		T **map_;
 	public:
 		deque();
-		explicit deque(size_type n, const value_type& val = value_type());
-		template <class InputIterator>
-		deque(InputIterator first, InputIterator last);
 		deque(const deque& x);
 
 		~deque(){
 			for (int i = 0; i != mapSize_; ++i)
-				dataAllocator::deallocate(map_[i], getBuckSize());
+				if (!map_[i])
+					dataAllocator::deallocate(map_[i], getBuckSize());
 			delete[] map_;
 		}
 
@@ -173,41 +182,53 @@ namespace TinySTL{
 		iterator begin(){ return beg_; }
 		const_iterator begin() const{ return beg_; }
 		iterator end(){ return end_; }
-		const_iterator end() const{return end_}
+		const_iterator end() const{ return end_; }
 		const_iterator cbegin() const{ return beg_; }
 		const_iterator cend() const{ return end_; }
 
 		size_type size() const{ return end() - begin(); }
 		bool empty() const{ return begin() == end(); }
 
-		reference operator[] (size_type n);
-		const_reference operator[] (size_type n) const;
-		reference front();
-		const_reference front() const;
-		reference back();
-		const_reference back() const;
+		reference operator[] (size_type n){ return *(begin() + n); }
+		const_reference operator[] (size_type n) const{ return *(cbegin() + n); }
+		reference front(){ return *begin(); }
+		const_reference front() const{ return *cbegin(); }
+		reference back(){ return *(end() - 1); }
+		const_reference back() const{ return *(cend() - 1); }
 
 		void push_back(const value_type& val);
-		void push_back(value_type&& val);
 		void push_front(const value_type& val);
-		void push_front(value_type&& val);
 		void pop_back();
 		void pop_front();
 		void swap(deque& x);
 		void clear();
 	private:
-		T *getABuck(){
-			return dataAllocator::allocate(getBuckSize);
+		T *getANewBuck(){
+			return dataAllocator::allocate(getBuckSize());
 		}
 		T** getANewMap(const size_t size){
 			mapSize_ = size;
-			return new T*[mapSize_](0);
+			return new T*[mapSize_];
 		}
-		/*size_t getNewMapSize(const size_t size){
-			return (size == 0 ? 1 : size * 1.5);
-		}*/
+		size_t getNewMapSize(const size_t size){
+			return (size == 0 ? 2 : size * 1.5);
+		}
 		size_t getBuckSize()const{
 			return (size_t)EBucksSize::BUCKSIZE;
+		}
+		void init(){
+			mapSize_ = 2;
+			map_ = getANewMap(mapSize_);
+			map_[mapSize_ - 1] = getANewBuck();
+			beg_.container_ = end_.container_ = this;
+			beg_.mapIndex_ = end_.mapIndex_ = mapSize_ - 1;
+			beg_.cur_ = end_.cur_ = map_[mapSize_ - 1];
+		}
+		bool back_full()const{ 
+			return map_[mapSize_ - 1] && (map_[mapSize_ - 1] + getBuckSize()) == end().cur_;
+		}
+		bool front_full()const{
+			return map_[0] && map_[0] == begin().cur_;
 		}
 	public:
 		template <class T, class Alloc>
@@ -229,15 +250,32 @@ namespace TinySTL{
 	template<class T, class Alloc>
 	deque<T, Alloc>::deque()
 		:mapSize_(0), map_(0){}
+	/*template<class T, class Alloc>
+	deque<T, Alloc>::deque(const deque& x){
+
+	}*/
 	template<class T, class Alloc>
-	deque<T, Alloc>::deque(size_type n, const value_type& val = value_type()){
-		auto nMap = n / getBuckSize() + 1 + 2;
-		map_ = getANewMap(nMap);
+	void deque<T, Alloc>::push_back(const value_type& val){
+		if (empty()){
+			init();
+		}
+		else if (back_full()){
+			return;
+		}
+		*end_ = val;
+		++end_;
 	}
-	//template<class T, class Alloc>
-	//template <class InputIterator>
-	//deque<T, Alloc>::deque(InputIterator first, InputIterator last);
-	//template<class T, class Alloc>
-	//deque<T, Alloc>::deque(const deque& x);
+	template<class T, class Alloc>
+	void deque<T, Alloc>::push_front(const value_type& val){
+		if (empty()){
+			init();
+			map_[0] = getANewBuck();
+		}
+		else if (front_full()){
+			return;
+		}
+		--beg_;
+		*beg_ = val;
+	}
 }
 #endif
