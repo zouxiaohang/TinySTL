@@ -171,7 +171,10 @@ namespace TinySTL{
 		deque(const deque& x);
 
 		~deque(){
-			clear();
+			for (int i = 0; i != mapSize_; ++i)
+				if (!map_[i])
+					dataAllocator::deallocate(map_[i], getBuckSize());
+			delete[] map_;
 		}
 
 		deque& operator= (const deque& x);
@@ -202,8 +205,10 @@ namespace TinySTL{
 		void clear(){
 			for (int i = 0; i != mapSize_; ++i)
 				if (!map_[i])
-					dataAllocator::deallocate(map_[i], getBuckSize());
-			delete[] map_;
+					dataAllocator::destroy(map_[i], map_[i] + getBuckSize());
+			mapSize_ = 0;
+			beg_.mapIndex_ = end_.mapIndex_ = mapSize_ / 2;
+			beg_.cur_ = end_.cur_ = map_[mapSize_ / 2];
 		}
 	private:
 		T *getANewBuck(){
