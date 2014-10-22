@@ -27,10 +27,10 @@ namespace TinySTL{
 			dq_iter(const dq_iter& it) 
 				:mapIndex_(it.mapIndex_), cur_(it.cur_), container_(it.container_){}
 			dq_iter& operator = (const dq_iter& it){
-				if (this != it){
-					mapIndex_ = it->mapIndex_;
-					cur_ = it->cur_;
-					container_ = it->container_;
+				if (this != &it){
+					mapIndex_ = it.mapIndex_;
+					cur_ = it.cur_;
+					container_ = it.container_;
 				}
 				return *this;
 			}
@@ -43,8 +43,9 @@ namespace TinySTL{
 					++mapIndex_;
 					cur_ = getBuckHead(mapIndex_);
 				}else{//+1后跳出了map
-					mapIndex_ = container_->mapSize_ - 1;
-					cur_ = container_->map_[mapIndex_] + getBuckSize();//指向map_[mapSize_-1]的尾的下一个位置
+					mapIndex_ = container_->mapSize_;
+					//cur_ = container_->map_[mapIndex_] + getBuckSize();//指向map_[mapSize_-1]的尾的下一个位置
+					cur_ = container_->map_[mapIndex_];
 				}
 				return *this;
 			}
@@ -170,10 +171,7 @@ namespace TinySTL{
 		deque(const deque& x);
 
 		~deque(){
-			for (int i = 0; i != mapSize_; ++i)
-				if (!map_[i])
-					dataAllocator::deallocate(map_[i], getBuckSize());
-			delete[] map_;
+			clear();
 		}
 
 		deque& operator= (const deque& x);
@@ -201,17 +199,24 @@ namespace TinySTL{
 		void pop_back();
 		void pop_front();
 		void swap(deque& x);
-		void clear();
-	private:
-		T *getANewBuck(){
-			return dataAllocator::allocate(getBuckSize());
+		void clear(){
+			for (int i = 0; i != mapSize_; ++i)
+				if (!map_[i])
+					dataAllocator::deallocate(map_[i], getBuckSize());
+			delete[] map_;
 		}
+	private:
+		//T *getANewBuck(){
+		//	return dataAllocator::allocate(getBuckSize());
+		//}
 		T** getANewMap(const size_t size){
-			mapSize_ = size;
-			return new T*[mapSize_];
+			T **map = new T*[size];
+			for (int i = 0; i != size; ++i)
+				map[i] = dataAllocator::allocate(getBuckSize());
+			return map;
 		}
 		size_t getNewMapSize(const size_t size){
-			return (size == 0 ? 2 : size * 1.5);
+			return (size == 0 ? 2 : size * 2);
 		}
 		size_t getBuckSize()const{
 			return (size_t)EBucksSize::BUCKSIZE;
@@ -219,17 +224,18 @@ namespace TinySTL{
 		void init(){
 			mapSize_ = 2;
 			map_ = getANewMap(mapSize_);
-			map_[mapSize_ - 1] = getANewBuck();
+			//map_[mapSize_ - 1] = getANewBuck();
 			beg_.container_ = end_.container_ = this;
 			beg_.mapIndex_ = end_.mapIndex_ = mapSize_ - 1;
 			beg_.cur_ = end_.cur_ = map_[mapSize_ - 1];
 		}
 		bool back_full()const{ 
-			return map_[mapSize_ - 1] && (map_[mapSize_ - 1] + getBuckSize()) == end().cur_;
+			return map_[mapSize_ - 1] && (map_[mapSize_]) == end().cur_;
 		}
 		bool front_full()const{
 			return map_[0] && map_[0] == begin().cur_;
 		}
+		void reallocateAndCopy();
 	public:
 		template <class T, class Alloc>
 		friend bool operator== (const deque<T, Alloc>& lhs, const deque<T, Alloc>& rhs);
@@ -255,12 +261,31 @@ namespace TinySTL{
 
 	}*/
 	template<class T, class Alloc>
+	void deque<T, Alloc>::reallocateAndCopy(){
+		auto newMapSize = getNewMapSize(mapSize_);
+		T** newMap = getANewMap(newMapSize);
+		size_t startIndex = (newMapSize < 5) ? 1 : 2;
+		for (int i = 0; i + beg_.mapIndex_ != mapSize_; ++i)
+			for (int j = 0; j != getBuckSize(); ++j)
+				newMap[startIndex + i][j] = map_[beg_.mapIndex_ + i][j];
+
+		size_t n = beg_.cur_ - map_[beg_.mapIndex_];
+		auto size = this->size();
+		auto b = beg_, e = end_;
+		clear();
+		mapSize_ = newMapSize;
+		map_ = newMap;
+		beg_ = iterator(startIndex, newMap[startIndex] + n, this);
+		end_ = beg_ + size;
+		
+	}
+	template<class T, class Alloc>
 	void deque<T, Alloc>::push_back(const value_type& val){
 		if (empty()){
 			init();
 		}
 		else if (back_full()){
-			return;
+			reallocateAndCopy();
 		}
 		*end_ = val;
 		++end_;
@@ -269,13 +294,22 @@ namespace TinySTL{
 	void deque<T, Alloc>::push_front(const value_type& val){
 		if (empty()){
 			init();
-			map_[0] = getANewBuck();
 		}
 		else if (front_full()){
-			return;
+			reallocateAndCopy();
 		}
 		--beg_;
 		*beg_ = val;
+	}
+	template<class T, class Alloc>
+	void deque<T, Alloc>::pop_front(){
+		dataAllocator::destroy(beg_.cur_);
+		--beg_;
+	}
+	template<class T, class Alloc>
+	void deque<T, Alloc>::pop_back(){
+		--end_;
+		dataAllocator::destroy(end_.cur_);
 	}
 }
 #endif
