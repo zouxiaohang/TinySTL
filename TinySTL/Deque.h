@@ -234,7 +234,6 @@ namespace TinySTL{
 		void init(){
 			mapSize_ = 2;
 			map_ = getANewMap(mapSize_);
-			//map_[mapSize_ - 1] = getANewBuck();
 			beg_.container_ = end_.container_ = this;
 			beg_.mapIndex_ = end_.mapIndex_ = mapSize_ - 1;
 			beg_.cur_ = end_.cur_ = map_[mapSize_ - 1];
@@ -255,7 +254,7 @@ namespace TinySTL{
 		template<class Iterator>
 		void deque_aux(Iterator first, Iterator last, std::false_type){
 			difference_type mid = (last - first) / 2;
-			for (auto it = first + mid; it >= first; --it)
+			for (auto it = first + mid; it != first - 1; --it)
 				(*this).push_front(*it);
 			for (auto it = first + mid + 1; it != last; ++it)
 				(*this).push_back(*it);
@@ -292,10 +291,19 @@ namespace TinySTL{
 		deque();
 		deque_aux(first, last, typename std::is_integral<InputIterator>::type());
 	}
-	/*template<class T, class Alloc>
+	template<class T, class Alloc>
 	deque<T, Alloc>::deque(const deque& x){
-
-	}*/
+		mapSize_ = x.mapSize_;
+		map_ = getANewMap(mapSize_);
+		for (int i = 0; i + x.beg_.mapIndex_ != x.mapSize_; ++i)
+			for (int j = 0; j != getBuckSize(); ++j)
+				map_[x.beg_.mapIndex_ + i][j] = x.map_[x.beg_.mapIndex_ + i][j];
+		beg_.mapIndex_ = x.beg_.mapIndex_;
+		end_.mapIndex_ = x.end_.mapIndex_;
+		beg_.cur_ = map_[beg_.mapIndex_] + (x.beg_.cur_ - x.map_[x.beg_.mapIndex_]);
+		end_.cur_ = map_[end_.mapIndex_] + (x.end_.cur_ - x.map_[x.end_.mapIndex_]);
+		beg_.container_ = end_.container_ = this;
+	}
 	template<class T, class Alloc>
 	void deque<T, Alloc>::reallocateAndCopy(){
 		auto newMapSize = getNewMapSize(mapSize_);
