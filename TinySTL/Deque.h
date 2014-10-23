@@ -139,6 +139,8 @@ namespace TinySTL{
 		}
 		template<class T>
 		typename dq_iter<T>::difference_type operator - (const dq_iter<T>& it1, const dq_iter<T>& it2){
+			if (it1.container_ == it2.container_ && it1.container_ == 0)
+				return 0;
 			return typename dq_iter<T>::difference_type(it1.getBuckSize()) * (it1.mapIndex_ - it2.mapIndex_ - 1)
 				+ (it1.cur_ - it1.getBuckHead(it1.mapIndex_)) + (it2.getBuckTail(it2.mapIndex_) - it2.cur_) + 1;
 		}
@@ -168,6 +170,9 @@ namespace TinySTL{
 		T **map_;
 	public:
 		deque();
+		explicit deque(size_type n, const value_type& val = value_type());
+		template <class InputIterator>
+		deque(InputIterator first, InputIterator last);
 		deque(const deque& x);
 
 		~deque(){
@@ -240,6 +245,21 @@ namespace TinySTL{
 		bool front_full()const{
 			return map_[0] && map_[0] == begin().cur_;
 		}
+		void deque_aux(size_t n, const value_type& val, std::true_type){
+			int i = 0;
+			for (; i != n / 2; ++i)
+				(*this).push_front(val);
+			for (; i != n; ++i)
+				(*this).push_back(val);
+		}
+		template<class Iterator>
+		void deque_aux(Iterator first, Iterator last, std::false_type){
+			difference_type mid = (last - first) / 2;
+			for (auto it = first + mid; it >= first; --it)
+				(*this).push_front(*it);
+			for (auto it = first + mid + 1; it != last; ++it)
+				(*this).push_back(*it);
+		}
 		void reallocateAndCopy();
 	public:
 		template <class T, class Alloc>
@@ -261,6 +281,17 @@ namespace TinySTL{
 	template<class T, class Alloc>
 	deque<T, Alloc>::deque()
 		:mapSize_(0), map_(0){}
+	template<class T, class Alloc>
+	deque<T, Alloc>::deque(size_type n, const value_type& val = value_type()){
+		deque();
+		deque_aux(n, val, typename std::is_integral<size_type>::type());
+	}
+	template<class T, class Alloc>
+	template <class InputIterator>
+	deque<T, Alloc>::deque(InputIterator first, InputIterator last){
+		deque();
+		deque_aux(first, last, typename std::is_integral<InputIterator>::type());
+	}
 	/*template<class T, class Alloc>
 	deque<T, Alloc>::deque(const deque& x){
 
@@ -309,7 +340,7 @@ namespace TinySTL{
 	template<class T, class Alloc>
 	void deque<T, Alloc>::pop_front(){
 		dataAllocator::destroy(beg_.cur_);
-		--beg_;
+		++beg_;
 	}
 	template<class T, class Alloc>
 	void deque<T, Alloc>::pop_back(){
