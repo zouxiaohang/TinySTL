@@ -59,6 +59,7 @@ TinySTL
 * priority_queue：100%
 * stack：100%
 * binary_search_tree：100%
+* deque：100%
 
 #TinySTL测试:
 ###测试环境：Windows 7 && VS2013 && release模式
@@ -226,5 +227,31 @@ TinySTL
 |TinySTL::binary_search_tree&lt;int>|10万|64|  
 |TinySTL::binary_search_tree&lt;int>|100万|828|   
 #######注：真实的插入时间 = 总的插入时间 - C++11随机数生成器生成随机数的总的时间
+
+####(1):deque&lt;int>
+
+    //std::deque<int> dq;
+    TinySTL::deque<int> dq;
+	ProfilerInstance::start();
+	const int max = 10000000;
+	int i = 0;
+	for (; i != max / 2; ++i){
+		dq.push_front(i);
+	}
+	for (; i != max; ++i){
+		dq.push_back(i);
+	}
+	ProfilerInstance::finish();
+	ProfilerInstance::dumpDuringTime();
+    
+|container|quantity|time(ms)|  
+|---------|--------|--------|  
+|TinySTL::deque&lt;int>|10万|15|  
+|TinySTL::deque&lt;int>|100万|78|  
+|TinySTL::deque&lt;int>|1000万|1186|  
+|std::deque&lt;int>|10万|90|  
+|std::deque&lt;int>|100万|1087|  
+|std::deque&lt;int>|1000万|4835|  
+#####ps：这个性能差距的原因1是内部实现的机制不同，我的deque是预先分配内存因此相同条件下占用的内存更多，而stl的deque是需要的时候再分配，更加节省内存；2是stl的deque实现了更多更灵活的插入删除操作，我只是实现了在头尾的插入和删除
 
 
