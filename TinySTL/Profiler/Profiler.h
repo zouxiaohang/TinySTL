@@ -14,6 +14,8 @@
 #include <Psapi.h>
 #pragma comment(lib, "psapi.lib")
 #else
+#include <sys/resource>
+#include <sys/time.h>
 #endif
 
 namespace TinySTL{
@@ -34,14 +36,14 @@ namespace TinySTL{
 			static TimePoint startTime;
 			static TimePoint finishTime;
 		public:
-			static void start();
-			static void finish();
-			static void dumpDuringTime(std::ostream& os = std::cout);
+			static void start();//开始计时
+			static void finish();//结束计时
+			static void dumpDuringTime(std::ostream& os = std::cout);//打印时间
 
-			static double second();
-			static double millisecond();
+			static double second();//以秒为单位返回时间
+			static double millisecond();//以毫秒为单位返回时间
 
-			static size_t memory(MemoryUnit mu = MemoryUnit::KB_);
+			static size_t memory(MemoryUnit mu = MemoryUnit::KB_);//查询当前程序的内存使用量
 		};
 	}
 }
