@@ -34,6 +34,11 @@ namespace TinySTL{
 				}
 				return *this;
 			}
+			void swap(dq_iter& it){
+				TinySTL::swap(mapIndex_, it.mapIndex_);
+				TinySTL::swap(cur_, it.cur_);
+				//TinySTL::swap(container_, it.container_);
+			}
 			reference operator *(){ return *cur_; }
 			pointer operator ->(){ return &(operator*()); }
 			dq_iter& operator ++(){
@@ -99,6 +104,8 @@ namespace TinySTL{
 			friend dq_iter<T> operator - (typename dq_iter<T>::difference_type n, const dq_iter<T>& it);
 			template<class T>
 			friend typename dq_iter<T>::difference_type operator - (const dq_iter<T>& it1, const dq_iter<T>& it2);
+			template<class T>
+			friend void swap(dq_iter<T>& lhs, dq_iter<T>& rhs);
 		};
 		template<class T>
 		dq_iter<T> operator + (const dq_iter<T>& it, typename dq_iter<T>::difference_type n){//assume n >= 0
@@ -143,6 +150,10 @@ namespace TinySTL{
 				return 0;
 			return typename dq_iter<T>::difference_type(it1.getBuckSize()) * (it1.mapIndex_ - it2.mapIndex_ - 1)
 				+ (it1.cur_ - it1.getBuckHead(it1.mapIndex_)) + (it2.getBuckTail(it2.mapIndex_) - it2.cur_) + 1;
+		}
+		template<class T>
+		void swap(dq_iter<T>& lhs, dq_iter<T>& rhs){
+			lhs.swap(rhs);
 		}
 	}
 
@@ -266,14 +277,6 @@ namespace TinySTL{
 		template <class T, class Alloc>
 		friend bool operator!= (const deque<T, Alloc>& lhs, const deque<T, Alloc>& rhs);
 		template <class T, class Alloc>
-		friend bool operator<  (const deque<T, Alloc>& lhs, const deque<T, Alloc>& rhs);
-		template <class T, class Alloc>
-		friend bool operator<= (const deque<T, Alloc>& lhs, const deque<T, Alloc>& rhs);
-		template <class T, class Alloc>
-		friend bool operator>  (const deque<T, Alloc>& lhs, const deque<T, Alloc>& rhs);
-		template <class T, class Alloc>
-		friend bool operator>= (const deque<T, Alloc>& lhs, const deque<T, Alloc>& rhs);
-		template <class T, class Alloc>
 		friend void swap(deque<T, Alloc>& x, deque<T, Alloc>& y);
 	};//end of deque
 
@@ -356,11 +359,30 @@ namespace TinySTL{
 		dataAllocator::destroy(end_.cur_);
 	}
 	template<class T, class Alloc>
-	void deque<T, Alloc>::swap(deque& x){
-		TinySTL::swap(beg_, x.beg_);
-		TinySTL::swap(end_, x.end_);
+	void deque<T, Alloc>::swap(deque<T, Alloc>& x){
 		TinySTL::swap(mapSize_, x.mapSize_);
 		TinySTL::swap(map_, x.map_);
+		beg_.swap(x.beg_);
+		end_.swap(x.end_);
+	}
+	template <class T, class Alloc>
+	bool operator== (const deque<T, Alloc>& lhs, const deque<T, Alloc>& rhs){
+		auto cit1 = lhs.cbegin(), cit2 = rhs.cbegin();
+		for (; cit1 != lhs.cend() && cit2 != rhs.cend(); ++cit1, ++cit2){
+			if (*cit1 != *cit2)
+				return false;
+		}
+		if (cit1 == lhs.cend() && cit2 == rhs.cend())
+			return true;
+		return false;
+	}
+	template <class T, class Alloc>
+	bool operator!= (const deque<T, Alloc>& lhs, const deque<T, Alloc>& rhs){
+		return !(lhs == rhs);
+	}
+	template <class T, class Alloc>
+	void swap(deque<T, Alloc>& x, deque<T, Alloc>& y){
+		x.swap(y);
 	}
 }
 #endif
