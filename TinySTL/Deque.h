@@ -40,7 +40,9 @@ namespace TinySTL{
 				//TinySTL::swap(container_, it.container_);
 			}
 			reference operator *(){ return *cur_; }
+			const reference operator *()const{ return *cur_; }
 			pointer operator ->(){ return &(operator*()); }
+			const pointer operator ->()const{ return &(operator*()); }
 			dq_iter& operator ++(){
 				if (cur_ != getBuckTail(mapIndex_))//+1后还在同一个桶里
 					++cur_;
@@ -166,7 +168,6 @@ namespace TinySTL{
 	public:
 		typedef T value_type;
 		typedef dq_iter<T> iterator;
-		typedef const iterator const_iterator;
 		typedef T& reference;
 		typedef const reference const_reference;
 		typedef size_t size_type;
@@ -197,11 +198,7 @@ namespace TinySTL{
 		deque& operator= (deque&& x);
 
 		iterator begin(){ return beg_; }
-		const_iterator begin() const{ return beg_; }
 		iterator end(){ return end_; }
-		const_iterator end() const{ return end_; }
-		const_iterator cbegin() const{ return beg_; }
-		const_iterator cend() const{ return end_; }
 
 		size_type size() const{ return end() - begin(); }
 		bool empty() const{ return begin() == end(); }

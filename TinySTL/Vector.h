@@ -24,8 +24,8 @@ namespace TinySTL{
 		typedef T									value_type;
 		typedef T*							iterator;
 		typedef const iterator					const_iterator;
-		typedef reverse_iterator<T*>				reverse_iterator;
-		typedef const reverse_iterator				const_reverse_iterator;
+		typedef reverse_iterator_t<T*>				reverse_iterator;
+		typedef reverse_iterator_t<const T*>				const_reverse_iterator;
 		typedef iterator							pointer;
 		typedef T&									reference;
 		typedef const T&							const_reference;

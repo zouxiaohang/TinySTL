@@ -1,9 +1,11 @@
 #include <algorithm>
 #include <atomic>
 #include <cassert>
+#include <cctype>
 #include <condition_variable>
 #include <iostream>
 #include <list>
+#include <new>
 #include <mutex>
 #include <memory>
 #include <string>
@@ -29,24 +31,19 @@
 
 using namespace std;
 using namespace TinySTL::Profiler;
-
+bool comp_case_insensitive(char c1, char c2) {
+	return (std::tolower(c1) == std::tolower(c2));
+}
 int main(){
-	//TinySTL::deque<int> dq;
-	//int array[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 };
-	int array[] = { 5, 3, 2, 7, 6, 8, 8 };
-	TinySTL::binary_search_tree<int> bst;
-	bst.insert(array, array + 7);
-	//std::vector<int> vec;
-	TinySTL::vector<int> vec;
-	ProfilerInstance::start();
-	int i = 0;
-	for (; i != 1000000; ++i){
-		vec.push_back(i);
-	}
-	ProfilerInstance::finish();
-	ProfilerInstance::dumpDuringTime();
-	cout << ProfilerInstance::millisecond() << endl;
-
+	TinySTL::deque<int> dq;
+	for (int i = 0; i != 10; ++i)
+		dq.push_front(i);
+	/*for (auto x : dq)
+		cout << x << endl;*/
+	for (auto rit = dq.begin(); rit != dq.end(); ++rit)
+		cout << *rit << endl;
+	for (auto x : dq)
+		cout << x << endl;
 	system("pause");
 	return 0;
 }
