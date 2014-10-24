@@ -276,6 +276,31 @@ namespace TinySTL{
 		}
 		return ret;
 	}
+	//********** [find_first_of] ******************************
+	//********* [Algorithm Complexity: O(N*N)] ****************
+	template <class ForwardIterator1, class ForwardIterator2>
+	ForwardIterator1 find_first_of(ForwardIterator1 first1, ForwardIterator1 last1,
+		ForwardIterator2 first2, ForwardIterator2 last2){
+		for (; first1 != last1; ++first1){
+			for (auto it = first2; it != last2; ++it){
+				if (*first1 == *it)
+					return first1;
+			}
+		}
+		return last1;
+	}
+	template <class ForwardIterator1, class ForwardIterator2, class BinaryPredicate>
+	ForwardIterator1 find_first_of(ForwardIterator1 first1, ForwardIterator1 last1,
+		ForwardIterator2 first2, ForwardIterator2 last2,
+		BinaryPredicate pred){
+		for (; first1 != last1; ++first1){
+			for (auto it = first2; it != last2; ++it){
+				if (pred(*first1, *it))
+					return first1;
+			}
+		}
+		return last1;
+	}
 }
 
 
