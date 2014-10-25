@@ -168,6 +168,7 @@ namespace TinySTL{
 	public:
 		typedef T value_type;
 		typedef dq_iter<T> iterator;
+		typedef dq_iter<const T> const_iterator;
 		typedef T& reference;
 		typedef const reference const_reference;
 		typedef size_t size_type;
@@ -199,7 +200,11 @@ namespace TinySTL{
 
 		iterator begin(){ return beg_; }
 		iterator end(){ return end_; }
-
+	private:
+		//对外不提供const_iterator，但为了其他const函数能使用begin()和end()因此提供两个私有的const版本
+		iterator begin()const{ return beg_; }
+		iterator end()const{ return end_; }
+	public:
 		size_type size() const{ return end() - begin(); }
 		bool empty() const{ return begin() == end(); }
 
