@@ -28,7 +28,7 @@ TinySTL
   * R-tree
   * Matrix
   * Graph
-  * ThreadPool
+  * bloom filter
 
 ##完成进度：
 * STL的几大基本组件
@@ -60,6 +60,7 @@ TinySTL
 * stack：100%
 * binary_search_tree：100%
 * deque：100%
+* queue：100%
 
 #TinySTL测试:
 ###测试环境：Windows 7 && VS2013 && release模式
