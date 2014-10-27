@@ -28,7 +28,7 @@ TinySTL
   * R-tree
   * Matrix
   * Graph
-  * ThreadPool
+  * bloom filter
 
 ##完成进度：
 * STL的几大基本组件
