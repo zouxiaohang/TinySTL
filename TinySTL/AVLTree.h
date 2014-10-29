@@ -3,6 +3,7 @@
 
 #include "Allocator.h"
 #include "Stack.h"
+#include "String.h"
 
 #include <set>
 
@@ -31,6 +32,7 @@ namespace TinySTL{
 		typedef T value_type;
 		typedef avl_iter<node> const_iterator;
 		typedef const T& const_reference;
+		typedef size_t size_type;
 	private:
 		node *root_;
 		size_t size_;
@@ -51,6 +53,11 @@ namespace TinySTL{
 		const_iterator find_min();
 		const_iterator find_max();
 		const_iterator find(const T& val);
+
+		void print_preorder(const string& delim = " ", std::ostream& os = std::cout)const;
+		void print_inorder(const string& delim = " ", std::ostream& os = std::cout)const;
+		void print_postorder(const string& delim = " ", std::ostream& os = std::cout)const;
+		void print_levelorder(const string& delim = " ", std::ostream& os = std::cout)const;
 	private:
 		void destroyAndDeallocateAllNodes(node *p){
 			if (p != 0){
@@ -63,7 +70,61 @@ namespace TinySTL{
 		const_iterator find_min_aux(const node *ptr);
 		const_iterator find_max_aux(const node *ptr);
 		const_iterator find_aux(const T& val, const node *ptr);
+		void print_preorder_aux(const string& delim, std::ostream& os, const node *ptr)const;
+		void print_inorder_aux(const string& delim, std::ostream& os, const node *ptr)const;
+		void print_postorder_aux(const string& delim, std::ostream& os, const node *ptr)const;
 	};// end of avl_tree
+	template<class T>
+	void avl_tree<T>::print_preorder_aux(const string& delim, std::ostream& os, const node *ptr)const{
+		if (ptr != 0){
+			os << ptr->data_ << delim;
+			print_preorder_aux(delim, os, ptr->left_);
+			print_preorder_aux(delim, os, ptr->right_);
+		}
+	}
+	template<class T>
+	void avl_tree<T>::print_preorder(const string& delim, std::ostream& os)const{
+		print_preorder_aux(delim, os, root_);
+	}
+	template<class T>
+	void avl_tree<T>::print_inorder_aux(const string& delim, std::ostream& os, const node *ptr)const{
+		if (ptr != 0){
+			print_inorder_aux(delim, os, ptr->left_);
+			os << ptr->data_ << delim;
+			print_inorder_aux(delim, os, ptr->right_);
+		}
+	}
+	template<class T>
+	void avl_tree<T>::print_inorder(const string& delim, std::ostream& os)const{
+		print_inorder_aux(delim, os, root_);
+	}
+	template<class T>
+	void avl_tree<T>::print_postorder_aux(const string& delim, std::ostream& os, const node *ptr)const{
+		if (ptr != 0){
+			print_postorder_aux(delim, os, ptr->left_);
+			print_postorder_aux(delim, os, ptr->right_);
+			os << ptr->data_ << delim;
+		}
+	}
+	template<class T>
+	void avl_tree<T>::print_postorder(const string& delim, std::ostream& os)const{
+		print_postorder_aux(delim, os, root_);
+	}
+	template<class T>
+	void avl_tree<T>::print_levelorder(const string& delim, std::ostream& os)const{
+		auto temp = root_;
+		if (temp != 0){
+			std::deque<node *> q;
+			q.push_back(temp);
+			while (!q.empty()){
+				temp = q.front();
+				q.pop_front();
+				os << temp->data_ << delim;
+				if (temp->left_ != 0) q.push_back(temp->left_);
+				if (temp->right_ != 0) q.push_back(temp->right);
+			}
+		}
+	}
 	template<class T>
 	typename avl_tree<T>::const_iterator avl_tree<T>::find_aux(const T& val, const node *ptr){
 		while (ptr != 0){
