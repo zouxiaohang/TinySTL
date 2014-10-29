@@ -7,6 +7,10 @@
 #include <set>
 
 namespace TinySTL{
+	namespace {
+		template<class T>
+		class avl_iter;
+	}
 	//class of avl tree
 	template<class T>
 	class avl_tree{
@@ -18,10 +22,11 @@ namespace TinySTL{
 			T data_;
 			node *left_, *right_;
 			size_t height_;
+			typedef T value_type;
 			explicit node(T d = T(), node *l = 0, node *r = 0, size_t h = 0)
 				:data_(d), left_(l), right_(r), height_(h){}
 		};
-		typedef TinySTL::allocator<T> dataAllocator;
+		typedef TinySTL::allocator<node> dataAllocator;
 	public:
 		typedef T value_type;
 		typedef avl_iter<node> const_iterator;
@@ -38,7 +43,14 @@ namespace TinySTL{
 		size_t height()const{ return root_ == 0 ? -1 : root_->height_; }
 		size_t size()const{ return size_; }
 		bool empty()const{ return root_ == 0; }
-		/*const_iterator root(){ return const_iterator(root_, this); }*/
+		const_iterator root(){ return const_iterator(root_, this); }
+
+		const_iterator cbegin(){ return find_min(); }
+		const_iterator cend(){ return const_iterator(0, this); }
+
+		const_iterator find_min();
+		const_iterator find_max();
+		const_iterator find(const T& val);
 	private:
 		void destroyAndDeallocateAllNodes(node *p){
 			if (p != 0){
@@ -48,17 +60,56 @@ namespace TinySTL{
 				dataAllocator::deallocate(p);
 			}
 		}
-	};
+		const_iterator find_min_aux(const node *ptr);
+		const_iterator find_max_aux(const node *ptr);
+		const_iterator find_aux(const T& val, const node *ptr);
+	};// end of avl_tree
+	template<class T>
+	typename avl_tree<T>::const_iterator avl_tree<T>::find_aux(const T& val, const node *ptr){
+		while (ptr != 0){
+			if (ptr->data_ < val)
+				ptr = ptr->right_;
+			else if (ptr->data_ > val)
+				ptr = ptr->left_;
+			else
+				break;
+		}
+		return const_iterator(ptr, this);
+	}
+	template<class T>
+	typename avl_tree<T>::const_iterator avl_tree<T>::find(const T& val){
+		return find_aux(val, root_);
+	}
+	template<class T>
+	typename avl_tree<T>::const_iterator avl_tree<T>::find_max_aux(const node *ptr){
+		while (ptr != 0 && ptr->right_ != 0)
+			ptr = ptr->right_;
+		return const_iterator(ptr, this);
+	}
+	template<class T>
+	typename avl_tree<T>::const_iterator avl_tree<T>::find_max(){
+		return find_max_aux(root_);
+	}
+	template<class T>
+	typename avl_tree<T>::const_iterator avl_tree<T>::find_min_aux(const node *ptr){
+		while (ptr != 0 && ptr->left_ != 0)
+			ptr = ptr->left_;
+		return const_iterator(ptr, this);
+	}
+	template<class T>
+	typename avl_tree<T>::const_iterator avl_tree<T>::find_min(){
+		return find_min_aux(root_);
+	}
 
 	namespace{
-		//class of bst iterator
+		//class of avl tree iterator
 		template<class T>//T = node
 		class avl_iter{
 		private:
 			template<class T>
 			friend class avl_tree;
 		private:
-			typedef typename avl_tree<typename T::value_type>::vaule_type value_type;
+			typedef typename avl_tree<typename T::value_type>::value_type value_type;
 			typedef typename avl_tree<typename T::value_type>::const_reference const_reference;
 			typedef typename const T::value_type *const_pointer;
 			typedef avl_tree<typename T::value_type> * cntrPtr;
