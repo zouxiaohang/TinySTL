@@ -37,6 +37,11 @@ TinySTL
     * iterator traits：100%
     * reverse_iterator：100%
     * vector：100%
+    * string：100%
+    * priority_queue：100%
+    * stack：100%
+    * deque：100%
+    * queue：100%
 * STL Algorithms:  
     * fill：100% 
     * fill_n：100% 
@@ -53,14 +58,11 @@ TinySTL
     * none_of：100%
     * find_if：100%
     * find_if_not：100%
-* circular_buffer：100%   
-* bitmap：100%
-* string：100%
-* priority_queue：100%
-* stack：100%
-* binary_search_tree：100%
-* deque：100%
-* queue：100%
+    * adjacent_find：100%
+* 其他组件：
+    * circular_buffer：100%   
+    * bitmap：100%
+    * binary_search_tree：100%
 
 #TinySTL测试:
 ###测试环境：Windows 7 && VS2013 && release模式
