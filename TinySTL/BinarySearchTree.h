@@ -28,7 +28,7 @@ namespace TinySTL{
 		};
 		typedef TinySTL::allocator<node> nodeAllocator;
 	public:
-		typedef T vaule_type;
+		typedef T value_type;
 		typedef bst_iter<node> const_iterator;
 		typedef const T& const_reference;
 	private:
@@ -246,7 +246,7 @@ namespace TinySTL{
 			template<class T>
 			friend class binary_search_tree;
 		private:
-			typedef typename binary_search_tree<typename T::value_type>::vaule_type value_type;
+			typedef typename binary_search_tree<typename T::value_type>::value_type value_type;
 			typedef typename binary_search_tree<typename T::value_type>::const_reference const_reference;
 			typedef typename const T::value_type *const_pointer;
 			typedef binary_search_tree<typename T::value_type> * cntrPtr;
