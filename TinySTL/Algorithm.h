@@ -1,6 +1,9 @@
 #ifndef _ALGORITHM_H_
 #define _ALGORITHM_H_
 
+#include "Functional.h"
+#include "TypeTraits.h"
+
 #include <cstring>
 
 namespace TinySTL{
@@ -300,6 +303,21 @@ namespace TinySTL{
 			}
 		}
 		return last1;
+	}
+	//********** [adjacent_find] ******************************
+	//********* [Algorithm Complexity: O(N)] ****************
+	template <class ForwardIterator>
+	ForwardIterator adjacent_find(ForwardIterator first, ForwardIterator last){
+		return TinySTL::adjacent_find(first, last, 
+			equal_to<iterator_traits<typename ForwardIterator>::value_type>());
+	}
+	template <class ForwardIterator, class BinaryPredicate>
+	ForwardIterator adjacent_find(ForwardIterator first, ForwardIterator last, BinaryPredicate pred){
+		for (; first != last; ++first){
+			if (first + 1 != last && pred(*(first), *(first + 1)))
+				break;
+		}
+		return first;
 	}
 }
 
