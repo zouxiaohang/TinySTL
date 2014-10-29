@@ -31,6 +31,7 @@ namespace TinySTL{
 		typedef T value_type;
 		typedef bst_iter<node> const_iterator;
 		typedef const T& const_reference;
+		typedef size_t size_type;
 	private:
 		node *root_;
 		size_t size_;
