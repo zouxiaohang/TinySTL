@@ -42,6 +42,11 @@ namespace TinySTL{
 		avl_tree& operator = (const avl_tree&) = delete;
 		~avl_tree(){ destroyAndDeallocateAllNodes(root_); }
 
+		void insert(const T& val);//todo
+		template<class Iterator>
+		void insert(Iterator first, Iterator last);//todo
+		void erase(const T& val);//todo
+
 		size_t height()const{ return root_ == 0 ? -1 : root_->height_; }
 		size_t size()const{ return size_; }
 		bool empty()const{ return root_ == 0; }
@@ -59,6 +64,25 @@ namespace TinySTL{
 		void print_postorder(const string& delim = " ", std::ostream& os = std::cout)const;
 		void print_levelorder(const string& delim = " ", std::ostream& os = std::cout)const;
 	private:
+		void singleLeftLeftRotate(node *&parent, node *&child){
+			parent->left_ = child->right_;
+			child->right_ = parent;
+			parent = child;//new root
+		}
+		void doubleLeftRightRotate(node *&parent, node *&child){
+			singleRightRightRotate(parent->left_, parent->left_->right_);
+			singleLeftLeftRotate(parent, parent->left_);
+		}
+		void doubleRightLeftRotate(node *&parent, node *&child){
+			singleLeftLeftRotate(parent->right_, parent->right_->left_);
+			singleRightRightRotate(parent, parent->right);
+		}
+		void singleRightRightRotate(node *&parent, node *&child){
+			parent->right_ = child->left_;
+			child->left_ = parent;
+			parent = child;//new root
+		}
+	private:
 		void destroyAndDeallocateAllNodes(node *p){
 			if (p != 0){
 				destroyAndDeallocateAllNodes(p->left_);
@@ -74,6 +98,10 @@ namespace TinySTL{
 		void print_inorder_aux(const string& delim, std::ostream& os, const node *ptr)const;
 		void print_postorder_aux(const string& delim, std::ostream& os, const node *ptr)const;
 	};// end of avl_tree
+	template<class T>
+	void avl_tree<T>::insert(const T& val){
+
+	}
 	template<class T>
 	void avl_tree<T>::print_preorder_aux(const string& delim, std::ostream& os, const node *ptr)const{
 		if (ptr != 0){
