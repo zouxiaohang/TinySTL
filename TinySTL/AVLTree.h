@@ -24,7 +24,7 @@ namespace TinySTL{
 			node *left_, *right_;
 			size_t height_;
 			typedef T value_type;
-			explicit node(T d = T(), node *l = 0, node *r = 0, size_t h = 0)
+			explicit node(T d = T(), node *l = 0, node *r = 0, size_t h = 1)
 				:data_(d), left_(l), right_(r), height_(h){}
 		};
 		typedef TinySTL::allocator<node> dataAllocator;
@@ -47,7 +47,7 @@ namespace TinySTL{
 		void insert(Iterator first, Iterator last);//todo
 		void erase(const T& val);//todo
 
-		size_t height()const{ return root_ == 0 ? -1 : root_->height_; }
+		size_t height()const{ return getHeight(root_); }
 		size_t size()const{ return size_; }
 		bool empty()const{ return root_ == 0; }
 		const_iterator root(){ return const_iterator(root_, this); }
@@ -64,25 +64,32 @@ namespace TinySTL{
 		void print_postorder(const string& delim = " ", std::ostream& os = std::cout)const;
 		void print_levelorder(const string& delim = " ", std::ostream& os = std::cout)const;
 	private:
-		void singleLeftLeftRotate(node *&parent, node *&child){
-			parent->left_ = child->right_;
-			child->right_ = parent;
-			parent = child;//new root
+		node *singleLeftLeftRotate(node *k2){
+			auto k1 = k2->left_;
+			k2->left_ = k1->right_;
+			k1->right_ = k2;
+			k2->height_ = max(getHeight(k2->left_), getHeight(k2->right_)) + 1;
+			k1->height_ = max(getHeight(k1->left_), k2->height_) + 1;
+			return k1;
 		}
-		void doubleLeftRightRotate(node *&parent, node *&child){
-			singleRightRightRotate(parent->left_, parent->left_->right_);
-			singleLeftLeftRotate(parent, parent->left_);
+		node *doubleLeftRightRotate(node * k3){
+			k3->left_ = singleRightRightRotate(k3->left_);
+			return singleLeftLeftRotate(k3);
 		}
-		void doubleRightLeftRotate(node *&parent, node *&child){
-			singleLeftLeftRotate(parent->right_, parent->right_->left_);
-			singleRightRightRotate(parent, parent->right);
+		node *doubleRightLeftRotate(node * k3){
+			k3->right_ = singleLeftLeftRotate(k3->right_);
+			return singleRightRightRotate(k3);
 		}
-		void singleRightRightRotate(node *&parent, node *&child){
-			parent->right_ = child->left_;
-			child->left_ = parent;
-			parent = child;//new root
+		node *singleRightRightRotate(node * k2){
+			auto k1 = k2->right_;
+			k2->right_ = k1->left_;
+			k1->left_ = k2;
+			k2->height_ = max(getHeight(k2->left_), getHeight(k2->right_)) + 1;
+			k1->height_ = max(k2->height_, getHeight(k1->right_)) + 1;
+			return k1;
 		}
 	private:
+		void insert_elem(const T& val, node *&p);
 		void destroyAndDeallocateAllNodes(node *p){
 			if (p != 0){
 				destroyAndDeallocateAllNodes(p->left_);
@@ -91,6 +98,7 @@ namespace TinySTL{
 				dataAllocator::deallocate(p);
 			}
 		}
+		size_t getHeight(const node *p)const{ return p == 0 ? 0 : p->height_; }
 		const_iterator find_min_aux(const node *ptr);
 		const_iterator find_max_aux(const node *ptr);
 		const_iterator find_aux(const T& val, const node *ptr);
@@ -99,8 +107,42 @@ namespace TinySTL{
 		void print_postorder_aux(const string& delim, std::ostream& os, const node *ptr)const;
 	};// end of avl_tree
 	template<class T>
+	void avl_tree<T>::insert_elem(const T& val, node *&p){
+		if (p == 0){
+			p = dataAllocator::allocate();
+			p->data_ = val;
+			p->left_ = p->right_ = 0;
+			p->height_ = 1;
+			++size_;
+		}else if (p->data_ < val){
+			insert_elem(val, p->right_);
+			if (getHeight(p->right_) - getHeight(p->left_) == 2){
+				if (val > p->right_->data_)
+					p = singleRightRightRotate(p);
+				else
+					p = doubleRightLeftRotate(p);
+			}
+		}else{
+			insert_elem(val, p->left_);
+			if (getHeight(p->left_) - getHeight(p->right_) == 2){
+				if (val < p->left_->data_)
+					p = singleLeftLeftRotate(p);
+				else
+					p = doubleLeftRightRotate(p);
+			}
+		}
+		int l = getHeight(p->left_), r = getHeight(p->right_);
+		p->height_ = max(l, r) + 1;
+	}
+	template<class T>
 	void avl_tree<T>::insert(const T& val){
-
+		return insert_elem(val, root_);
+	}
+	template<class T>
+	template<class Iterator>
+	void avl_tree<T>::insert(Iterator first, Iterator last){
+		for (; first != last; ++first)
+			insert(*first);
 	}
 	template<class T>
 	void avl_tree<T>::print_preorder_aux(const string& delim, std::ostream& os, const node *ptr)const{
@@ -149,7 +191,7 @@ namespace TinySTL{
 				q.pop_front();
 				os << temp->data_ << delim;
 				if (temp->left_ != 0) q.push_back(temp->left_);
-				if (temp->right_ != 0) q.push_back(temp->right);
+				if (temp->right_ != 0) q.push_back(temp->right_);
 			}
 		}
 	}
