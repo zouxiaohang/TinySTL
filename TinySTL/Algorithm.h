@@ -1,7 +1,9 @@
 #ifndef _ALGORITHM_H_
 #define _ALGORITHM_H_
 
+#include "Allocator.h"
 #include "Functional.h"
+#include "Iterator.h"
 #include "TypeTraits.h"
 
 #include <cstring>
@@ -318,6 +320,18 @@ namespace TinySTL{
 				break;
 		}
 		return first;
+	}
+	//********** [count] ******************************
+	//********* [Algorithm Complexity: O(N)] ****************
+	template <class InputIterator, class T>
+	typename iterator_traits<InputIterator>::difference_type
+		count(InputIterator first, InputIterator last, const T& val){
+		typename iterator_traits<InputIterator>::difference_type n = 0;
+		for (; first != last; ++first){
+			if (*first == val)
+				++n;
+		}
+		return n;
 	}
 }
 
