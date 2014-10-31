@@ -333,6 +333,18 @@ namespace TinySTL{
 		}
 		return n;
 	}
+	//********** [count_if] ******************************
+	//********* [Algorithm Complexity: O(N)] ****************
+	template <class InputIterator, class UnaryPredicate>
+	typename iterator_traits<InputIterator>::difference_type
+		count_if(InputIterator first, InputIterator last, UnaryPredicate pred){
+		typename iterator_traits<InputIterator>::difference_type n = 0;
+		for (; first != last; ++first){
+			if (pred(*first))
+				++n;
+		}
+		return n;
+	}
 }
 
 
