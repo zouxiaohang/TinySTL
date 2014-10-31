@@ -2,6 +2,7 @@
 #define _BINARY_SEARCH_TREE_H_
 
 #include "Allocator.h"
+#include "Queue.h"
 #include "Stack.h"
 #include "String.h"
 
@@ -25,6 +26,8 @@ namespace TinySTL{
 			T data_;
 			node *left_;
 			node *right_;
+			explicit node(T d = T(), node *l = 0, node *r = 0)
+				:data_(d), left_(l), right_(r){}
 		};
 		typedef TinySTL::allocator<node> nodeAllocator;
 	public:
@@ -72,7 +75,7 @@ namespace TinySTL{
 				nodeAllocator::deallocate(ptr);
 			}
 		}
-		size_t height_aux(const node *p)const;
+		size_t height_aux(node *p)const;
 		void erase_elem(const T& val, node *&ptr);
 		void insert_elem(const T& val, node *&ptr);
 		const_iterator find_min_aux(const node *ptr);
@@ -83,12 +86,27 @@ namespace TinySTL{
 		void print_postorder_aux(const string& delim, std::ostream& os, const node *ptr)const;
 	};//end of bst class
 	template<class T>
-	size_t binary_search_tree<T>::height_aux(const node *p)const{
-		if (p == 0)
-			return 0;
-		else{
-			return TinySTL::max(height_aux(p->left_), height_aux(p->right_)) + 1;
+	size_t binary_search_tree<T>::height_aux(node *p)const{
+		TinySTL::queue<node *> q, level;
+		size_t nlevel = 0;
+		if (p != 0){
+			level.push(p);
+			++nlevel;
+			while (!(q.empty() && level.empty())){
+				if (level.empty()){
+					++nlevel;
+					while (!q.empty()){
+						level.push(q.front());
+						q.pop();
+					}
+				}
+				auto temp = level.front();
+				level.pop();
+				if (temp->left_ != 0) q.push(temp->left_);
+				if (temp->right_ != 0) q.push(temp->right_);
+			}
 		}
+		return nlevel;
 	}
 	template<class T>
 	void binary_search_tree<T>::erase_elem(const T& val, node *&ptr){
