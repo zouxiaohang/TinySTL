@@ -63,6 +63,7 @@ TinySTL
     * circular_buffer：100%   
     * bitmap：100%
     * binary_search_tree：100%
+    * avl_tree：100%
 
 #TinySTL测试:
 ###测试环境：Windows 7 && VS2013 && release模式
@@ -231,7 +232,7 @@ TinySTL
 |TinySTL::binary_search_tree&lt;int>|100万|828|   
 #######注：真实的插入时间 = 总的插入时间 - C++11随机数生成器生成随机数的总的时间
 
-####(1):deque&lt;int>
+####(8):deque&lt;int>
 
     //std::deque<int> dq;
     TinySTL::deque<int> dq;
@@ -257,4 +258,16 @@ TinySTL
 |std::deque&lt;int>|1000万|4835|  
 #####ps：这个性能差距的原因1是内部实现的机制不同，我的deque是预先分配内存因此相同条件下占用的内存更多，而stl的deque是需要的时候再分配，更加节省内存；2是stl的deque实现了更多更灵活的插入删除操作，我只是实现了在头尾的插入和删除
 
+####(9):avl_tree&lt;int> 
+    TinySTL::binary_search_tree<int> bst;
+    TinySTL::avl_tree<int> avlt;
+	for (int i = 0; i != 10000; ++i){
+		avlt.insert(i);
+		bst.insert(i);
+	}
+	cout << "binary_search_tree height = " << bst.height() << endl;
+	cout << "avl_tree height = " << avlt.height() << endl;
+输出结果：  
 
+    binary_search_tree height = 10000
+    avl_tree height = 14
