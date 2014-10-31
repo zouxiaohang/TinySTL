@@ -42,9 +42,9 @@ namespace TinySTL{
 		avl_tree& operator = (const avl_tree&) = delete;
 		~avl_tree(){ destroyAndDeallocateAllNodes(root_); }
 
-		void insert(const T& val);//todo
+		void insert(const T& val);
 		template<class Iterator>
-		void insert(Iterator first, Iterator last);//todo
+		void insert(Iterator first, Iterator last);
 		void erase(const T& val);//todo
 
 		size_t height()const{ return getHeight(root_); }
@@ -90,6 +90,7 @@ namespace TinySTL{
 		}
 	private:
 		void insert_elem(const T& val, node *&p);
+		void erase_elem(const T& val, node *&p);
 		void destroyAndDeallocateAllNodes(node *p){
 			if (p != 0){
 				destroyAndDeallocateAllNodes(p->left_);
@@ -106,6 +107,51 @@ namespace TinySTL{
 		void print_inorder_aux(const string& delim, std::ostream& os, const node *ptr)const;
 		void print_postorder_aux(const string& delim, std::ostream& os, const node *ptr)const;
 	};// end of avl_tree
+	template<class T>
+	void avl_tree<T>::erase_elem(const T& val, node *&p){
+		if (p == 0)
+			return;
+		if (p->data_ < val){
+			erase_elem(val, p->right_);
+		}else if (p->data_ > val){
+			erase_elem(val, p->left_);
+		}else{// found
+			if (p->left_ != 0 && p->right_ != 0){//has two children
+				size_t choose = size_ % 2;
+				//随机选择删除左右，使得删除操作更平衡
+				auto pos = (choose == 0 ?
+					const_cast<node *>(find_min_aux(p->right_).ptr_) : const_cast<node *>(find_max_aux(p->left_).ptr_));
+				p->data_ = pos->data_;
+				(choose == 0 ? erase_elem(pos->data_, p->right_) : erase_elem(pos->data_, p->left_));
+			}else{ //has one or no child
+				auto temp = p;
+				if (p->left_ == 0)
+					p = p->right_;
+				else
+					p = p->left_;
+				dataAllocator::deallocate(temp);
+				--size_;
+			}
+		}
+		if (p != 0){//最后更新p的节点高度信息和旋转维持平衡
+			p->height_ = max(getHeight(p->left_), getHeight(p->right_)) + 1;
+			if (getHeight(p->left_) - getHeight(p->right_) == 2){
+				if (p->left_->right_ == 0)
+					singleLeftLeftRotate(p);
+				else
+					doubleLeftRightRotate(p);
+			}else if (getHeight(p->right_) - getHeight(p->left_) == 2){
+				if (p->right_->left_ == 0)
+					singleRightRightRotate(p);
+				else
+					doubleRightLeftRotate(p);
+			}
+		}
+	}
+	template<class T>
+	void avl_tree<T>::erase(const T& val){
+		return erase_elem(val, root_);
+	}
 	template<class T>
 	void avl_tree<T>::insert_elem(const T& val, node *&p){
 		if (p == 0){
@@ -131,8 +177,7 @@ namespace TinySTL{
 					p = doubleLeftRightRotate(p);
 			}
 		}
-		int l = getHeight(p->left_), r = getHeight(p->right_);
-		p->height_ = max(l, r) + 1;
+		p->height_ = max(getHeight(p->left_), getHeight(p->right_)) + 1;
 	}
 	template<class T>
 	void avl_tree<T>::insert(const T& val){
