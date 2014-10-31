@@ -87,7 +87,7 @@ namespace TinySTL{
 	};//end of bst class
 	template<class T>
 	size_t binary_search_tree<T>::height_aux(node *p)const{
-		TinySTL::queue<node *> q, level;
+		TinySTL::queue<node *> q/*存放下一层的node*/, level/*存放当前层的node*/;
 		size_t nlevel = 0;
 		if (p != 0){
 			level.push(p);
@@ -95,7 +95,7 @@ namespace TinySTL{
 			while (!(q.empty() && level.empty())){
 				if (level.empty()){
 					++nlevel;
-					while (!q.empty()){
+					while (!q.empty()){//当前层为空，将下一层的node全部转移至当前层
 						level.push(q.front());
 						q.pop();
 					}

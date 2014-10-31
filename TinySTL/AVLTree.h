@@ -45,7 +45,7 @@ namespace TinySTL{
 		void insert(const T& val);
 		template<class Iterator>
 		void insert(Iterator first, Iterator last);
-		void erase(const T& val);//todo
+		void erase(const T& val);
 
 		size_t height()const{ return getHeight(root_); }
 		size_t size()const{ return size_; }
