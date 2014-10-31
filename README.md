@@ -59,6 +59,8 @@ TinySTL
     * find_if：100%
     * find_if_not：100%
     * adjacent_find：100%
+    * count：100%
+    * count_if：100%
 * 其他组件：
     * circular_buffer：100%   
     * bitmap：100%
