@@ -42,6 +42,7 @@ TinySTL
     * stack：100%
     * deque：100%
     * queue：100%
+    * pair：20%
 * STL Algorithms:  
     * fill：100% 
     * fill_n：100% 
@@ -61,6 +62,7 @@ TinySTL
     * adjacent_find：100%
     * count：100%
     * count_if：100%
+    * mismatch：100%
 * 其他组件：
     * circular_buffer：100%   
     * bitmap：100%
