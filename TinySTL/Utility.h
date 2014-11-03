@@ -9,5 +9,17 @@ namespace TinySTL{
 		a = b;
 		b = temp;
 	}
+	//*********** [pair] ****************
+	template<class T1, class T2>
+	struct pair{
+	public:
+		typedef T1 first_type;
+		typedef T2 second_type;
+	public:
+		T1 first;
+		T2 second;
+	public:
+
+	};
 }
 #endif
