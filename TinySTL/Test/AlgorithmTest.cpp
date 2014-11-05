@@ -23,10 +23,7 @@ bool myfunction2(int i, int j) {
 bool comp_case_insensitive(char c1, char c2) {
 	return (std::tolower(c1) == std::tolower(c2));
 }
-bool myfunction3(int i, int j) {
-	return (i == j);
-}
-int main(){
+void testAlgorithm(){
 	//test fill
 	vector<int> myvector1(8);                       // myvector: 0 0 0 0 0 0 0 0
 	fill(myvector1.begin(), myvector1.begin() + 4, 5);   // myvector: 5 5 5 5 0 0 0 0
@@ -175,7 +172,7 @@ int main(){
 	it8 = adjacent_find(v1.begin(), v1.end());
 	if (it8 != v1.end())
 		std::cout << "the first pair of repeated elements are: " << *it8 << '\n';
-	it8 = adjacent_find(++it8, v1.end(), myfunction3);
+	it8 = adjacent_find(++it8, v1.end(), myfunction2);
 	if (it8 != v1.end())
 		std::cout << "the second pair of repeated elements are: " << *it8 << '\n';
 
@@ -186,6 +183,18 @@ int main(){
 	vector<int> myvector6(myints4, myints4 + 8);
 	mycount = count(myvector6.begin(), myvector6.end(), 20);
 	std::cout << "20 appears " << mycount << " times.\n";
-	system("pause");
-	return 0;
+
+	//test mismatch
+	vector<int> myvector7;
+	for (int i = 1; i<6; i++) myvector7.push_back(i * 10); // myvector: 10 20 30 40 50
+	int myints5[] = { 10, 20, 80, 320, 1024 };                //   myints: 10 20 80 320 1024
+	pair<vector<int>::iterator, int*> mypair;
+	mypair = mismatch(myvector7.begin(), myvector7.end(), myints5);
+	std::cout << "First mismatching elements: " << *mypair.first;
+	std::cout << " and " << *mypair.second << '\n';
+	++mypair.first; ++mypair.second;
+	mypair = mismatch(mypair.first, myvector7.end(), mypair.second, myfunction2);
+	std::cout << "Second mismatching elements: " << *mypair.first;
+	std::cout << " and " << *mypair.second << '\n';
+
 }
