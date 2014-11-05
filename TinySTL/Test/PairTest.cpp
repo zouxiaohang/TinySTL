@@ -4,7 +4,8 @@
 #include "..\String.h"
 
 using namespace TinySTL;
-int main(){
+
+void testPair(){
 	// test ctor
 	pair <string, double> product1;                     // default constructor
 	pair <string, double> product2("tomatoes", 2.30);   // value init
@@ -40,6 +41,4 @@ int main(){
 	if (foo> bar) std::cout << "foo is greater than bar\n";
 	if (foo <= bar) std::cout << "foo is less than or equal to bar\n";
 	if (foo >= bar) std::cout << "foo is greater than or equal to bar\n";
-	system("pause");
-	return 0;
 }
