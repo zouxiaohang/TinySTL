@@ -5,6 +5,7 @@
 #include "Functional.h"
 #include "Iterator.h"
 #include "TypeTraits.h"
+#include "Utility.h"
 
 #include <cstring>
 #include <utility>
@@ -349,23 +350,23 @@ namespace TinySTL{
 	//********** [mismatch] ******************************
 	//********* [Algorithm Complexity: O(N)] ****************
 	template <class InputIterator1, class InputIterator2>
-	std::pair<InputIterator1, InputIterator2>
+	pair<InputIterator1, InputIterator2>
 		mismatch(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2){
 			for (; first1 != last1; ++first1, ++first2){
 				if (*first1 != *first2)
 					break;
 			}
-			return std::make_pair(first1, first2);
+			return make_pair(first1, first2);
 	}
 	template <class InputIterator1, class InputIterator2, class BinaryPredicate>
-	std::pair<InputIterator1, InputIterator2>
+	pair<InputIterator1, InputIterator2>
 		mismatch(InputIterator1 first1, InputIterator1 last1,
 		InputIterator2 first2, BinaryPredicate pred){
 		for (; first1 != last1; ++first1, ++first2){
 			if (!pred(*first1, *first2))
 				break;
 		}
-		return std::make_pair(first1, first2);
+		return make_pair(first1, first2);
 	}
 }
 
