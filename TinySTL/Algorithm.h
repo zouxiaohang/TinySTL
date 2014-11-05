@@ -1,14 +1,14 @@
 #ifndef _ALGORITHM_H_
 #define _ALGORITHM_H_
 
+#include <cstring>
+#include <utility>
+
 #include "Allocator.h"
 #include "Functional.h"
 #include "Iterator.h"
 #include "TypeTraits.h"
 #include "Utility.h"
-
-#include <cstring>
-#include <utility>
 
 namespace TinySTL{
 	//********* [fill] ********************
