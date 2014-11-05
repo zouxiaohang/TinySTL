@@ -16,6 +16,9 @@
     <Filter Include="头文件\Profiler">
       <UniqueIdentifier>{092c2875-2b56-404b-977e-a9b4aa67c134}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Test">
+      <UniqueIdentifier>{102ada31-2e23-4fa3-b913-81e7e40d12a7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -23,6 +26,9 @@
     </ClCompile>
     <ClCompile Include="Profiler\Profiler.cpp">
       <Filter>头文件\Profiler</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\PairTest.cpp">
+      <Filter>Test</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
