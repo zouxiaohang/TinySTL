@@ -1,11 +1,31 @@
 #include <iostream>
 #include <array>
+#include <cstring>
+#include <cctype>
 
 #include "..\Algorithm.h"
 #include "..\Vector.h"
 
 using namespace TinySTL;
 
+void myfunction(int i) {  // function:
+	std::cout << ' ' << i;
+}
+struct myclass {           // function object type:
+	void operator() (int i) { std::cout << ' ' << i; }
+} myobject;
+bool IsOdd(int i) {
+	return ((i % 2) == 1);
+}
+bool myfunction2(int i, int j) {
+	return (i == j);
+}
+bool comp_case_insensitive(char c1, char c2) {
+	return (std::tolower(c1) == std::tolower(c2));
+}
+bool myfunction3(int i, int j) {
+	return (i == j);
+}
 int main(){
 	//test fill
 	vector<int> myvector1(8);                       // myvector: 0 0 0 0 0 0 0 0
@@ -82,6 +102,90 @@ int main(){
 	std::array<int, 8> foo3 = { 1, 2, 4, 8, 16, 32, 64, 128 };
 	if (TinySTL::none_of(foo3.begin(), foo3.end(), [](int i){return i<0; }))
 		std::cout << "There are no negative elements in the range.\n";
+
+	//test for_each
+	vector<int> myvector3;
+	myvector3.push_back(10);
+	myvector3.push_back(20);
+	myvector3.push_back(30);
+	std::cout << "myvector contains:";
+	for_each(myvector3.begin(), myvector3.end(), myfunction);
+	std::cout << '\n';
+	std::cout << "myvector contains:";
+	for_each(myvector3.begin(), myvector3.end(), myobject);
+	std::cout << '\n';
+
+	//test find
+	int myints1[] = { 10, 20, 30, 40 };
+	int * p;
+	p = std::find(myints1, myints1 + 4, 30);
+	if (p != myints1 + 4)
+		std::cout << "Element found in myints: " << *p << '\n';
+	else
+		std::cout << "Element not found in myints\n";
+	vector<int> myvector4(myints1, myints1 + 4);
+	vector<int>::iterator it;
+	it = find(myvector4.begin(), myvector4.end(), 30);
+	if (it != myvector4.end())
+		std::cout << "Element found in myvector: " << *it << '\n';
+	else
+		std::cout << "Element not found in myints\n";
+
+	//test find_if
+	vector<int> myvector5;
+	myvector5.push_back(10);
+	myvector5.push_back(25);
+	myvector5.push_back(40);
+	myvector5.push_back(55);
+	vector<int>::iterator it4 = find_if(myvector5.begin(), myvector5.end(), IsOdd);
+	std::cout << "The first odd value is " << *it4 << '\n';
+
+	//test find_if_not
+	std::array<int, 5> arr = { 1, 2, 3, 4, 5 };
+	auto it5 = TinySTL::find_if_not(arr.begin(), arr.end(), [](int i){return i % 2; });
+	std::cout << "The first even value is " << *it5 << '\n';
+
+	//test find_end
+	int myints2[] = { 1, 2, 3, 4, 5, 1, 2, 3, 4, 5 };
+	vector<int> haystack(myints2, myints2 + 10);
+	int needle1[] = { 1, 2, 3 };
+	vector<int>::iterator it6;
+	it6 = find_end(haystack.begin(), haystack.end(), needle1, needle1 + 3);
+	if (it6 != haystack.end())
+		std::cout << "needle1 last found at position " << (it6 - haystack.begin()) << '\n';
+	int needle2[] = { 4, 5, 1 };
+	it6 = find_end(haystack.begin(), haystack.end(), needle2, needle2 + 3, myfunction2);
+	if (it6 != haystack.end())
+		std::cout << "needle2 last found at position " << (it6 - haystack.begin()) << '\n';
+
+	//test find_first_of
+	int mychars[] = { 'a', 'b', 'c', 'A', 'B', 'C' };
+	vector<char> haystack1(mychars, mychars + 6);
+	vector<char>::iterator it7;
+	int needle[] = { 'A', 'B', 'C' };
+	it7 = find_first_of(haystack1.begin(), haystack1.end(),
+		needle, needle + 3, comp_case_insensitive);
+	if (it7 != haystack1.end())
+		std::cout << "The first match is: " << *it7 << '\n';
+
+	//test adjacent_find
+	int myints3[] = { 5, 20, 5, 30, 30, 20, 10, 10, 20 };
+	vector<int> v1(myints3, myints3 + 8);
+	vector<int>::iterator it8;
+	it8 = adjacent_find(v1.begin(), v1.end());
+	if (it8 != v1.end())
+		std::cout << "the first pair of repeated elements are: " << *it8 << '\n';
+	it8 = adjacent_find(++it8, v1.end(), myfunction3);
+	if (it8 != v1.end())
+		std::cout << "the second pair of repeated elements are: " << *it8 << '\n';
+
+	//test count
+	int myints4[] = { 10, 20, 30, 30, 20, 10, 10, 20 };   // 8 elements
+	int mycount = std::count(myints4, myints4 + 8, 10);
+	std::cout << "10 appears " << mycount << " times.\n";
+	vector<int> myvector6(myints4, myints4 + 8);
+	mycount = count(myvector6.begin(), myvector6.end(), 20);
+	std::cout << "20 appears " << mycount << " times.\n";
 	system("pause");
 	return 0;
 }
