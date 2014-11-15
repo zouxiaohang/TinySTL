@@ -21,13 +21,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="Profiler\Profiler.cpp">
       <Filter>头文件\Profiler</Filter>
     </ClCompile>
     <ClCompile Include="Test\PairTest.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\AlgorithmTest.cpp">
       <Filter>Test</Filter>
     </ClCompile>
   </ItemGroup>
@@ -90,6 +93,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="AVLTree.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="List.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

@@ -81,6 +81,7 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Profiler\Profiler.cpp" />
+    <ClCompile Include="Test\AlgorithmTest.cpp" />
     <ClCompile Include="Test\PairTest.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -95,6 +96,7 @@
     <ClInclude Include="Deque.h" />
     <ClInclude Include="Functional.h" />
     <ClInclude Include="Iterator.h" />
+    <ClInclude Include="List.h" />
     <ClInclude Include="Profiler\Profiler.h" />
     <ClInclude Include="Queue.h" />
     <ClInclude Include="ReverseIterator.h" />
