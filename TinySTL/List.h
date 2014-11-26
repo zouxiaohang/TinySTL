@@ -2,6 +2,8 @@
 #define _LIST_H_
 
 #include "Allocator.h"
+#include "Iterator.h"
+#include "ReverseIterator.h"
 #include "UninitializedFunctions.h"
 
 namespace TinySTL{
@@ -23,7 +25,7 @@ namespace TinySTL{
 		};
 		//the class of list iterator
 		template<class T>
-		struct listIterator{
+		struct listIterator :public bidirectional_iterator<T, ptrdiff_t>{
 			template<class T>
 			friend class List;
 		private:
@@ -52,24 +54,34 @@ namespace TinySTL{
 			}
 			T& operator *(){ return p->data; }
 			T* operator &(){ return &(operator*()); }
-			bool operator ==(const listIterator& it){
-				return *p == *(it.p);
-			}
-			bool operator !=(const listIterator& it){
-				return !(*this == it);
-			}
+
+			template<class T>
+			friend bool operator ==(const listIterator<T>& lhs, const listIterator<T>& rhs);
+			template<class T>
+			friend bool operator !=(const listIterator<T>& lhs, const listIterator<T>& rhs);
 		};
+		template<class T>
+		bool operator ==(const listIterator<T>& lhs, const listIterator<T>& rhs){
+			return lhs.p == rhs.p;
+		}
+		template<class T>
+		bool operator !=(const listIterator<T>& lhs, const listIterator<T>& rhs){
+			return !(lhs == rhs);
+		}
 	}//end of namespace
 
 	//the class of List
 	template<class T>
 	class List{
+		template<class T>
+		friend struct listIterator;
 	private:
 		typedef allocator<node<T>> nodeAllocator;
 		typedef node<T> *nodePtr;
 	public:
 		typedef T value_type;
 		typedef listIterator<T> iterator;
+		typedef reverse_iterator_t<iterator> reverse_iterator;
 		typedef T& reference;
 		typedef size_t size_type;
 	private:
@@ -91,13 +103,27 @@ namespace TinySTL{
 			nodeAllocator::deallocate(tail.p);
 		}
 
+		bool empty()const{
+			return head == tail;
+		}
+		size_type size()const{
+			size_type length = 0;
+			for (auto h = head; h != tail; ++h)
+				++length;
+			return length;
+		}
+		reference front(){ return (head.p->data); }
+		reference back(){ return (tail.p->prev->data); }
+
 		void push_front(const value_type& val);
 		void pop_front();
 		void push_back(const value_type& val);
 		void pop_back();
 
-		iterator begin()const{ return head; }
-		iterator end()const{ return tail; }
+		iterator begin(){ return head; }
+		iterator end(){ return tail; }
+		reverse_iterator rbegin(){ return reverse_iterator(tail); }
+		reverse_iterator rend(){ return reverse_iterator(head); }
 	private:
 		nodePtr newNode(const T& val = T()){
 			nodePtr res = nodeAllocator::allocate();
