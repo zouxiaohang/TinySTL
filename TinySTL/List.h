@@ -12,12 +12,13 @@ namespace TinySTL{
 		template<class T>
 		struct node{
 			T data;
+			node *prev;
 			node *next;
 			List<T> *container;
-			node(const T& d, node *n, List<T> *c):
-				data(d), node(n), container(c){}
+			node(const T& d, node *p, node *n, List<T> *c):
+				data(d), prev(p), node(n), container(c){}
 			bool operator ==(const node& n){
-				return data == n.data && next == n.next && container == n.container;
+				return data == n.data && prev == n.prev && next == n.next && container == n.container;
 			}
 		};
 		//the class of list iterator
@@ -38,6 +39,15 @@ namespace TinySTL{
 			listIterator operator++(int){
 				auto res = *this;
 				++*this;
+				return res;
+			}
+			listIterator& operator --(){
+				p = p->prev;
+				return *this;
+			}
+			listIterator operator --(int){
+				auto res = *this;
+				--*this;
 				return res;
 			}
 			T& operator *(){ return p->data; }
@@ -82,7 +92,9 @@ namespace TinySTL{
 		}
 
 		void push_front(const value_type& val);
+		void pop_front();
 		void push_back(const value_type& val);
+		void pop_back();
 
 		iterator begin()const{ return head; }
 		iterator end()const{ return tail; }
@@ -91,22 +103,44 @@ namespace TinySTL{
 			nodePtr res = nodeAllocator::allocate();
 			res->container = this;
 			res->data = val;
+			res->prev = nullptr;
 			res->next = nullptr;
 			return res;
+		}
+		void deleteNode(nodePtr p){ 
+			p->prev = nullptr;
+			p->next = nullptr;
+			nodeAllocator::deallocate(p); 
 		}
 	};
 	template<class T>
 	void List<T>::push_front(const value_type& val){
 		auto node = newNode(val);
+		head.p->prev = node;
 		node->next = head.p;
 		head.p = node;
+	}
+	template<class T>
+	void List<T>::pop_front(){
+		auto oldNode = head.p;
+		head.p = oldNode->next;
+		head.p->prev = nullptr;
+		deleteNode(oldNode);
 	}
 	template<class T>
 	void List<T>::push_back(const value_type& val){
 		auto node = newNode();
 		(tail.p)->data = val;
 		(tail.p)->next = node;
+		node->prev = tail.p;
 		tail.p = node;
+	}
+	template<class T>
+	void List<T>::pop_back(){
+		auto newTail = tail.p->prev;
+		newTail->next = nullptr;
+		deleteNode(tail.p);
+		tail.p = newTail;
 	}
 }
 
