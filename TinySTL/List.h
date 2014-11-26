@@ -133,7 +133,7 @@ namespace TinySTL{
 		iterator erase(iterator position);
 		iterator erase(iterator first, iterator last);
 		//void swap(List& x);
-		//void clear();
+		void clear();
 		//void splice(iterator position, list& x);
 		//void splice(iterator position, list& x, iterator i);
 		//void splice(iterator position, list& x, iterator first, iterator last);
@@ -245,6 +245,10 @@ namespace TinySTL{
 			res = erase(temp);
 		}
 		return res;
+	}
+	template<class T>
+	void List<T>::clear(){
+		erase(begin(), end());
 	}
 }
 
