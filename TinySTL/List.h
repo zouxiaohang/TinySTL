@@ -70,6 +70,22 @@ namespace TinySTL{
 			head.p = newNode();//add a dummy node
 			tail.p = head.p;
 		}
+		/*List(const List& list){
+
+		}*/
+		~List(){
+			for (; head != tail;){
+				auto temp = head++;
+				nodeAllocator::deallocate(temp.p);
+			}
+			nodeAllocator::deallocate(tail.p);
+		}
+
+		void push_front(const value_type& val);
+		void push_back(const value_type& val);
+
+		iterator begin()const{ return head; }
+		iterator end()const{ return tail; }
 	private:
 		nodePtr newNode(const T& val = T()){
 			nodePtr res = nodeAllocator::allocate();
@@ -79,6 +95,19 @@ namespace TinySTL{
 			return res;
 		}
 	};
+	template<class T>
+	void List<T>::push_front(const value_type& val){
+		auto node = newNode(val);
+		node->next = head.p;
+		head.p = node;
+	}
+	template<class T>
+	void List<T>::push_back(const value_type& val){
+		auto node = newNode();
+		(tail.p)->data = val;
+		(tail.p)->next = node;
+		tail.p = node;
+	}
 }
 
 #endif
