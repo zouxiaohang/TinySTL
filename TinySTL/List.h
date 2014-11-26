@@ -130,8 +130,8 @@ namespace TinySTL{
 		void insert(iterator position, size_type n, const value_type& val);
 		template <class InputIterator>
 		void insert(iterator position, InputIterator first, InputIterator last);
-		//iterator erase(iterator position);
-		//iterator erase(iterator first, iterator last);
+		iterator erase(iterator position);
+		iterator erase(iterator first, iterator last);
 		//void swap(List& x);
 		//void clear();
 		//void splice(iterator position, list& x);
@@ -223,6 +223,28 @@ namespace TinySTL{
 	template <class InputIterator>
 	void List<T>::insert(iterator position, InputIterator first, InputIterator last){
 		insert_aux(position, first, last, typename std::is_integral<InputIterator>::type());
+	}
+	template<class T>
+	typename List<T>::iterator List<T>::erase(iterator position){
+		if (position == head){
+			pop_front();
+			return head;
+		}else{
+			auto prev = position.p->prev;
+			prev->next = position.p->next;
+			position.p->next->prev = prev;
+			deleteNode(position.p);
+			return iterator(prev->next);
+		}
+	}
+	template<class T>
+	typename List<T>::iterator List<T>::erase(iterator first, iterator last){
+		typename List<T>::iterator res;
+		for (; first != last; ){
+			auto temp = first++;
+			res = erase(temp);
+		}
+		return res;
 	}
 }
 
