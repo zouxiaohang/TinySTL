@@ -6,6 +6,8 @@
 #include "ReverseIterator.h"
 #include "UninitializedFunctions.h"
 
+#include <type_traits>
+
 namespace TinySTL{
 	template<class T>
 	class List;
@@ -92,9 +94,8 @@ namespace TinySTL{
 			head.p = newNode();//add a dummy node
 			tail.p = head.p;
 		}
-		/*List(const List& list){
-
-		}*/
+		List(const List& list) = delete;
+		List& operator = (const List& list) = delete;
 		~List(){
 			for (; head != tail;){
 				auto temp = head++;
@@ -124,6 +125,31 @@ namespace TinySTL{
 		iterator end(){ return tail; }
 		reverse_iterator rbegin(){ return reverse_iterator(tail); }
 		reverse_iterator rend(){ return reverse_iterator(head); }
+
+		iterator insert(iterator position, const value_type& val);
+		void insert(iterator position, size_type n, const value_type& val);
+		template <class InputIterator>
+		void insert(iterator position, InputIterator first, InputIterator last);
+		//iterator erase(iterator position);
+		//iterator erase(iterator first, iterator last);
+		//void swap(List& x);
+		//void clear();
+		//void splice(iterator position, list& x);
+		//void splice(iterator position, list& x, iterator i);
+		//void splice(iterator position, list& x, iterator first, iterator last);
+		//void remove(const value_type& val);
+		//template <class Predicate>
+		//void remove_if(Predicate pred);
+		//void unique();
+		//template <class BinaryPredicate>
+		//void unique(BinaryPredicate binary_pred);
+		//void merge(list& x);
+		//template <class Compare>
+		//void merge(list& x, Compare comp);
+		//void sort();
+		//template <class Compare>
+		//void sort(Compare comp);
+		//void reverse();
 	private:
 		nodePtr newNode(const T& val = T()){
 			nodePtr res = nodeAllocator::allocate();
@@ -137,6 +163,17 @@ namespace TinySTL{
 			p->prev = nullptr;
 			p->next = nullptr;
 			nodeAllocator::deallocate(p); 
+		}
+		void insert_aux(iterator position, size_type n, const T& val, std::true_type){
+			for (auto i = n; i != 0; --i){
+				position = insert(position, val);
+			}
+		}
+		template<class InputIterator>
+		void insert_aux(iterator position, InputIterator first, InputIterator last, std::false_type){
+			for (; first != last; ++first){
+				insert(position, *first);
+			}
 		}
 	};
 	template<class T>
@@ -167,6 +204,25 @@ namespace TinySTL{
 		newTail->next = nullptr;
 		deleteNode(tail.p);
 		tail.p = newTail;
+	}
+	template<class T>
+	typename List<T>::iterator List<T>::insert(iterator position, const value_type& val){
+		auto node = newNode(val);
+		auto prev = position.p->prev;
+		node->next = position.p;
+		node->prev = prev;
+		prev->next = node;
+		position.p->prev = node;
+		return iterator(node);
+	}
+	template<class T>
+	void List<T>::insert(iterator position, size_type n, const value_type& val){
+		insert_aux(position, n, val, typename std::is_integral<InputIterator>::type());
+	}
+	template<class T>
+	template <class InputIterator>
+	void List<T>::insert(iterator position, InputIterator first, InputIterator last){
+		insert_aux(position, first, last, typename std::is_integral<InputIterator>::type());
 	}
 }
 
