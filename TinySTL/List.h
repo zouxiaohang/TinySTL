@@ -137,9 +137,9 @@ namespace TinySTL{
 		//void splice(iterator position, list& x);
 		//void splice(iterator position, list& x, iterator i);
 		//void splice(iterator position, list& x, iterator first, iterator last);
-		//void remove(const value_type& val);
-		//template <class Predicate>
-		//void remove_if(Predicate pred);
+		void remove(const value_type& val);
+		template <class Predicate>
+		void remove_if(Predicate pred);
 		//void unique();
 		//template <class BinaryPredicate>
 		//void unique(BinaryPredicate binary_pred);
@@ -264,6 +264,25 @@ namespace TinySTL{
 			curNode->prev = head.p;
 			curNode = nextNode;
 		} while (curNode != head.p);
+	}
+	template<class T>
+	void List<T>::remove(const value_type& val){
+		for (auto it = begin(); it != end();){
+			if (*it == val)
+				it = erase(it);
+			else
+				++it;
+		}
+	}
+	template<class T>
+	template <class Predicate>
+	void List<T>::remove_if(Predicate pred){
+		for (auto it = begin(); it != end();){
+			if (pred(*it))
+				it = erase(it);
+			else
+				++it;
+		}
 	}
 }
 
