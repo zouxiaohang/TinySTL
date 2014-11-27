@@ -149,7 +149,7 @@ namespace TinySTL{
 		//void sort();
 		//template <class Compare>
 		//void sort(Compare comp);
-		//void reverse();
+		void reverse();
 	private:
 		nodePtr newNode(const T& val = T()){
 			nodePtr res = nodeAllocator::allocate();
@@ -249,6 +249,21 @@ namespace TinySTL{
 	template<class T>
 	void List<T>::clear(){
 		erase(begin(), end());
+	}
+	template<class T>
+	void List<T>::reverse(){//²ÉÓÃÎ²²å·¨
+		if (empty() || size() == 1) return;
+		auto curNode = head.p;
+		head.p = tail.p->prev;
+		head.p->prev = nullptr;
+		do{
+			auto nextNode = curNode->next;
+			curNode->next = head.p->next;
+			head.p->next->prev = curNode;
+			head.p->next = curNode;
+			curNode->prev = head.p;
+			curNode = nextNode;
+		} while (curNode != head.p);
 	}
 }
 
