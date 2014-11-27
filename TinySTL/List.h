@@ -132,7 +132,7 @@ namespace TinySTL{
 		void insert(iterator position, InputIterator first, InputIterator last);
 		iterator erase(iterator position);
 		iterator erase(iterator first, iterator last);
-		//void swap(List& x);
+		void swap(List& x);
 		void clear();
 		//void splice(iterator position, list& x);
 		//void splice(iterator position, list& x, iterator i);
@@ -175,6 +175,9 @@ namespace TinySTL{
 				insert(position, *first);
 			}
 		}
+	public:
+		template<class T>
+		friend void swap(List<T>& x, List<T>& y);
 	};
 	template<class T>
 	void List<T>::push_front(const value_type& val){
@@ -283,6 +286,15 @@ namespace TinySTL{
 			else
 				++it;
 		}
+	}
+	template<class T>
+	void List<T>::swap(List& x){
+		TinySTL::swap(head.p, x.head.p);
+		TinySTL::swap(tail.p, x.tail.p);
+	}
+	template<class T>
+	void swap(List<T>& x, List<T>& y){
+		x.swap(y);
 	}
 }
 
