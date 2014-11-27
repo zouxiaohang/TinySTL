@@ -255,7 +255,7 @@ namespace TinySTL{
 	}
 	template<class T>
 	void List<T>::reverse(){//²ÉÓÃÎ²²å·¨
-		if (empty() || size() == 1) return;
+		if (empty() || head.p->next == tail.p) return;
 		auto curNode = head.p;
 		head.p = tail.p->prev;
 		head.p->prev = nullptr;
