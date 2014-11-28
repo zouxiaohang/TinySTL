@@ -232,9 +232,9 @@ TinySTL
     
 |container|quantity|time(ms)|  
 |---------|--------|--------|  
-|TinySTL::binary_search_tree&lt;int>|1万|5|  
-|TinySTL::binary_search_tree&lt;int>|10万|64|  
-|TinySTL::binary_search_tree&lt;int>|100万|828|   
+|TinySTL::binary_search_tree&lt;int>|1万|1|  
+|TinySTL::binary_search_tree&lt;int>|10万|21|  
+|TinySTL::binary_search_tree&lt;int>|100万|347|   
 #######注：真实的插入时间 = 总的插入时间 - C++11随机数生成器生成随机数的总的时间
 
 ####(8):deque&lt;int>
