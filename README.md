@@ -216,26 +216,32 @@ TinySTL
 |std::priority_queue&lt;int>|100万|92|  
 |std::priority_queue&lt;int>|1000万|1214|  
 
-####(7):binary_search_tree&lt;int>
+####(7):binary_search_tree&lt;string>
 
-    TinySTL::binary_search_tree<int> bst;
-    const size_t max = 10000;
-	std::random_device rd;
+    ifstream f;
+	char buff[256] = { 0 };
+	std::string word;
+	f.open("C:\\Users\\zxh\\Desktop\\text.txt");
+	TinySTL::vector<TinySTL::string> v;
+	while (f.good()){
+		f >> word;
+		std::copy(word.begin(), word.end(), buff);
+		v.push_back(TinySTL::string(buff, buff + word.size()));
+	}
+	TinySTL::binary_search_tree<TinySTL::string> sbst;
 	ProfilerInstance::start();
-	size_t i = 0;
-	for (; i != max; ++i){
-		bst.insert(rd());
-		//rd();
+	for (const auto& word : v){
+		sbst.insert(word);
 	}
 	ProfilerInstance::finish();
 	ProfilerInstance::dumpDuringTime();
+	f.close();
     
 |container|quantity|time(ms)|  
 |---------|--------|--------|  
-|TinySTL::binary_search_tree&lt;int>|1万|5|  
-|TinySTL::binary_search_tree&lt;int>|10万|64|  
-|TinySTL::binary_search_tree&lt;int>|100万|828|   
-#######注：真实的插入时间 = 总的插入时间 - C++11随机数生成器生成随机数的总的时间
+|TinySTL::binary_search_tree&lt;string>|44067|16|  
+|TinySTL::binary_search_tree&lt;string>|169664|64|  
+|TinySTL::binary_search_tree&lt;string>|438230|277|   
 
 ####(8):deque&lt;int>
 
