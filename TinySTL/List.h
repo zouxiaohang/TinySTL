@@ -10,7 +10,7 @@
 
 namespace TinySTL{
 	template<class T>
-	class List;
+	class list;
 	namespace{
 		//the class of node
 		template<class T>
@@ -18,8 +18,8 @@ namespace TinySTL{
 			T data;
 			node *prev;
 			node *next;
-			List<T> *container;
-			node(const T& d, node *p, node *n, List<T> *c):
+			list<T> *container;
+			node(const T& d, node *p, node *n, list<T> *c):
 				data(d), prev(p), node(n), container(c){}
 			bool operator ==(const node& n){
 				return data == n.data && prev == n.prev && next == n.next && container == n.container;
@@ -29,7 +29,7 @@ namespace TinySTL{
 		template<class T>
 		struct listIterator :public bidirectional_iterator<T, ptrdiff_t>{
 			template<class T>
-			friend class List;
+			friend class list;
 		private:
 			typedef node<T>* nodePtr;
 			nodePtr p;
@@ -72,9 +72,9 @@ namespace TinySTL{
 		}
 	}//end of namespace
 
-	//the class of List
+	//the class of list
 	template<class T>
-	class List{
+	class list{
 		template<class T>
 		friend struct listIterator;
 	private:
@@ -90,13 +90,13 @@ namespace TinySTL{
 		iterator head;
 		iterator tail;
 	public:
-		List(){
+		list(){
 			head.p = newNode();//add a dummy node
 			tail.p = head.p;
 		}
-		List(const List& list) = delete;
-		List& operator = (const List& list) = delete;
-		~List(){
+		list(const list& list) = delete;
+		list& operator = (const list& list) = delete;
+		~list(){
 			for (; head != tail;){
 				auto temp = head++;
 				nodeAllocator::deallocate(temp.p);
@@ -132,7 +132,7 @@ namespace TinySTL{
 		void insert(iterator position, InputIterator first, InputIterator last);
 		iterator erase(iterator position);
 		iterator erase(iterator first, iterator last);
-		void swap(List& x);
+		void swap(list& x);
 		void clear();
 		//void splice(iterator position, list& x);
 		//void splice(iterator position, list& x, iterator i);
@@ -140,9 +140,9 @@ namespace TinySTL{
 		void remove(const value_type& val);
 		template <class Predicate>
 		void remove_if(Predicate pred);
-		//void unique();
-		//template <class BinaryPredicate>
-		//void unique(BinaryPredicate binary_pred);
+		void unique();
+		template <class BinaryPredicate>
+		void unique(BinaryPredicate binary_pred);
 		//void merge(list& x);
 		//template <class Compare>
 		//void merge(list& x, Compare comp);
@@ -177,24 +177,24 @@ namespace TinySTL{
 		}
 	public:
 		template<class T>
-		friend void swap(List<T>& x, List<T>& y);
+		friend void swap(list<T>& x, list<T>& y);
 	};
 	template<class T>
-	void List<T>::push_front(const value_type& val){
+	void list<T>::push_front(const value_type& val){
 		auto node = newNode(val);
 		head.p->prev = node;
 		node->next = head.p;
 		head.p = node;
 	}
 	template<class T>
-	void List<T>::pop_front(){
+	void list<T>::pop_front(){
 		auto oldNode = head.p;
 		head.p = oldNode->next;
 		head.p->prev = nullptr;
 		deleteNode(oldNode);
 	}
 	template<class T>
-	void List<T>::push_back(const value_type& val){
+	void list<T>::push_back(const value_type& val){
 		auto node = newNode();
 		(tail.p)->data = val;
 		(tail.p)->next = node;
@@ -202,14 +202,14 @@ namespace TinySTL{
 		tail.p = node;
 	}
 	template<class T>
-	void List<T>::pop_back(){
+	void list<T>::pop_back(){
 		auto newTail = tail.p->prev;
 		newTail->next = nullptr;
 		deleteNode(tail.p);
 		tail.p = newTail;
 	}
 	template<class T>
-	typename List<T>::iterator List<T>::insert(iterator position, const value_type& val){
+	typename list<T>::iterator list<T>::insert(iterator position, const value_type& val){
 		auto node = newNode(val);
 		auto prev = position.p->prev;
 		node->next = position.p;
@@ -219,16 +219,16 @@ namespace TinySTL{
 		return iterator(node);
 	}
 	template<class T>
-	void List<T>::insert(iterator position, size_type n, const value_type& val){
+	void list<T>::insert(iterator position, size_type n, const value_type& val){
 		insert_aux(position, n, val, typename std::is_integral<InputIterator>::type());
 	}
 	template<class T>
 	template <class InputIterator>
-	void List<T>::insert(iterator position, InputIterator first, InputIterator last){
+	void list<T>::insert(iterator position, InputIterator first, InputIterator last){
 		insert_aux(position, first, last, typename std::is_integral<InputIterator>::type());
 	}
 	template<class T>
-	typename List<T>::iterator List<T>::erase(iterator position){
+	typename list<T>::iterator list<T>::erase(iterator position){
 		if (position == head){
 			pop_front();
 			return head;
@@ -241,8 +241,8 @@ namespace TinySTL{
 		}
 	}
 	template<class T>
-	typename List<T>::iterator List<T>::erase(iterator first, iterator last){
-		typename List<T>::iterator res;
+	typename list<T>::iterator list<T>::erase(iterator first, iterator last){
+		typename list<T>::iterator res;
 		for (; first != last; ){
 			auto temp = first++;
 			res = erase(temp);
@@ -250,11 +250,11 @@ namespace TinySTL{
 		return res;
 	}
 	template<class T>
-	void List<T>::clear(){
+	void list<T>::clear(){
 		erase(begin(), end());
 	}
 	template<class T>
-	void List<T>::reverse(){//采用尾插法
+	void list<T>::reverse(){//采用尾插法
 		if (empty() || head.p->next == tail.p) return;
 		auto curNode = head.p;
 		head.p = tail.p->prev;
@@ -269,7 +269,7 @@ namespace TinySTL{
 		} while (curNode != head.p);
 	}
 	template<class T>
-	void List<T>::remove(const value_type& val){
+	void list<T>::remove(const value_type& val){
 		for (auto it = begin(); it != end();){
 			if (*it == val)
 				it = erase(it);
@@ -279,7 +279,7 @@ namespace TinySTL{
 	}
 	template<class T>
 	template <class Predicate>
-	void List<T>::remove_if(Predicate pred){
+	void list<T>::remove_if(Predicate pred){
 		for (auto it = begin(); it != end();){
 			if (pred(*it))
 				it = erase(it);
@@ -288,13 +288,54 @@ namespace TinySTL{
 		}
 	}
 	template<class T>
-	void List<T>::swap(List& x){
+	void list<T>::swap(list& x){
 		TinySTL::swap(head.p, x.head.p);
 		TinySTL::swap(tail.p, x.tail.p);
 	}
 	template<class T>
-	void swap(List<T>& x, List<T>& y){
+	void swap(list<T>& x, list<T>& y){
 		x.swap(y);
+	}
+	template<class T>
+	void list<T>::unique(){
+		nodePtr curNode = head.p;
+		while (curNode != tail.p){
+			nodePtr nextNode = curNode->next;
+			if (curNode->data == nextNode->data){
+				if (nextNode == tail.p){
+					curNode->next = nullptr;
+					tail.p = curNode;
+				}else{
+					curNode->next = nextNode->next;
+					nextNode->next->prev = curNode;
+				}
+				deleteNode(nextNode);
+			}else{
+				curNode = nextNode;
+			}
+		}
+	}
+	template<class T>
+	template <class BinaryPredicate>
+	void list<T>::unique(BinaryPredicate binary_pred){
+		nodePtr curNode = head.p;
+		while (curNode != tail.p){
+			nodePtr nextNode = curNode->next;
+			if (binary_pred(curNode->data, nextNode->data)){
+				if (nextNode == tail.p){
+					curNode->next = nullptr;
+					tail.p = curNode;
+				}
+				else{
+					curNode->next = nextNode->next;
+					nextNode->next->prev = curNode;
+				}
+				deleteNode(nextNode);
+			}
+			else{
+				curNode = nextNode;
+			}
+		}
 	}
 }
 
