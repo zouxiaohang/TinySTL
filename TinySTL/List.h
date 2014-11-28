@@ -134,9 +134,9 @@ namespace TinySTL{
 		iterator erase(iterator first, iterator last);
 		void swap(list& x);
 		void clear();
-		//void splice(iterator position, list& x);
-		//void splice(iterator position, list& x, iterator i);
-		//void splice(iterator position, list& x, iterator first, iterator last);
+		void splice(iterator position, list& x);
+		void splice(iterator position, list& x, iterator i);
+		void splice(iterator position, list& x, iterator first, iterator last);
 		void remove(const value_type& val);
 		template <class Predicate>
 		void remove_if(Predicate pred);
@@ -336,6 +336,39 @@ namespace TinySTL{
 				curNode = nextNode;
 			}
 		}
+	}
+	template<class T>
+	void list<T>::splice(iterator position, list& x){
+		this->insert(position, x.begin(), x.end());
+		x.head.p = x.tail.p;
+	}
+	template<class T>
+	void list<T>::splice(iterator position, list& x, iterator first, iterator last){
+		if (first.p == last.p) return;
+		auto tailNode = last.p->prev;
+		if (x.head.p == first.p){
+			x.head.p = last.p;
+			x.head.p->prev = nullptr;
+		}else{
+			first.p->prev->next = last.p;
+			last.p->prev = first.p->prev;
+		}
+		if (position.p == head.p){
+			first.p->prev = nullptr;
+			tailNode->next = head.p;
+			head.p->prev = tailNode;
+			head.p = first.p;
+		}else{
+			position.p->prev->next = first.p;
+			first.p->prev = position.p->prev;
+			tailNode->next = position.p;
+			position.p->prev = tailNode;
+		}
+	}
+	template<class T>
+	void list<T>::splice(iterator position, list& x, iterator i){
+		auto next = i;
+		this->splice(position, x, i, ++next);
 	}
 }
 
