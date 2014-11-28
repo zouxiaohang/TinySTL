@@ -43,7 +43,7 @@ TinySTL
     * deque：100%
     * queue：100%
     * pair：100%
-    * list：50%
+    * list：70%
 * STL Algorithms:  
     * fill：100% 
     * fill_n：100% 
