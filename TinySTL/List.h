@@ -143,9 +143,9 @@ namespace TinySTL{
 		void unique();
 		template <class BinaryPredicate>
 		void unique(BinaryPredicate binary_pred);
-		//void merge(list& x);
-		//template <class Compare>
-		//void merge(list& x, Compare comp);
+		void merge(list& x);
+		template <class Compare>
+		void merge(list& x, Compare comp);
 		//void sort();
 		//template <class Compare>
 		//void sort(Compare comp);
@@ -369,6 +369,37 @@ namespace TinySTL{
 	void list<T>::splice(iterator position, list& x, iterator i){
 		auto next = i;
 		this->splice(position, x, i, ++next);
+	}
+	template<class T>
+	void list<T>::merge(list& x){
+		auto it1 = begin(), it2 = x.begin();
+		while (it1 != end() && it2 != x.end()){
+			if (*it1 <= *it2)
+				++it1;
+			else{
+				auto temp = it2++;
+				this->splice(it1, x, temp);
+			}
+		}
+		if (it1 == end()){
+			this->splice(it1, x, it2, x.end());
+		}
+	}
+	template<class T>
+	template <class Compare>
+	void list<T>::merge(list& x, Compare comp){
+		auto it1 = begin(), it2 = x.begin();
+		while (it1 != end() && it2 != x.end()){
+			if (comp(*it2, *it1)){
+				auto temp = it2++;
+				this->splice(it1, x, temp);
+			}
+			else
+				++it1;
+		}
+		if (it1 == end()){
+			this->splice(it1, x, it2, x.end());
+		}
 	}
 }
 
