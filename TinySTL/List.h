@@ -30,7 +30,7 @@ namespace TinySTL{
 		struct listIterator :public bidirectional_iterator<T, ptrdiff_t>{
 			template<class T>
 			friend class list;
-		private:
+		public:
 			typedef node<T>* nodePtr;
 			nodePtr p;
 		public:
@@ -209,6 +209,10 @@ namespace TinySTL{
 	public:
 		template<class T>
 		friend void swap(list<T>& x, list<T>& y);
+		template <class T>
+		friend bool operator== (const list<T>& lhs, const list<T>& rhs);
+		template <class T>
+		friend bool operator!= (const list<T>& lhs, const list<T>& rhs);
 	};
 	template<class T>
 	void list<T>::push_front(const value_type& val){
@@ -431,6 +435,21 @@ namespace TinySTL{
 		if (it1 == end()){
 			this->splice(it1, x, it2, x.end());
 		}
+	}
+	template <class T>
+	bool operator== (const list<T>& lhs, const list<T>& rhs){
+		auto node1 = lhs.head.p, node2 = rhs.head.p;
+		for (; node1 != lhs.tail.p && node2 != rhs.tail.p; node1 = node1->next, node2 = node2->next){
+			if (node1->data != node2->data)
+				break;
+		}
+		if (node1 == lhs.tail.p && node2 == rhs.tail.p)
+			return true;
+		return false;
+	}
+	template <class T>
+	bool operator!= (const list<T>& lhs, const list<T>& rhs){
+		return !(lhs == rhs);
 	}
 }
 
