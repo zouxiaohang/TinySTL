@@ -94,6 +94,13 @@ namespace TinySTL{
 			head.p = newNode();//add a dummy node
 			tail.p = head.p;
 		}
+		explicit list(size_type n, const value_type& val = value_type()){
+			ctorAux(n, val, std::is_integral<value_type>());
+		}
+		template <class InputIterator>
+		list(InputIterator first, InputIterator last){
+			ctorAux(first, last, std::is_integral<InputIterator>());
+		}
 		list(const list& l){
 			head.p = newNode();//add a dummy node
 			tail.p = head.p;
@@ -161,6 +168,19 @@ namespace TinySTL{
 		//void sort(Compare comp);
 		void reverse();
 	private:
+		void ctorAux(size_type n, const value_type& val, std::true_type){
+			head.p = newNode();//add a dummy node
+			tail.p = head.p;
+			while (n--)
+				push_back(val);
+		}
+		template <class InputIterator>
+		void ctorAux(InputIterator first, InputIterator last, std::false_type){
+			head.p = newNode();//add a dummy node
+			tail.p = head.p;
+			for (; first != last; ++first)
+				push_back(*first);
+		}
 		nodePtr newNode(const T& val = T()){
 			nodePtr res = nodeAllocator::allocate();
 			res->container = this;
