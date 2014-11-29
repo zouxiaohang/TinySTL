@@ -154,7 +154,8 @@ namespace TinySTL{
 		nodePtr newNode(const T& val = T()){
 			nodePtr res = nodeAllocator::allocate();
 			res->container = this;
-			res->data = val;
+			//res->data = val; -> bug
+			construct(&(res->data), val);//fix
 			res->prev = nullptr;
 			res->next = nullptr;
 			return res;
