@@ -43,7 +43,7 @@ TinySTL
     * deque：100%
     * queue：100%
     * pair：100%
-    * list：50%
+    * list：70%
 * STL Algorithms:  
     * fill：100% 
     * fill_n：100% 
@@ -282,3 +282,24 @@ TinySTL
 
     binary_search_tree height = 10000
     avl_tree height = 14
+
+
+####(10):list&lt;int>
+
+    TinySTL::list<int> list;
+    //std::list<int> list;
+	const size_t max = 100000;
+	ProfilerInstance::start();
+	for (size_t i = 0; i != max; ++i)
+		list.push_back(i);
+	ProfilerInstance::finish();
+	ProfilerInstance::dumpDuringTime();
+    
+|container|quantity|time(ms)|  
+|---------|--------|--------|  
+|TinySTL::list&lt;int>|10万|4|  
+|TinySTL::list&lt;int>|100万|33|  
+|TinySTL::list&lt;int>|1000万|286|  
+|std::list&lt;int>|10万|189|  
+|std::list&lt;int>|100万|1774|  
+|std::list&lt;int>|1000万|17571|  
