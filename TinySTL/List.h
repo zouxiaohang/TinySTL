@@ -94,8 +94,18 @@ namespace TinySTL{
 			head.p = newNode();//add a dummy node
 			tail.p = head.p;
 		}
-		list(const list& list) = delete;
-		list& operator = (const list& list) = delete;
+		list(const list& l){
+			head.p = newNode();//add a dummy node
+			tail.p = head.p;
+			for (auto node = l.head.p; node != l.tail.p; node = node->next)
+				push_back(node->data);
+		}
+		list& operator = (const list& l){
+			if (this != &l){
+				list(l).swap(*this);
+			}
+			return *this;
+		}
 		~list(){
 			for (; head != tail;){
 				auto temp = head++;
