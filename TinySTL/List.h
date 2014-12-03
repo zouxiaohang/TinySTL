@@ -163,9 +163,9 @@ namespace TinySTL{
 		void merge(list& x);
 		template <class Compare>
 		void merge(list& x, Compare comp);
-		//void sort();
-		//template <class Compare>
-		//void sort(Compare comp);
+		void sort();
+		template <class Compare>
+		void sort(Compare comp);
 		void reverse();
 	private:
 		void ctorAux(size_type n, const value_type& val, std::true_type){
@@ -450,6 +450,35 @@ namespace TinySTL{
 	template <class T>
 	bool operator!= (const list<T>& lhs, const list<T>& rhs){
 		return !(lhs == rhs);
+	}
+	template<class T>
+	void list<T>::sort(){
+		sort(TinySTL::less<T>());
+	}
+	template<class T>
+	template <class Compare>
+	void list<T>::sort(Compare comp){
+		if (empty() || head.p->next == tail.p)
+			return;
+
+		list carry;
+		list counter[64];
+		int fill = 0;
+		while (!empty()){
+			carry.splice(carry.begin(), *this, begin());
+			int i = 0;
+			while (i < fill && !counter[i].empty()){
+				counter[i].merge(carry, comp);
+				carry.swap(counter[i++]);
+			}
+			carry.swap(counter[i]);
+			if (i == fill)
+				++fill;
+		}
+		for (int i = 0; i != fill; ++i){
+			counter[i].merge(counter[i - 1], comp);
+		}
+		swap(counter[fill - 1]);
 	}
 }
 
