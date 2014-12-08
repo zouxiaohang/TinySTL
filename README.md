@@ -15,7 +15,7 @@ TinySTL
   * binary search tree
   * AVL tree
   * rbtree
-  * 线段树
+  * segment tree
   * splay tree
   * rope
   * Van Emde Boas tree
