@@ -368,6 +368,22 @@ namespace TinySTL{
 		}
 		return make_pair(first1, first2);
 	}
+	//********** [equal] ******************************
+	//********* [Algorithm Complexity: O(N)] ****************
+	template <class InputIterator1, class InputIterator2>
+	bool equal(InputIterator1 first1, InputIterator1 last1,
+		InputIterator2 first2){
+		return TinySTL::equal(first1, last1, first2, TinySTL::equal_to<typename TinySTL::iterator_traits<InputIterator1>::value_type>());
+	}
+	template <class InputIterator1, class InputIterator2, class BinaryPredicate>
+	bool equal(InputIterator1 first1, InputIterator1 last1,
+		InputIterator2 first2, BinaryPredicate pred){
+		for (; first1 != last1; ++first1, ++first2){
+			if (!pred(*first1, *first2))
+				return false;
+		}
+		return true;
+	}
 }
 
 
