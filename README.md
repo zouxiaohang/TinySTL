@@ -15,7 +15,7 @@ TinySTL
   * binary search tree
   * AVL tree
   * rbtree
-  * 线段树
+  * segment tree
   * splay tree
   * rope
   * Van Emde Boas tree
@@ -43,7 +43,7 @@ TinySTL
     * deque：100%
     * queue：100%
     * pair：100%
-    * list：90%
+    * list：100%
 * STL Algorithms:  
     * fill：100% 
     * fill_n：100% 
@@ -64,6 +64,7 @@ TinySTL
     * count：100%
     * count_if：100%
     * mismatch：100%
+    * equal：100%
 * 其他组件：
     * circular_buffer：100%   
     * bitmap：100%
@@ -303,3 +304,40 @@ TinySTL
 |std::list&lt;int>|10万|189|  
 |std::list&lt;int>|100万|1774|  
 |std::list&lt;int>|1000万|17571|  
+
+
+####(11):list&lt;int>::sort()
+
+    TinySTL::list<int> list1;
+    std::list<int> list2;
+	std::default_random_engine dre;
+	std::uniform_int_distribution<int> id;
+	const size_t max = 10000;
+	for (int i = 0; i != max; ++i){
+		auto n = id(dre);
+		list1.push_back(n);
+		list2.push_back(n);
+	}
+	double cost1 = 0.0, cost2 = 0.0;
+	for (int i = 0; i != 100; ++i){
+		ProfilerInstance::start();
+		list1.sort();//TinySTL::list<int>
+		ProfilerInstance::finish();
+		cost1 += ProfilerInstance::millisecond();
+
+		ProfilerInstance::start();
+		list2.sort();//std::list<int>
+		ProfilerInstance::finish();
+		cost2 += ProfilerInstance::millisecond();
+	}
+	cout << "TinySTL time: " << cost1 / 100 << "ms" << endl;
+	cout << "std time: " << cost2 / 100 << "ms" << endl;
+    
+|container|quantity|time(ms)|  
+|---------|--------|--------|  
+|TinySTL::list&lt;int>|1万|0.88|  
+|TinySTL::list&lt;int>|10万|17.621|  
+|TinySTL::list&lt;int>|100万|591.354|  
+|std::list&lt;int>|1万|1.25|  
+|std::list&lt;int>|10万|35.692|  
+|std::list&lt;int>|100万|665.128|  
