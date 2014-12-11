@@ -65,6 +65,7 @@ TinySTL
     * count_if：100%
     * mismatch：100%
     * equal：100%
+	* is_permutation：100%
 * 其他组件：
     * circular_buffer：100%   
     * bitmap：100%
