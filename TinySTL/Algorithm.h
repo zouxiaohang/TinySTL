@@ -366,7 +366,7 @@ namespace TinySTL{
 			if (!pred(*first1, *first2))
 				break;
 		}
-		return make_pair(first1, first2);
+		return TinySTL::make_pair(first1, first2);
 	}
 	//********** [equal] ******************************
 	//********* [Algorithm Complexity: O(N)] ****************
@@ -381,6 +381,33 @@ namespace TinySTL{
 		for (; first1 != last1; ++first1, ++first2){
 			if (!pred(*first1, *first2))
 				return false;
+		}
+		return true;
+	}
+	//********** [is_permutation] ******************************
+	//********* [Algorithm Complexity: O(N*N)] ****************
+	template <class ForwardIterator1, class ForwardIterator2>
+	bool is_permutation(ForwardIterator1 first1, ForwardIterator1 last1,
+		ForwardIterator2 first2){
+		return TinySTL::is_permutation(first1, last1, first2,
+			TinySTL::equal_to<typename TinySTL::iterator_traits<ForwardIterator1>::value_type>());
+	}
+	template <class ForwardIterator1, class ForwardIterator2, class BinaryPredicate>
+	bool is_permutation(ForwardIterator1 first1, ForwardIterator1 last1,
+		ForwardIterator2 first2, BinaryPredicate pred){
+		//find the first position that is not equal
+		auto res = TinySTL::mismatch(first1, last1, first2, pred);
+		first1 = res.first, first2 = res.second;
+		if (first1 == last1)
+			return true;
+		auto last2 = first2;
+		std::advance(last2, std::distance(first1, last1));
+		for (auto it1 = first1; it1 != last1; ++it1){
+			if (TinySTL::find_if(first1, it1, [&](decltype(*first1) val){return pred(val, *it1); }) == it1){
+				auto n = TinySTL::count(first2, last2, *it1);
+				if (n == 0 || TinySTL::count(it1, last1, *it1) != n)
+					return false;
+			}
 		}
 		return true;
 	}
