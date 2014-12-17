@@ -411,6 +411,36 @@ namespace TinySTL{
 		}
 		return true;
 	}
+	//********** [search] ******************************
+	//********* [Algorithm Complexity: O(N*N)] ****************
+	template <class ForwardIterator1, class ForwardIterator2>
+	ForwardIterator1 search(ForwardIterator1 first1, ForwardIterator1 last1,
+		ForwardIterator2 first2, ForwardIterator2 last2){
+		return TinySTL::search(first1, last1, first2, last2,
+			TinySTL::equal_to<typename TinySTL::iterator_traits<ForwardIterator1>::value_type>());
+	}
+	template <class ForwardIterator1, class ForwardIterator2, class BinaryPredicate>
+	ForwardIterator1 search(ForwardIterator1 first1, ForwardIterator1 last1,
+		ForwardIterator2 first2, ForwardIterator2 last2,
+		BinaryPredicate pred){
+		while (first1 != last1){
+			auto it1 = first1;
+			auto it2 = first2;
+			while (it1 != last1 && it2 != last2){
+				if (pred(*it1, *it2)){
+					++it1, ++it2;
+				}else{
+					break;
+				}
+			}
+			if (it2 == last2)
+				return first1;
+			if (it1 == last1)
+				return last1;
+			++first1;
+		}
+		return last1;
+	}
 }
 
 
