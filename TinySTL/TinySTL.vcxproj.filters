@@ -98,5 +98,11 @@
     <ClInclude Include="List.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Test\TestUtil.h">
+      <Filter>Test</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\README.md" />
   </ItemGroup>
 </Project>
