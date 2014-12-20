@@ -11,7 +11,11 @@
 
 namespace TinySTL{
 	namespace AlgorithmTest{
-		void testFIll();
+		void testFill();
+		void testFillN();
+		void testMinMax();
+		void testHeapAlgorithm();
+		void testIsHeap();
 	}
 }
 
