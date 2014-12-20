@@ -6,6 +6,7 @@
 #include "../Algorithm.h"
 #include <algorithm>
 
+#include <array>
 #include <cassert>
 #include <vector>
 
@@ -16,6 +17,10 @@ namespace TinySTL{
 		void testMinMax();
 		void testHeapAlgorithm();
 		void testIsHeap();
+		void testAllOf();
+		void testNoneOf();
+		void testAnyOf();
+		void testForEach();
 	}
 }
 

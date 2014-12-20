@@ -63,6 +63,27 @@ namespace TinySTL{
 
 			assert(TinySTL::Test::container_equal(v1, v2));
 		}
+		void testAllOf(){
+			std::array<int, 8> foo = { 3, 5, 7, 11, 13, 17, 19, 23 };
+			assert(TinySTL::all_of(foo.begin(), foo.end(), [](int i){return i % 2; }));
+		}
+		void testNoneOf(){
+			std::array<int, 8> foo = { 1, 2, 4, 8, 16, 32, 64, 128 };
+			assert(TinySTL::none_of(foo.begin(), foo.end(), [](int i){return i < 0; }));
+		}
+		void testAnyOf(){
+			std::array<int, 7> foo = { 0, 1, -1, 3, -3, 5, -5 };
+			assert(std::any_of(foo.begin(), foo.end(), [](int i){return i < 0; }));
+		}
+		void testForEach(){
+			std::vector<int> myvector{ 10, 20, 30 };
+			std::vector<int> temp{ 11, 21, 31 };
+			TinySTL::for_each(myvector.begin(), myvector.end(), [&myvector](int& i){
+					++i;
+			});
+
+			assert(TinySTL::Test::container_equal(myvector, temp));
+		}
 	}
 }
 
@@ -73,6 +94,10 @@ int main(){
 	//testMinMax();
 	//testHeapAlgorithm();
 	//testIsHeap();
+	//testAllOf();
+	//testNoneOf();
+	//testAnyOf();
+	//testForEach();
 	system("pause");
 	return 0;
 }
