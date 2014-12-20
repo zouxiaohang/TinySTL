@@ -102,6 +102,7 @@
     <ClInclude Include="ReverseIterator.h" />
     <ClInclude Include="Stack.h" />
     <ClInclude Include="String.h" />
+    <ClInclude Include="Test\PairTest.h" />
     <ClInclude Include="Test\TestUtil.h" />
     <ClInclude Include="TypeTraits.h" />
     <ClInclude Include="UninitializedFunctions.h" />

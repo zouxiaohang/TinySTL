@@ -101,6 +101,9 @@
     <ClInclude Include="Test\TestUtil.h">
       <Filter>Test</Filter>
     </ClInclude>
+    <ClInclude Include="Test\PairTest.h">
+      <Filter>Test</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.md" />
