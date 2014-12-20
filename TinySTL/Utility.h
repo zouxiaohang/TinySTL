@@ -93,7 +93,7 @@ namespace TinySTL{
 	}
 	// ******* [make_pair] ************
 	template<class U, class V>
-	pair<U, V> make_pair(U& u, V& v){
+	pair<U, V> make_pair(const U& u, const V& v){
 		return pair<U, V>(u, v);
 	}
 }
