@@ -356,7 +356,7 @@ namespace TinySTL{
 				if (*first1 != *first2)
 					break;
 			}
-			return make_pair(first1, first2);
+			return TinySTL::make_pair(first1, first2);
 	}
 	template <class InputIterator1, class InputIterator2, class BinaryPredicate>
 	pair<InputIterator1, InputIterator2>

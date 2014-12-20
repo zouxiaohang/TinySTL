@@ -7,6 +7,8 @@
 #include <algorithm>
 
 #include <array>
+#include <cctype>
+#include <cstring>
 #include <cassert>
 #include <vector>
 
@@ -21,6 +23,15 @@ namespace TinySTL{
 		void testNoneOf();
 		void testAnyOf();
 		void testForEach();
+		void testFind();
+		void testFindEnd();
+		void testFindFirstOf();
+		void testAdjacentFind();
+		void testCount();
+		void testMismatch();
+		void testEqual();
+		void testIsPermutation();
+		void testSearch();
 	}
 }
 
