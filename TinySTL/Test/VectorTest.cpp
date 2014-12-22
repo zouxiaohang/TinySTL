@@ -119,6 +119,65 @@ namespace TinySTL{
 
 			assert(TinySTL::Test::container_equal(v1, v2));
 		}
+		void testCase10(){
+			tsVec<int> foo(3, 100);   // three ints with a value of 100
+			tsVec<int> bar(5, 200);   // five ints with a value of 200
+
+			TinySTL::Test::print_container(foo, "foo");
+			TinySTL::Test::print_container(bar, "bar");
+			foo.swap(bar);
+			TinySTL::Test::print_container(foo, "foo");
+			TinySTL::Test::print_container(bar, "bar");
+		}
+		void testCase11(){
+			stdVec<std::string> v1;
+			tsVec<std::string> v2;
+
+			v1.push_back("hello "); v1.push_back("world");
+			v2.push_back("hello "); v2.push_back("world");
+			assert(TinySTL::Test::container_equal(v1, v2));
+
+			v1.pop_back();
+			v2.pop_back();
+			assert(TinySTL::Test::container_equal(v1, v2));
+		}
+		void testCase12(){
+			stdVec<int> v1;
+			tsVec<int> v2;
+
+			v1.insert(v1.begin(), 0);
+			v2.insert(v2.begin(), 0);
+			assert(TinySTL::Test::container_equal(v1, v2));
+
+			v1.insert(v1.end(), 1);
+			v2.insert(v2.end(), 1);
+			assert(TinySTL::Test::container_equal(v1, v2));
+
+			v1.insert(v1.begin() + v1.size() / 2, 10, 0);
+			v2.insert(v2.begin() + v2.size() / 2, 10, 0);
+			assert(TinySTL::Test::container_equal(v1, v2));
+
+			int arr[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+			v1.insert(v1.end(), std::begin(arr), std::end(arr));
+			v2.insert(v2.end(), std::begin(arr), std::end(arr));
+			assert(TinySTL::Test::container_equal(v1, v2));
+		}
+		void testCase13(){
+			stdVec<int> v1;
+			tsVec<int> v2;
+			for (int i = 1; i <= 10; i++) {
+				v1.push_back(i);
+				v2.push_back(i);
+			}
+			v1.erase(v1.begin() + 5);
+			v2.erase(v2.begin() + 5);
+			assert(TinySTL::Test::container_equal(v1, v2));
+
+			v1.erase(v1.begin(), v1.begin() + 3);
+			v2.erase(v2.begin(), v2.begin() + 3);
+			assert(TinySTL::Test::container_equal(v1, v2));
+
+		}
 	}
 }
 
@@ -133,6 +192,10 @@ int main(){
 	//testCase7();
 	//testCase8();
 	//testCase9();
+	//testCase10();
+	//testCase11();
+	testCase12();
+	testCase13();
 	system("pause");
 	return 0;
 }
