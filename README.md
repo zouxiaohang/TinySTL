@@ -76,6 +76,7 @@ TinySTL
 ##TinySTL单元测试(原单元测试代码逐步)：
   * pair：100%
   * algorithm：20%
+  * vector：100%
 
 
 #TinySTL性能测试:
