@@ -8,6 +8,7 @@
 
 #include <array>
 #include <cassert>
+#include<iostream>
 #include <iterator>
 #include <string>
 
@@ -21,6 +22,9 @@ namespace TinySTL{
 	namespace VectorTest{
 		void testCase1();
 		void testCase2();
+		void testCase3();
+		void testCase4();
+		void testCase5();
 	}
 }
 
