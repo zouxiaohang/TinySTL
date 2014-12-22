@@ -77,6 +77,48 @@ namespace TinySTL{
 				std::cout << ' ' << *it;
 			std::cout << '\n';
 		}
+		void testCase6(){
+			tsVec<int> v(11, 0);
+			assert(v.size() == 11);
+
+			v.resize(5);
+			assert(v.size() == 5);
+
+			v.resize(20);
+			assert(v.size() == 20);
+		}
+		void testCase7(){
+			tsVec<int> v;
+			v.reserve(20);
+			assert(v.capacity() == 20);
+		}
+		void testCase8(){
+			stdVec<int> v1(10);
+			tsVec<int> v2(10);
+			for (unsigned i = 0; i < 10; i++){
+				v1[i] = i;
+				v2[i] = i;
+			}
+			assert(TinySTL::Test::container_equal(v1, v2));
+
+			v1.front() = 99;
+			v2.front() = 99;
+			v1.back() = 100;
+			v2.back() = 100;
+
+			assert(TinySTL::Test::container_equal(v1, v2));
+		}
+		void testCase9(){
+			stdVec<int> v1(5);
+			tsVec<int> v2(5);
+
+			auto p1 = v1.data();
+			auto p2 = v2.data();
+			*p1 = 10; ++p1; *p1 = 20; p1[2] = 100;
+			*p2 = 10; ++p2; *p2 = 20; p2[2] = 100;
+
+			assert(TinySTL::Test::container_equal(v1, v2));
+		}
 	}
 }
 
@@ -87,6 +129,10 @@ int main(){
 	//testCase3();
 	//testCase4();
 	//testCase5();
+	//testCase6();
+	//testCase7();
+	//testCase8();
+	//testCase9();
 	system("pause");
 	return 0;
 }
