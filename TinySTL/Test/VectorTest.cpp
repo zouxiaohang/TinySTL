@@ -176,7 +176,13 @@ namespace TinySTL{
 			v1.erase(v1.begin(), v1.begin() + 3);
 			v2.erase(v2.begin(), v2.begin() + 3);
 			assert(TinySTL::Test::container_equal(v1, v2));
+		}
+		void testCase14(){
+			tsVec<int> foo(3, 100);  
+			tsVec<int> bar(2, 200);  
 
+			assert(!(foo == bar));
+			assert(foo != bar);
 		}
 	}
 }
@@ -194,8 +200,9 @@ int main(){
 	//testCase9();
 	//testCase10();
 	//testCase11();
-	testCase12();
-	testCase13();
+	//testCase12();
+	//testCase13();
+	//testCase14();
 	system("pause");
 	return 0;
 }
