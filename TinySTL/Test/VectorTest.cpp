@@ -187,22 +187,22 @@ namespace TinySTL{
 	}
 }
 
-using namespace TinySTL::VectorTest;
-int main(){
-	//testCase1();
-	//testCase2();
-	//testCase3();
-	//testCase4();
-	//testCase5();
-	//testCase6();
-	//testCase7();
-	//testCase8();
-	//testCase9();
-	//testCase10();
-	//testCase11();
-	//testCase12();
-	//testCase13();
-	//testCase14();
-	system("pause");
-	return 0;
-}
+//using namespace TinySTL::VectorTest;
+//int main(){
+//	//testCase1();
+//	//testCase2();
+//	//testCase3();
+//	//testCase4();
+//	//testCase5();
+//	//testCase6();
+//	//testCase7();
+//	//testCase8();
+//	//testCase9();
+//	//testCase10();
+//	//testCase11();
+//	//testCase12();
+//	//testCase13();
+//	//testCase14();
+//	system("pause");
+//	return 0;
+//}
