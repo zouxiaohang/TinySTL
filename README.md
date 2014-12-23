@@ -228,14 +228,15 @@ TinySTL
 ####(7):binary_search_tree&lt;string>
 
     ifstream f;
-	char buff[256] = { 0 };
+	//char buff[256] = { 0 };
 	std::string word;
 	f.open("C:\\Users\\zxh\\Desktop\\text.txt");
 	TinySTL::vector<TinySTL::string> v;
 	while (f.good()){
 		f >> word;
-		std::copy(word.begin(), word.end(), buff);
-		v.push_back(TinySTL::string(buff, buff + word.size()));
+		//std::copy(word.begin(), word.end(), buff);
+		//v.push_back(TinySTL::string(buff, buff + word.size()));
+		v.push_back(word);
 	}
 	TinySTL::binary_search_tree<TinySTL::string> sbst;
 	ProfilerInstance::start();
