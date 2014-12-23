@@ -43,6 +43,35 @@ namespace TinySTL{
 			tsStr s8(temp2, 0, 5);
 			assert(TinySTL::Test::container_equal(s7, s8));
 		}
+		void testCase3(){
+			stdStr t1("hello, world");
+			tsStr t2("hello, world");
+
+			stdStr s1; s1 = 'a';
+			tsStr s2; s2 = 'a';
+			assert(TinySTL::Test::container_equal(s1, s2));
+
+			stdStr s3; s3 = "hello";
+			tsStr s4; s4 = "hello";
+			assert(TinySTL::Test::container_equal(s3, s4));
+
+			stdStr s5; s5 = t1;
+			tsStr s6; s6 = t2;
+			assert(TinySTL::Test::container_equal(s5, s6));
+
+			stdStr s7; s7 = std::move(t1);
+			tsStr s8; s8 = std::move(t2);
+			assert(TinySTL::Test::container_equal(s7, s8));
+		}
+		void testCase4(){
+			tsStr str("Test string");
+			for (tsStr::iterator it = str.begin(); it != str.end(); ++it)
+				std::cout << *it;
+			std::cout << '\n';
+			for (tsStr::reverse_iterator it = str.rbegin(); it != str.rend(); ++it)
+				std::cout << *it;
+			std::cout << '\n';
+		}
 	}
 }
 
@@ -50,6 +79,8 @@ using namespace TinySTL::StringTest;
 int main(){
 	testCase1();
 	testCase2();
+	testCase3();
+	testCase4();
 	system("pause");
 	return 0;
 }
