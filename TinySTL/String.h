@@ -184,7 +184,8 @@ namespace TinySTL{
 		size_type getNewCapacity(size_type len)const{
 			size_type oldCapacity = endOfStorage_ - start_;
 			auto res = TinySTL::max(oldCapacity, len);
-			size_type newCapacity = (oldCapacity != 0 ? (oldCapacity + res) : 1);
+			//size_type newCapacity = (oldCapacity != 0 ? (oldCapacity + res) : 1);
+			auto newCapacity = oldCapacity + res;
 			return newCapacity;
 		}
 		void allocateAndFillN(size_t n, char c){
