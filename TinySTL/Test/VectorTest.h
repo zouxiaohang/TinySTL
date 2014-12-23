@@ -12,14 +12,14 @@
 #include <iterator>
 #include <string>
 
-template<class T>
-using stdVec = std::vector < T > ;
-
-template<class T>
-using tsVec = TinySTL::vector < T > ;
-
 namespace TinySTL{
 	namespace VectorTest{
+		template<class T>
+		using stdVec = std::vector < T >;
+
+		template<class T>
+		using tsVec = TinySTL::vector < T >;
+
 		void testCase1();
 		void testCase2();
 		void testCase3();
