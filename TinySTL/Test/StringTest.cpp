@@ -116,19 +116,84 @@ namespace TinySTL{
 			s.clear();
 			assert(s.empty());
 		}
+		void testCase9(){
+			tsStr s;
+			s.resize(10);
+			for (auto i = 0; i != s.size(); ++i)
+				s[i] = 'a' + i;
+			TinySTL::Test::print_container(s);
+
+			s.back() = 'Z';
+			s.front() = 'A';
+			TinySTL::Test::print_container(s);
+		}
+		void testCase10(){
+			stdStr s1;
+			tsStr s2;
+			for (auto i = 0; i != 10; ++i){
+				s1.push_back('a' + i);
+				s2.push_back('a' + i);
+			}
+			assert(TinySTL::Test::container_equal(s1, s2));
+		}
+		void testCase11(){
+			stdStr s1;
+			tsStr s2;
+
+			s1.insert(s1.begin(), 'A'); 
+			s2.insert(s2.begin(), 'A'); 
+			assert(TinySTL::Test::container_equal(s1, s2));
+
+			s1.insert(s1.end(), 2, 'Z');
+			s2.insert(s2.end(), 2, 'Z');
+			assert(TinySTL::Test::container_equal(s1, s2));
+
+			size_t n = 2;
+			s1.insert(2, 10, '@');
+			s2.insert(2, 10, '@');
+			assert(TinySTL::Test::container_equal(s1, s2));
+
+			s1.insert(0, "hello, world");
+			s2.insert(0, "hello, world");
+			assert(TinySTL::Test::container_equal(s1, s2));
+
+			s1.insert(s1.size() - 1, "zouxiaohang", 3);
+			s2.insert(s2.size() - 1, "zouxiaohang", 3);
+			assert(TinySTL::Test::container_equal(s1, s2));
+
+			stdStr s3;
+			tsStr s4;
+
+			s3.insert(s3.begin(), s1.begin(), s1.end());
+			s4.insert(s4.begin(), s2.begin(), s2.end());
+			assert(TinySTL::Test::container_equal(s3, s4));
+
+			s3.insert(1, s1);
+			s4.insert(1, s2);
+			assert(TinySTL::Test::container_equal(s3, s4));
+
+			stdStr t1("zouxiaoHANG");
+			tsStr t2("zouxiaoHANG");
+			s3.insert(s3.size(), t1, 7, t1.size() - 7);
+			s4.insert(s4.size(), t2, 7, t2.size() - 7);
+			assert(TinySTL::Test::container_equal(s3, s4));
+		}
 	}
 }
 
 using namespace TinySTL::StringTest;
 int main(){
-	//testCase1();
-	//testCase2();
-	//testCase3();
-	//testCase4();
-	//testCase5();
-	//testCase6();
-	//testCase7();
-	//testCase8();
+	testCase1();
+	testCase2();
+	testCase3();
+	testCase4();
+	testCase5();
+	testCase6();
+	testCase7();
+	testCase8();
+	testCase9();
+	testCase10();
+	testCase11();
 	system("pause");
 	return 0;
 }
