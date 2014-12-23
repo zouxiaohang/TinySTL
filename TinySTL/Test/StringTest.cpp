@@ -72,15 +72,63 @@ namespace TinySTL{
 				std::cout << *it;
 			std::cout << '\n';
 		}
+		void testCase5(){
+			tsStr s;
+			assert(s.size() == 0);
+			assert(s.length() == 0);
+
+			s = "hello, world";
+			assert(s.size() == 12);
+			assert(s.size() == 12);
+		}
+		void testCase6(){
+			stdStr s1("hello, world");
+			tsStr s2("hello, world");
+
+			s1.resize(5);
+			s2.resize(5);
+			assert(TinySTL::Test::container_equal(s1, s2));
+
+			s1.resize(20, 'z');
+			s2.resize(20, 'z');
+			assert(TinySTL::Test::container_equal(s1, s2));
+
+			s1.resize(6, 'a');
+			s2.resize(6, 'a');
+			assert(TinySTL::Test::container_equal(s1, s2));
+
+			s1.resize(100);
+			s2.resize(100);
+			assert(TinySTL::Test::container_equal(s1, s2));
+		}
+		void testCase7(){
+			tsStr s;
+			s.reserve(10);
+			assert(s.capacity() == 10);
+		}
+		void testCase8(){
+			tsStr s;
+			assert(s.empty());
+
+			s = "hello, world";
+			assert(!s.empty());
+
+			s.clear();
+			assert(s.empty());
+		}
 	}
 }
 
 using namespace TinySTL::StringTest;
 int main(){
-	testCase1();
-	testCase2();
-	testCase3();
-	testCase4();
+	//testCase1();
+	//testCase2();
+	//testCase3();
+	//testCase4();
+	//testCase5();
+	//testCase6();
+	//testCase7();
+	//testCase8();
 	system("pause");
 	return 0;
 }
