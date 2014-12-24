@@ -305,6 +305,29 @@ namespace TinySTL{
 			buffer[length] = '\0';
 			std::cout << "buffer contains: " << buffer << '\n';
 		}
+		void testCase19(){
+			tsStr str("There are two needles in this haystack with needles.");
+			tsStr str2("needle");
+
+			auto found = str.find(str2);
+			assert(found == 14);
+
+			found = str.find("needles are small", found + 1, 6);
+			assert(found == 44);
+
+			found = str.find(tsStr("wuhan"));
+			assert(found == tsStr::npos);
+
+			found = str.find("haystack");
+			assert(found == 30);
+
+			found = str.find('.');
+			assert(found == 51);
+
+			str.replace(str.find(str2), str2.length(), "preposition");
+			assert(TinySTL::Test::container_equal(str, 
+				tsStr("There are two prepositions in this haystack with needles.")));
+		}
 	}
 }
 
@@ -321,13 +344,14 @@ int main(){
 	//testCase9();
 	//testCase10();
 	//testCase11();
-	testCase12();
-	testCase13();
-	testCase14();
-	testCase15();
-	testCase16();
-	testCase17();
-	testCase18();
+	//testCase12();
+	//testCase13();
+	//testCase14();
+	//testCase15();
+	//testCase16();
+	//testCase17();
+	//testCase18();
+	//testCase19();
 	system("pause");
 	return 0;
 }
