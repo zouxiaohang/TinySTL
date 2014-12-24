@@ -528,9 +528,12 @@ namespace TinySTL{
 	}
 	size_t string::find(const char* s, size_t pos, size_t n) const{
 		size_t lenghtOfS = strlen(s);
-		if (n < lenghtOfS)
-			return npos;
-		return find_aux(s, pos, lenghtOfS, pos + n);
+		//if (n < lenghtOfS)
+		//	return npos;
+		//return find_aux(s, pos, lenghtOfS, pos + n);
+		//bug fix
+		//2014.12.24
+		return find_aux(s, pos, n, size());
 	}
 	size_t string::find(const string& str, size_t pos) const{
 		size_t lengthOfS = str.size();
@@ -539,7 +542,10 @@ namespace TinySTL{
 		return find_aux(str.cbegin(), pos, lengthOfS, size());
 	}
 	size_t string::find(const char* s, size_t pos) const{
-		return find(s, pos, size() - pos);
+		//return find(s, pos, size() - pos);
+		//bug fix
+		//2014.12.24
+		return find(s, pos, strlen(s));
 	}
 	size_t string::find(char c, size_t pos) const{
 		for (auto cit = cbegin() + pos; cit != cend(); ++cit){
