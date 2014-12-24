@@ -77,6 +77,7 @@ TinySTL
   * pair：100%
   * algorithm：20%
   * vector：100%
+  * string：70%
 
 
 #TinySTL性能测试:
