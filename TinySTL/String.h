@@ -472,7 +472,10 @@ namespace TinySTL{
 		return *this;
 	}
 	string::iterator string::erase(iterator p){
-		return erase(p, end());
+		//return erase(p, end());
+		//bug fix
+		//2014.12.24
+		return erase(p, p + 1);
 	}
 	template <class InputIterator>
 	string& string::replace(iterator i1, iterator i2,
