@@ -246,6 +246,65 @@ namespace TinySTL{
 			s2.erase(s2.begin(), s2.end());
 			assert(TinySTL::Test::container_equal(s1, s2));
 		}
+		void testCase16(){
+			stdStr s1("zouxiaohang"), t1("I Love C++");
+			tsStr s2("zouxiaohang"), t2("I Love C++");
+
+			s1.replace(0, 3, t1);
+			s2.replace(0, 3, t2);
+			assert(TinySTL::Test::container_equal(s1, s2));
+
+			s1.replace(s1.begin(), s1.begin() + s1.size() / 2, t1);
+			s2.replace(s2.begin(), s2.begin() + s2.size() / 2, t2);
+			assert(TinySTL::Test::container_equal(s1, s2));
+
+			s1.replace(0, s1.size(), t1, 0, t1.size());
+			s2.replace(0, s2.size(), t2, 0, t2.size());
+			assert(TinySTL::Test::container_equal(s1, s2));
+
+			s1.replace(0, s1.size(), "123456789");
+			s2.replace(0, s2.size(), "123456789");
+			assert(TinySTL::Test::container_equal(s1, s2));
+
+			s1.replace(s1.begin(), s1.end(), stdStr("hubei"));
+			s2.replace(s2.begin(), s2.end(), tsStr("hubei"));
+			assert(TinySTL::Test::container_equal(s1, s2));
+
+			s1.replace(0, s1.size(), "wuhan", 5);
+			s2.replace(0, s2.size(), "wuhan", 5);
+			assert(TinySTL::Test::container_equal(s1, s2));
+
+			s1.replace(s1.begin(), s1.end(), "hongshanqu", 10);
+			s2.replace(s2.begin(), s2.end(), "hongshanqu", 10);
+			assert(TinySTL::Test::container_equal(s1, s2));
+
+			s1.replace(0, s1.size(), 10, 'Z');
+			s2.replace(0, s2.size(), 10, 'Z');
+			assert(TinySTL::Test::container_equal(s1, s2));
+
+			s1.replace(s1.begin(), s1.end(), 10, 'A');
+			s2.replace(s2.begin(), s2.end(), 10, 'A');
+			assert(TinySTL::Test::container_equal(s1, s2));
+
+			s1.replace(s1.begin(), s1.end(), t1.begin(), t1.end());
+			s2.replace(s2.begin(), s2.end(), t2.begin(), t2.end());
+			assert(TinySTL::Test::container_equal(s1, s2));
+		}
+		void testCase17(){
+			tsStr buyer("money");
+			tsStr seller("goods");
+
+			seller.swap(buyer);
+			TinySTL::Test::print_container(buyer, "buyer");
+			TinySTL::Test::print_container(seller, "seller");
+		}
+		void testCase18(){
+			char buffer[20];
+			tsStr str("Test string...");
+			std::size_t length = str.copy(buffer, 6, 5);
+			buffer[length] = '\0';
+			std::cout << "buffer contains: " << buffer << '\n';
+		}
 	}
 }
 
@@ -266,6 +325,9 @@ int main(){
 	testCase13();
 	testCase14();
 	testCase15();
+	testCase16();
+	testCase17();
+	testCase18();
 	system("pause");
 	return 0;
 }
