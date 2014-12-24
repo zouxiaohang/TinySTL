@@ -222,6 +222,30 @@ namespace TinySTL{
 			s2 += tsStr("world");
 			assert(TinySTL::Test::container_equal(s1, s2));
 		}
+		void testCase14(){
+			stdStr s1("hello world");
+			tsStr s2("hello world");
+
+			s1.pop_back();
+			s2.pop_back();
+			assert(TinySTL::Test::container_equal(s1, s2));
+		}
+		void testCase15(){
+			stdStr s1("hello world");
+			tsStr s2("hello world");
+
+			s1.erase(s1.begin() + 1);
+			s2.erase(s2.begin() + 1);
+			assert(TinySTL::Test::container_equal(s1, s2));
+
+			s1.erase(2, s1.size() - 4);
+			s2.erase(2, s2.size() - 4);
+			assert(TinySTL::Test::container_equal(s1, s2));
+
+			s1.erase(s1.begin(), s1.end());
+			s2.erase(s2.begin(), s2.end());
+			assert(TinySTL::Test::container_equal(s1, s2));
+		}
 	}
 }
 
@@ -240,6 +264,8 @@ int main(){
 	//testCase11();
 	testCase12();
 	testCase13();
+	testCase14();
+	testCase15();
 	system("pause");
 	return 0;
 }

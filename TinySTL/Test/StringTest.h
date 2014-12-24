@@ -27,6 +27,8 @@ namespace TinySTL{
 		void testCase11();
 		void testCase12();
 		void testCase13();
+		void testCase14();
+		void testCase15();
 	}
 }
 
