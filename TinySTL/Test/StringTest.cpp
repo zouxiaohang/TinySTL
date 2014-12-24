@@ -178,22 +178,68 @@ namespace TinySTL{
 			s4.insert(s4.size(), t2, 7, t2.size() - 7);
 			assert(TinySTL::Test::container_equal(s3, s4));
 		}
+		void testCase12(){
+			stdStr s1;
+			tsStr s2;
+
+			s1.append(stdStr("abc"));
+			s2.append(tsStr("abc"));
+			assert(TinySTL::Test::container_equal(s1, s2));
+
+			s1.append(stdStr("123456789"), 1, 3);
+			s2.append(tsStr("123456789"), 1, 3);
+			assert(TinySTL::Test::container_equal(s1, s2));
+
+			s1.append("hello");
+			s2.append("hello");
+			assert(TinySTL::Test::container_equal(s1, s2));
+
+			s1.append("world", 0, 5);
+			s2.append("world", 0, 5);
+			assert(TinySTL::Test::container_equal(s1, s2));
+
+			s1.append(10, 'A');
+			s2.append(10, 'A');
+			assert(TinySTL::Test::container_equal(s1, s2));
+
+			stdStr s3; s3.append(s1.begin(), s1.end());
+			tsStr s4; s4.append(s2.begin(), s2.end());
+			assert(TinySTL::Test::container_equal(s3, s4));
+		}
+		void testCase13(){
+			stdStr s1;
+			tsStr s2;
+
+			s1 += 'A';
+			s2 += 'A';
+			assert(TinySTL::Test::container_equal(s1, s2));
+
+			s1 += "hello";
+			s2 += "hello";
+			assert(TinySTL::Test::container_equal(s1, s2));
+
+			s1 += stdStr("world");
+			s2 += tsStr("world");
+			assert(TinySTL::Test::container_equal(s1, s2));
+		}
 	}
 }
 
 using namespace TinySTL::StringTest;
 int main(){
-	testCase1();
-	testCase2();
-	testCase3();
-	testCase4();
-	testCase5();
-	testCase6();
-	testCase7();
-	testCase8();
-	testCase9();
-	testCase10();
-	testCase11();
+	//testCase1();
+	//testCase2();
+	//testCase3();
+	//testCase4();
+	//testCase5();
+	//testCase6();
+	//testCase7();
+	//testCase8();
+	//testCase9();
+	//testCase10();
+	//testCase11();
+	testCase12();
+	testCase13();
 	system("pause");
 	return 0;
 }
