@@ -347,6 +347,41 @@ namespace TinySTL{
 			found = str.rfind("sick111", 10, 4);
 			assert(found == 10);
 		}
+		void testCase21(){
+			tsStr str("Please, replace the vowels in this sentence by asterisks.");
+			tsStr key("aeiou");
+			const char *arr = "aeiou";
+
+			auto found = str.find_first_of(arr);
+			assert(found == 2);
+
+			found = str.find_first_of(arr, found + 1);
+			assert(found == 3);
+
+			found = str.find_first_of(arr, found + 1, 1);
+			assert(found == 12);
+
+			found = str.find_first_of(key, found + 1);
+			assert(found == 14);
+
+			found = str.find_first_of('v', found + 1);
+			assert(found == 20);
+		}
+		void testCase22(){
+			tsStr str("1234567890098765432112345678900");
+
+			auto found = str.find_last_of('6');
+			assert(found == 25);
+
+			found = str.find_last_of('6', found - 1);
+			assert(found == 14);
+
+			found = str.find_last_of("01", 11, 2);
+			assert(found == 10);
+
+			found = str.find_last_of(tsStr("#1"), 19);
+			assert(found == 19);
+		}
 	}
 }
 
@@ -372,6 +407,8 @@ int main(){
 	//testCase18();
 	//testCase19();
 	testCase20();
+	testCase21();
+	testCase22();
 	system("pause");
 	return 0;
 }
