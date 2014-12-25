@@ -564,7 +564,10 @@ namespace TinySTL{
 	}
 	size_t string::rfind_aux(const_iterator cit, size_t pos, size_t lengthOfS, int cond)const{
 		int i, j;
-		for (i = pos - lengthOfS; i >= cond; --i){
+		//bug fix
+		//2014.12.25
+		//for (i = pos - lengthOfS; i >= cond; --i){
+		for (i = pos + lengthOfS; i >= cond; --i){
 			for (j = 0; j != lengthOfS; ++j){
 				if (*(begin() + i + j) != cit[j])
 					break;
@@ -576,20 +579,20 @@ namespace TinySTL{
 	}
 	size_t string::rfind(const string& str, size_t pos) const{
 		auto lengthOfS = str.size();
-		if (pos - 0 < lengthOfS)
-			return npos;
+		//if (pos - 0 < lengthOfS)
+		//	return npos;
 		pos = changeVarWhenEuqalNPOS(pos, size(), 1);
 		return rfind_aux(str.begin(), pos, lengthOfS, 0);
 	}
 	size_t string::rfind(const char* s, size_t pos) const{
 		pos = changeVarWhenEuqalNPOS(pos, size(), 1);
-		return rfind(s, pos, pos + 1);
+		return rfind(s, pos, strlen(s));
 	}
 	size_t string::rfind(const char* s, size_t pos, size_t n) const{
 		auto lengthOfS = strlen(s);
-		if (n < lengthOfS)
-			return npos;
-		return rfind_aux(s, pos, lengthOfS, pos - n);
+		//if (n < lengthOfS)
+		//	return npos;
+		return rfind_aux(s, pos, n, 0);
 	}
 	int string::compare(const string& str) const{
 		return compare(0, size(), str, 0, str.size());
