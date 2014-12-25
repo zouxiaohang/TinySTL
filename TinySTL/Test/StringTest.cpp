@@ -382,6 +382,18 @@ namespace TinySTL{
 			found = str.find_last_of(tsStr("#1"), 19);
 			assert(found == 19);
 		}
+		void testCase23(){
+			tsStr str("look for non-alphabetic characters...");
+
+			auto found = str.find_first_not_of("abcdefghijklmnopqrstuvwxyz ");
+			assert(found == 12);
+		}
+		void testCase24(){
+			tsStr str("12345678900987654321");
+
+			auto found = str.find_last_not_of("023456789", str.size() - 2);
+			assert(found == 0);
+		}
 	}
 }
 
@@ -409,6 +421,8 @@ int main(){
 	testCase20();
 	testCase21();
 	testCase22();
+	testCase23();
+	testCase24();
 	system("pause");
 	return 0;
 }
