@@ -33,6 +33,7 @@ namespace TinySTL{
 		void testCase17();
 		void testCase18();
 		void testCase19();
+		void testCase20();
 	}
 }
 

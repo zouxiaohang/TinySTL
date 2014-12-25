@@ -328,6 +328,25 @@ namespace TinySTL{
 			assert(TinySTL::Test::container_equal(str, 
 				tsStr("There are two prepositions in this haystack with needles.")));
 		}
+		void testCase20(){
+			tsStr str("The sixth sick sheik's sixth sheep's sick.");
+			tsStr key("sixth");
+
+			auto found = str.rfind(key);
+			assert(found == 23);
+
+			found = str.rfind(key, 24);
+			assert(found == 23);
+
+			found = str.rfind('.');
+			assert(found == str.size() - 1);
+
+			found = str.rfind("The");
+			assert(found == 0);
+
+			found = str.rfind("sick111", 10, 4);
+			assert(found == 10);
+		}
 	}
 }
 
@@ -352,6 +371,7 @@ int main(){
 	//testCase17();
 	//testCase18();
 	//testCase19();
+	testCase20();
 	system("pause");
 	return 0;
 }
