@@ -628,14 +628,22 @@ namespace TinySTL{
 		return compare_aux(pos, len, s, 0, n);
 	}
 	size_t string::find_first_of(const string& str, size_t pos) const{
-		return find_first_of(str.begin(), pos, size() - pos);
+		//return find_first_of(str.begin(), pos, size() - pos);
+		return find_first_of(str.begin(), pos, str.size());
 	}
 	size_t string::find_first_of(const char* s, size_t pos) const{
-		return find_first_of(s, pos, size() - pos);
+		//return find_first_of(s, pos, size() - pos);
+		return find_first_of(s, pos, strlen(s));
 	}
 	size_t string::find_first_of(const char* s, size_t pos, size_t n) const{
-		for (size_t i = pos; i != pos + n; ++i){
-			if (isContained((*this)[i], s, s + strlen(s)))
+		//for (size_t i = pos; i != pos + n; ++i){
+		//	if (isContained((*this)[i], s, s + strlen(s)))
+		//		return i;
+		//}
+		//bug fix
+		//2014.12.25
+		for (size_t i = pos; i != size(); ++i){
+			if (isContained((*this)[i], s, s + n))
 				return i;
 		}
 		return npos;
