@@ -673,15 +673,23 @@ namespace TinySTL{
 	}
 	size_t string::find_last_of(const string& str, size_t pos) const{
 		pos = changeVarWhenEuqalNPOS(pos, size(), 1);
-		return find_last_of(str.begin(), pos, pos + 1);
+		//return find_last_of(str.begin(), pos, pos + 1);
+		return find_last_of(str.begin(), pos, str.size());
 	}
 	size_t string::find_last_of(const char* s, size_t pos) const{
 		pos = changeVarWhenEuqalNPOS(pos, size(), 1);
-		return find_last_of(s, pos, pos + 1);
+		//return find_last_of(s, pos, pos + 1);
+		return find_last_of(s, pos, strlen(s));
 	}
 	size_t string::find_last_of(const char* s, size_t pos, size_t n) const{
-		for (size_t i = pos, j = 0; i >= 0 && j != n; --i, ++j){
+		/*for (size_t i = pos, j = 0; i >= 0 && j != n; --i, ++j){
 			if (isContained((*this)[i], s, s + strlen(s)))
+				return i;
+		}*/
+		//bug fix
+		//2014.12.25
+		for (size_t i = pos; i > 0; --i){
+			if (isContained((*this)[i], s, s + n))
 				return i;
 		}
 		return npos;
