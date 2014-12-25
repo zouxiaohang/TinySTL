@@ -409,37 +409,76 @@ namespace TinySTL{
 			assert(str2.compare(str2.size() - 5, 5, "apple") == 0);
 			assert(str1.compare(6, 5, str2, 4, 5) == 0);
 		}
+		void testCase27(){
+			tsStr firstlevel("com");
+			tsStr secondlevel("cplusplus");
+			tsStr scheme("http://");
+
+			auto hostname = "www." + secondlevel + '.' + firstlevel;
+			auto url = scheme + hostname;
+
+			assert(TinySTL::Test::container_equal(url, tsStr("http://www.cplusplus.com")));
+		}
+		void testCase28(){
+			tsStr foo = "alpha";
+			tsStr bar = "beta";
+
+			assert(!(foo == bar)); 
+			assert(foo != bar); 
+			assert(foo < bar); 
+			assert(!(foo > bar)); 
+			assert(foo <= bar); 
+			assert(!(foo >= bar)); 
+		}
+		void testCase29(){
+			tsStr name;
+
+			std::cout << "Please, enter your name: ";
+			std::cin >> name;
+			std::cout << "Hello, " << name << "!\n";
+		}
+		void testCase30(){
+			tsStr name;
+
+			std::cout << "Please, enter your full name: ";
+			TinySTL::getline(std::cin, name);
+			std::cout << "Hello, " << name << "!\n";
+		}
 	}
 }
 
-using namespace TinySTL::StringTest;
-int main(){
-	//testCase1();
-	//testCase2();
-	//testCase3();
-	//testCase4();
-	//testCase5();
-	//testCase6();
-	//testCase7();
-	//testCase8();
-	//testCase9();
-	//testCase10();
-	//testCase11();
-	//testCase12();
-	//testCase13();
-	//testCase14();
-	//testCase15();
-	//testCase16();
-	//testCase17();
-	//testCase18();
-	//testCase19();
-	//testCase20();
-	//testCase21();
-	//testCase22();
-	//testCase23();
-	//testCase24();
-	//testCase25();
-	//testCase26();
-	system("pause");
-	return 0;
-}
+//using namespace TinySTL::StringTest;
+//int main(){
+//	//testCase1();
+//	//testCase2();
+//	//testCase3();
+//	//testCase4();
+//	//testCase5();
+//	//testCase6();
+//	//testCase7();
+//	//testCase8();
+//	//testCase9();
+//	//testCase10();
+//	//testCase11();
+//	//testCase12();
+//	//testCase13();
+//	//testCase14();
+//	//testCase15();
+//	//testCase16();
+//	//testCase17();
+//	//testCase18();
+//	//testCase19();
+//	//testCase20();
+//	//testCase21();
+//	//testCase22();
+//	//testCase23();
+//	//testCase24();
+//	//testCase25();
+//	//testCase26();
+//	//testCase27();
+//	//testCase28();
+//	//testCase29();
+//	//testCase30();
+//	system("pause");
+//	return 0;
+//}
