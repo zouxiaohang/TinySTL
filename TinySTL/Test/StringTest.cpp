@@ -394,6 +394,21 @@ namespace TinySTL{
 			auto found = str.find_last_not_of("023456789", str.size() - 2);
 			assert(found == 0);
 		}
+		void testCase25(){
+			tsStr str = "We think in generalities, but we live in details.";
+
+			auto s = str.substr(3, 5);
+			assert(TinySTL::Test::container_equal(s, tsStr("think")));
+		}
+		void testCase26(){
+			tsStr str1("green apple");
+			tsStr str2("red apple");
+
+			assert(str1.compare(str2) != 0);
+			assert(str1.compare(6, 5, "apple") == 0);
+			assert(str2.compare(str2.size() - 5, 5, "apple") == 0);
+			assert(str1.compare(6, 5, str2, 4, 5) == 0);
+		}
 	}
 }
 
@@ -418,11 +433,13 @@ int main(){
 	//testCase17();
 	//testCase18();
 	//testCase19();
-	testCase20();
-	testCase21();
-	testCase22();
-	testCase23();
-	testCase24();
+	//testCase20();
+	//testCase21();
+	//testCase22();
+	//testCase23();
+	//testCase24();
+	//testCase25();
+	//testCase26();
 	system("pause");
 	return 0;
 }
