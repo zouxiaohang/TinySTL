@@ -6,7 +6,9 @@
 #include "../Queue.h"
 #include <queue>
 
+#include <algorithm>
 #include <cassert>
+#include <string>
 
 namespace TinySTL{
 	namespace PriorityQueueTest{
@@ -14,6 +16,12 @@ namespace TinySTL{
 		using stdPQ = std::priority_queue < T > ;
 		template<class T>
 		using tsPQ = TinySTL::priority_queue < T > ;
+
+		void testCase1();
+		void testCase2();
+		void testCase3();
+		void testCase4();
+		void testCase5();
 	}
 }
 
