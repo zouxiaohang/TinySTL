@@ -22,13 +22,14 @@ namespace TinySTL{
 		suffix_array(InputIterator arr, size_t len, size_t max_len = 128){
 			calSuffix(arr, len, max_len);
 			calRank();
+			calHeight(arr, len - 1);
 		}
 
 		array_type suffixArray(){
 			return _suffix_array;
 		}
 		array_type heightArray(){
-			//todo
+			return _height_array;
 		}
 		array_type rankArray(){
 			return _rank_array;
@@ -81,16 +82,15 @@ namespace TinySTL{
 				for (t = x, x = y, y = t, p = 1, x[_suffix_array[0]] = 0, i = 1; i < len; i++)
 					x[_suffix_array[i]] = cmp(y, _suffix_array[i - 1], _suffix_array[i], j) ? p - 1 : p++;
 			}
-			return;
 		}
 		template<class InputIteraotr>
 		void calHeight(InputIteraotr arr, size_t len)
 		{
+			/*_height_array.resize(_suffix_array.size());
 			int i, j, k = 0;
-			for (i = 1; i <= n; i++) _rank_array[_suffix_array[i]] = i;
-			for (i = 0; i < n; _height_array[_rank_array[i++]] = k)
-				for (k ? k-- : 0, j = _suffix_array[_rank_array[i] - 1]; arr[i + k] == arr[j + k]; k++);
-			return;
+			for (i = 1; i <= len; i++) _rank_array[_suffix_array[i]] = i;
+			for (i = 0; i < len; _height_array[_rank_array[i++]] = k)
+				for (k ? k-- : 0, j = _suffix_array[_rank_array[i] - 1]; arr[i + k] == arr[j + k]; k++);*/
 		}
 	};
 }
