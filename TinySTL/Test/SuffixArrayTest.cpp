@@ -21,10 +21,10 @@ namespace TinySTL{
 	}
 }
 
-using namespace TinySTL::SuffixArrayTest;
-int main(){
-	testCase();
-
-	system("pause");
-	return 0;
-}
+//using namespace TinySTL::SuffixArrayTest;
+//int main(){
+//	testCase();
+//
+//	system("pause");
+//	return 0;
+//}
