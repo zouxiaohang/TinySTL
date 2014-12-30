@@ -72,6 +72,7 @@ TinySTL
     * bitmap：100%
     * binary_search_tree：100%
     * avl_tree：100%
+	* suffix_array：100%
 
 ##TinySTL单元测试(原单元测试代码逐步)：
   * pair：100%
@@ -79,6 +80,7 @@ TinySTL
   * vector：100%
   * string：100%
   * priority_queue：100%
+  * suffix_array：100%
 
 
 #TinySTL性能测试:
