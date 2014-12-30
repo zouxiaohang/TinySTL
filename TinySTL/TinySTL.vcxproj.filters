@@ -33,6 +33,18 @@
     <ClCompile Include="Test\AlgorithmTest.cpp">
       <Filter>Test</Filter>
     </ClCompile>
+    <ClCompile Include="Test\VectorTest.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\StringTest.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\PriorityQueueTest.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\SuffixArrayTest.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TypeTraits.h">
@@ -102,6 +114,24 @@
       <Filter>Test</Filter>
     </ClInclude>
     <ClInclude Include="Test\PairTest.h">
+      <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\AlgorithmTest.h">
+      <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\VectorTest.h">
+      <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\StringTest.h">
+      <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\PriorityQueueTest.h">
+      <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="SuffixArray.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\SuffixArrayTest.h">
       <Filter>Test</Filter>
     </ClInclude>
   </ItemGroup>
