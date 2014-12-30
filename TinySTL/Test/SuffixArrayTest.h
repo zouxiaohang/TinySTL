@@ -9,7 +9,7 @@
 
 namespace TinySTL{
 	namespace SuffixArrayTest{
-
+		void testCase();
 	}
 }
 
