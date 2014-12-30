@@ -359,9 +359,13 @@ TinySTL
 ####(12):suffix_array
 
     char arr[] = { 'a', 'a', 'b', 'a', 'a', 'a', 'a', 'b' };
-
     TinySTL::suffix_array sa(arr, 8);
-	auto v = sa.suffixArray();
-	auto t = std::vector<int> {3, 4, 5, 0, 6, 1, 7, 2};
-	assert(TinySTL::Test::container_equal(v, t));
+	auto suffixArray = sa.suffixArray();
+	auto rankArray = sa.rankArray();
+	auto heightArray = sa.heightArray();
+
+	TinySTL::Test::print_container(suffixArray, "suffixArray");
+	TinySTL::Test::print_container(rankArray, "rankArray");
+	TinySTL::Test::print_container(heightArray, "heightArray");
     
+![image](https://raw.githubusercontent.com/zouxiaohang/TinySTL/master/TinySTL/ScreenShots/suffix_array.png)
