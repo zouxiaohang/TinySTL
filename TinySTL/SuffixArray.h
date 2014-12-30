@@ -17,12 +17,13 @@ namespace TinySTL{
 		template<class InputIterator>
 		//arr - 源数组
 		//len - 源数组长度
-		//max_len - max_len代表字符串arr中字符的取值范围，是基数排序的一个参数，
-		//          如果原序列都是字母可以直接取128，如果原序列本身都是整数的话，则m可以取比最大的整数大1的值。
-		suffix_array(InputIterator arr, size_t len, size_t max_len = 128){
+		//max_len - max_len代表字符串arr中字符的取值范围，是基数排序的一个参数，原序列都是字母所以可以直接取256
+		suffix_array(const InputIterator arr, size_t len, size_t max_len = 256){
+			if (max_len > 256)
+				throw std::exception("out of the range");
 			calSuffix(arr, len, max_len);
 			calRank();
-			calHeight(arr, len - 1);
+			calHeight(arr, len);
 		}
 
 		array_type suffixArray(){
@@ -36,7 +37,7 @@ namespace TinySTL{
 		}
 	private:
 		template<class InputIteraotr>
-		bool cmp(InputIteraotr arr, size_t a, size_t b, size_t l){
+		bool cmp(const InputIteraotr arr, size_t a, size_t b, size_t l){
 			return arr[a] == arr[b] && arr[a + l] == arr[b + l];
 		}
 		void calRank(){
@@ -46,11 +47,11 @@ namespace TinySTL{
 			}
 		}
 		template<class InputIterator>
-		void calSuffix(InputIterator arr, size_t len, size_t max_len){
+		void calSuffix(const InputIterator arr, size_t len, size_t max_len){
 			//采用了罗穗骞论文中实现的倍增算法
 			//算法时间复杂度 = O(nlg(n))
 			_suffix_array.resize(len);
-			int wa[1024], wb[1024], wv[1024], ws[1024];
+			int wa[256], wb[256], wv[256], ws[256];
 			int i, j, p, *x = wa, *y = wb, *t;
 
 			//以下四行代码是把各个字符（也即长度为1的字符串）进行基数排序
@@ -84,13 +85,17 @@ namespace TinySTL{
 			}
 		}
 		template<class InputIteraotr>
-		void calHeight(InputIteraotr arr, size_t len)
+		void calHeight(const InputIteraotr arr, size_t len)
 		{
-			/*_height_array.resize(_suffix_array.size());
-			int i, j, k = 0;
-			for (i = 1; i <= len; i++) _rank_array[_suffix_array[i]] = i;
-			for (i = 0; i < len; _height_array[_rank_array[i++]] = k)
-				for (k ? k-- : 0, j = _suffix_array[_rank_array[i] - 1]; arr[i + k] == arr[j + k]; k++);*/
+			_height_array.resize(_suffix_array.size() - 1);
+			for (auto i = 0; i != _suffix_array.size() - 1; ++i){
+				auto n = 0;
+				for (auto j = _suffix_array[i], k = _suffix_array[i + 1]; 
+					arr[j] == arr[k] && (arr + j) != (arr + len) && (arr + k) != (arr + len); 
+					++j, ++k)
+					++n;
+				_height_array[i] = n;
+			}
 		}
 	};
 }
