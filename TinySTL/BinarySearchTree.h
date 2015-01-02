@@ -72,6 +72,7 @@ namespace TinySTL{
 			if (ptr){
 				deallocateAllNodes(ptr->left_);
 				deallocateAllNodes(ptr->right_);
+				nodeAllocator::destroy(ptr);
 				nodeAllocator::deallocate(ptr);
 			}
 		}

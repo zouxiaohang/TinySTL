@@ -189,9 +189,12 @@ namespace TinySTL{
 		deque(const deque& x);
 
 		~deque(){
-			for (int i = 0; i != mapSize_; ++i)
+			for (int i = 0; i != mapSize_; ++i){
+				for (auto p = map_[i] + 0; !p && p != map_[i] + getBuckSize(); ++p)
+					dataAllocator::destroy(p);
 				if (!map_[i])
 					dataAllocator::deallocate(map_[i], getBuckSize());
+			}
 			delete[] map_;
 		}
 
@@ -221,9 +224,12 @@ namespace TinySTL{
 		void pop_front();
 		void swap(deque& x);
 		void clear(){
-			for (int i = 0; i != mapSize_; ++i)
+			/*for (int i = 0; i != mapSize_; ++i)
 				if (!map_[i])
-					dataAllocator::destroy(map_[i], map_[i] + getBuckSize());
+					dataAllocator::destroy(map_[i], map_[i] + getBuckSize());*/
+			for (auto i = 0; i != mapSize_; ++i){
+				for (auto p = map_[i] + 0; !p && p != map_[i] + getBuckSize(); ++p)
+					dataAllocator::destroy(p);
 			mapSize_ = 0;
 			beg_.mapIndex_ = end_.mapIndex_ = mapSize_ / 2;
 			beg_.cur_ = end_.cur_ = map_[mapSize_ / 2];

@@ -116,6 +116,8 @@ namespace TinySTL{
 		~list(){
 			for (; head != tail;){
 				auto temp = head++;
+				//bug fix
+				nodeAllocator::destroy(temp.p);
 				nodeAllocator::deallocate(temp.p);
 			}
 			nodeAllocator::deallocate(tail.p);
@@ -185,7 +187,7 @@ namespace TinySTL{
 			nodePtr res = nodeAllocator::allocate();
 			res->container = this;
 			//res->data = val; -> bug
-			construct(&(res->data), val);//fix
+			nodeAllocator::construct(&(res->data), val);//fix
 			res->prev = nullptr;
 			res->next = nullptr;
 			return res;
