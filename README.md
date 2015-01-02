@@ -81,6 +81,7 @@ TinySTL
   * string：100%
   * priority_queue：100%
   * suffix_array：100%
+  * queue：100%
 
 
 #TinySTL性能测试:
