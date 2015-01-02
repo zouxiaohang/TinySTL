@@ -209,11 +209,11 @@ namespace TinySTL{
 		bool empty() const{ return begin() == end(); }
 
 		reference operator[] (size_type n){ return *(begin() + n); }
-		const_reference operator[] (size_type n) const{ return *(cbegin() + n); }
+		//const_reference operator[] (size_type n) const{ return *(cbegin() + n); }
 		reference front(){ return *begin(); }
-		const_reference front() const{ return *cbegin(); }
+		//const_reference front() const{ return *cbegin(); }
 		reference back(){ return *(end() - 1); }
-		const_reference back() const{ return *(cend() - 1); }
+		//const_reference back() const{ return *(cend() - 1); }
 
 		void push_back(const value_type& val);
 		void push_front(const value_type& val);
@@ -369,12 +369,12 @@ namespace TinySTL{
 	}
 	template <class T, class Alloc>
 	bool operator== (const deque<T, Alloc>& lhs, const deque<T, Alloc>& rhs){
-		auto cit1 = lhs.cbegin(), cit2 = rhs.cbegin();
-		for (; cit1 != lhs.cend() && cit2 != rhs.cend(); ++cit1, ++cit2){
+		auto cit1 = lhs.begin(), cit2 = rhs.begin();
+		for (; cit1 != lhs.end() && cit2 != rhs.end(); ++cit1, ++cit2){
 			if (*cit1 != *cit2)
 				return false;
 		}
-		if (cit1 == lhs.cend() && cit2 == rhs.cend())
+		if (cit1 == lhs.end() && cit2 == rhs.end())
 			return true;
 		return false;
 	}
