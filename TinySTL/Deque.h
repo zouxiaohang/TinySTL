@@ -336,7 +336,10 @@ namespace TinySTL{
 		else if (back_full()){
 			reallocateAndCopy();
 		}
-		*end_ = val;
+		//*end_ = val;
+		//bug fix
+		//2015.01.02
+		TinySTL::construct(end_.cur_, val);
 		++end_;
 	}
 	template<class T, class Alloc>
@@ -348,7 +351,10 @@ namespace TinySTL{
 			reallocateAndCopy();
 		}
 		--beg_;
-		*beg_ = val;
+		//*beg_ = val;
+		//bug fix
+		//2015.01.02
+		TinySTL::construct(beg_.cur_, val);
 	}
 	template<class T, class Alloc>
 	void deque<T, Alloc>::pop_front(){
