@@ -84,6 +84,8 @@
     <ClCompile Include="Test\AlgorithmTest.cpp" />
     <ClCompile Include="Test\PairTest.cpp" />
     <ClCompile Include="Test\PriorityQueueTest.cpp" />
+    <ClCompile Include="Test\QueueTest.cpp" />
+    <ClCompile Include="Test\StackTest.cpp" />
     <ClCompile Include="Test\StringTest.cpp" />
     <ClCompile Include="Test\SuffixArrayTest.cpp" />
     <ClCompile Include="Test\VectorTest.cpp" />
@@ -110,6 +112,8 @@
     <ClInclude Include="Test\AlgorithmTest.h" />
     <ClInclude Include="Test\PairTest.h" />
     <ClInclude Include="Test\PriorityQueueTest.h" />
+    <ClInclude Include="Test\QueueTest.h" />
+    <ClInclude Include="Test\StackTest.h" />
     <ClInclude Include="Test\StringTest.h" />
     <ClInclude Include="Test\SuffixArrayTest.h" />
     <ClInclude Include="Test\TestUtil.h" />
@@ -121,6 +125,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="ScreenShots\suffix_array.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

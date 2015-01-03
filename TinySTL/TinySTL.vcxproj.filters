@@ -19,6 +19,9 @@
     <Filter Include="Test">
       <UniqueIdentifier>{102ada31-2e23-4fa3-b913-81e7e40d12a7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ScreenShots">
+      <UniqueIdentifier>{f20d9032-1c1d-424a-a8aa-f39c87789d3b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Profiler\Profiler.cpp">
@@ -43,6 +46,12 @@
       <Filter>Test</Filter>
     </ClCompile>
     <ClCompile Include="Test\SuffixArrayTest.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\QueueTest.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\StackTest.cpp">
       <Filter>Test</Filter>
     </ClCompile>
   </ItemGroup>
@@ -134,8 +143,19 @@
     <ClInclude Include="Test\SuffixArrayTest.h">
       <Filter>Test</Filter>
     </ClInclude>
+    <ClInclude Include="Test\QueueTest.h">
+      <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\StackTest.h">
+      <Filter>Test</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="ScreenShots\suffix_array.png">
+      <Filter>ScreenShots</Filter>
+    </Image>
   </ItemGroup>
 </Project>
