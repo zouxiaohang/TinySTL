@@ -49,8 +49,8 @@ namespace TinySTL{
 		}
 
 		//比较操作相关
-		bool operator == (const vector& v);
-		bool operator != (const vector& v);
+		bool operator == (const vector& v)const;
+		bool operator != (const vector& v)const;
 
 		//迭代器相关
 		iterator begin(){ return (start_); }
@@ -341,7 +341,7 @@ namespace TinySTL{
 	}
 	//***********逻辑比较操作相关*******************
 	template<class T, class Alloc>
-	bool vector<T, Alloc>::operator == (const vector& v){
+	bool vector<T, Alloc>::operator == (const vector& v)const{
 		if (size() != v.size()){
 			return false;
 		}
@@ -356,12 +356,13 @@ namespace TinySTL{
 		}
 	}
 	template<class T, class Alloc>
-	bool vector<T, Alloc>::operator != (const vector& v){
+	bool vector<T, Alloc>::operator != (const vector& v)const{
 		return !(*this == v);
 	}
 	template<class T, class Alloc>
 	bool operator == (const vector<T, Alloc>& v1, const vector<T, Alloc>& v2){
-		return v1 == v2;
+		//return v1 == v2;
+		return v1.operator==(v2);
 	}
 	template<class T, class Alloc>
 	bool operator != (const vector<T, Alloc>& v1, const vector<T, Alloc>& v2){
