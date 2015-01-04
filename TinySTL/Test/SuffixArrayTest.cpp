@@ -3,9 +3,11 @@
 namespace TinySTL{
 	namespace SuffixArrayTest{
 		void testCase(){
-			char arr[] = { 'a', 'a', 'b', 'a', 'a', 'a', 'a', 'b' };
+			//char arr[] = { 'a', 'a', 'b', 'a', 'a', 'a', 'a', 'b' };
+			std::string str("aabaaaab");
 
-			TinySTL::suffix_array sa(arr, 8);
+			//TinySTL::suffix_array sa(arr, 8);
+			TinySTL::suffix_array sa(str.data(), str.size());
 			auto sa1 = sa.suffixArray();
 			auto sa2 = TinySTL::suffix_array::array_type{3, 4, 5, 0, 6, 1, 7, 2};
 			assert(TinySTL::Test::container_equal(sa1, sa2));

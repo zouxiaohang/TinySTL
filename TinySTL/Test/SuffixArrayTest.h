@@ -6,6 +6,7 @@
 #include "../SuffixArray.h"
 
 #include <cassert>
+#include <string>
 
 namespace TinySTL{
 	namespace SuffixArrayTest{
