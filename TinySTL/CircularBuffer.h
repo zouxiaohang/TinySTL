@@ -230,6 +230,9 @@ namespace TinySTL{
 	template<class T, size_t N, class Alloc>
 	template<class InputIterator>
 	circular_buffer<T, N, Alloc>::circular_buffer(InputIterator first, InputIterator last){
+		//bug fix
+		//2015.01.05
+		assert(first != last);
 		allocateAndCopy(first, last);
 	}
 	template<class T, size_t N, class Alloc>
