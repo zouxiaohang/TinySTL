@@ -230,6 +230,7 @@ namespace TinySTL{
 			for (auto i = 0; i != mapSize_; ++i){
 				for (auto p = map_[i] + 0; !p && p != map_[i] + getBuckSize(); ++p)
 					dataAllocator::destroy(p);
+			}
 			mapSize_ = 0;
 			beg_.mapIndex_ = end_.mapIndex_ = mapSize_ / 2;
 			beg_.cur_ = end_.cur_ = map_[mapSize_ / 2];
