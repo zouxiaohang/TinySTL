@@ -8,11 +8,11 @@ namespace TinySTL{
 	string::string(size_t n, char c){
 		allocateAndFillN(n, c);
 	}
-	template<class InputIterator>
-	string::string(InputIterator first, InputIterator last){
-		//处理指针和数字间的区别的函数
-		string_aux(first, last, typename std::is_integral<InputIterator>::type());
-	}
+	//template<class InputIterator>
+	//string::string(InputIterator first, InputIterator last){
+	//	//处理指针和数字间的区别的函数
+	//	string_aux(first, last, typename std::is_integral<InputIterator>::type());
+	//}
 	string::string(const char* s){
 		allocateAndCopy(s, s + strlen(s));
 	}
@@ -28,6 +28,9 @@ namespace TinySTL{
 	string::string(const string& str, size_t pos, size_t len){
 		len = changeVarWhenEuqalNPOS(len, str.size(), pos);
 		allocateAndCopy(str.start_ + pos, str.start_ + pos + len);
+	}
+	string::~string(){ 
+		destroyAndDeallocate(); 
 	}
 	string& string::operator= (const string& str){
 		if (this != &str){
@@ -86,7 +89,7 @@ namespace TinySTL{
 		finish_ = newFinish;
 		endOfStorage_ = start_ + n;
 	}
-	template <class InputIterator>
+	/*template <class InputIterator>
 	string::iterator string::insert_aux_copy(iterator p, InputIterator first, InputIterator last){
 		size_t lengthOfInsert = last - first;
 		auto newCapacity = getNewCapacity(lengthOfInsert);
@@ -101,8 +104,8 @@ namespace TinySTL{
 		finish_ = newFinish;
 		endOfStorage_ = start_ + newCapacity;
 		return res;
-	}
-	template <class InputIterator>
+	}*/
+	/*template <class InputIterator>
 	string::iterator string::insert(iterator p, InputIterator first, InputIterator last){
 		auto lengthOfLeft = capacity() - size();
 		size_t lengthOfInsert = last - first;
@@ -117,7 +120,7 @@ namespace TinySTL{
 		else{
 			return insert_aux_copy(p, first, last);
 		}
-	}
+	}*/
 	string& string::insert(size_t pos, const string& str){
 		insert(start_ + pos, str.begin(), str.end());
 		return *this;
@@ -203,11 +206,11 @@ namespace TinySTL{
 		insert(end(), n, c);
 		return *this;
 	}
-	template <class InputIterator>
+	/*template <class InputIterator>
 	string& string::append(InputIterator first, InputIterator last){
 		insert(end(), first, last);
 		return *this;
-	}
+	}*/
 	string::iterator string::erase(iterator first, iterator last){
 		size_t lengthOfMove = finish_ - last;
 		for (auto i = 0; i != lengthOfMove; ++i){
@@ -229,13 +232,13 @@ namespace TinySTL{
 		//2014.12.24
 		return erase(p, p + 1);
 	}
-	template <class InputIterator>
+	/*template <class InputIterator>
 	string& string::replace(iterator i1, iterator i2,
 		InputIterator first, InputIterator last){
 		auto ptr = erase(i1, i2);
 		insert(ptr, first, last);
 		return *this;
-	}
+	}*/
 	string& string::replace(size_t pos, size_t len, const string& str){
 		return replace(begin() + pos, begin() + pos + len, str.begin(), str.end());
 	}
@@ -656,5 +659,51 @@ namespace TinySTL{
 	}
 	void swap(string& x, string& y){
 		x.swap(y);
+	}
+
+	void string::moveData(string& str){
+		start_ = str.start_;
+		finish_ = str.finish_;
+		endOfStorage_ = str.endOfStorage_;
+		str.start_ = str.finish_ = str.endOfStorage_ = 0;
+	}
+	string::size_type string::getNewCapacity(size_type len)const{
+		size_type oldCapacity = endOfStorage_ - start_;
+		auto res = TinySTL::max(oldCapacity, len);
+		//size_type newCapacity = (oldCapacity != 0 ? (oldCapacity + res) : 1);
+		auto newCapacity = oldCapacity + res;
+		return newCapacity;
+	}
+	void string::allocateAndFillN(size_t n, char c){
+		start_ = dataAllocator::allocate(n);
+		finish_ = TinySTL::uninitialized_fill_n(start_, n, c);
+		endOfStorage_ = finish_;
+	}
+	/*template<class InputIterator>
+	void string::allocateAndCopy(InputIterator first, InputIterator last){
+		start_ = dataAllocator::allocate(last - first);
+		finish_ = TinySTL::uninitialized_copy(first, last, start_);
+		endOfStorage_ = finish_;
+	}*/
+	void string::string_aux(size_t n, char c, std::true_type){
+		allocateAndFillN(n, c);
+	}
+	/*template<class InputIterator>
+	void string::string_aux(InputIterator first, InputIterator last, std::false_type){
+		allocateAndCopy(first, last);
+	}*/
+	void string::destroyAndDeallocate(){
+		dataAllocator::destroy(start_, finish_);
+		dataAllocator::deallocate(start_, endOfStorage_ - start_);
+	}
+	bool string::isContained(char ch, const_iterator first, const_iterator last)const{
+		for (auto cit = first; cit != last; ++cit){
+			if (*cit == ch)
+				return true;
+		}
+		return false;
+	}
+	size_t string::changeVarWhenEuqalNPOS(size_t var, size_t minuend, size_t minue)const{
+		return (var == npos ? minuend - minue : var);
 	}
 }
