@@ -63,6 +63,9 @@
     <ClCompile Include="Alloc.cpp">
       <Filter>头文件</Filter>
     </ClCompile>
+    <ClCompile Include="String.cpp">
+      <Filter>头文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TypeTraits.h">

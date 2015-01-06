@@ -82,6 +82,7 @@
     <ClCompile Include="Alloc.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Profiler\Profiler.cpp" />
+    <ClCompile Include="String.cpp" />
     <ClCompile Include="Test\AlgorithmTest.cpp" />
     <ClCompile Include="Test\BitmapTest.cpp" />
     <ClCompile Include="Test\CircularBufferTest.cpp" />
