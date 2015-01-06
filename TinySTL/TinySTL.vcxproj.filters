@@ -54,6 +54,15 @@
     <ClCompile Include="Test\StackTest.cpp">
       <Filter>Test</Filter>
     </ClCompile>
+    <ClCompile Include="Test\BitmapTest.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\CircularBufferTest.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
+    <ClCompile Include="Alloc.cpp">
+      <Filter>头文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TypeTraits.h">
@@ -147,6 +156,12 @@
       <Filter>Test</Filter>
     </ClInclude>
     <ClInclude Include="Test\StackTest.h">
+      <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\BitmapTest.h">
+      <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\CircularBufferTest.h">
       <Filter>Test</Filter>
     </ClInclude>
   </ItemGroup>

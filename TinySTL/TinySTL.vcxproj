@@ -79,9 +79,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Alloc.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Profiler\Profiler.cpp" />
     <ClCompile Include="Test\AlgorithmTest.cpp" />
+    <ClCompile Include="Test\BitmapTest.cpp" />
+    <ClCompile Include="Test\CircularBufferTest.cpp" />
     <ClCompile Include="Test\PairTest.cpp" />
     <ClCompile Include="Test\PriorityQueueTest.cpp" />
     <ClCompile Include="Test\QueueTest.cpp" />
@@ -110,6 +113,8 @@
     <ClInclude Include="String.h" />
     <ClInclude Include="SuffixArray.h" />
     <ClInclude Include="Test\AlgorithmTest.h" />
+    <ClInclude Include="Test\BitmapTest.h" />
+    <ClInclude Include="Test\CircularBufferTest.h" />
     <ClInclude Include="Test\PairTest.h" />
     <ClInclude Include="Test\PriorityQueueTest.h" />
     <ClInclude Include="Test\QueueTest.h" />
