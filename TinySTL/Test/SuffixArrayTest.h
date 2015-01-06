@@ -11,6 +11,8 @@
 namespace TinySTL{
 	namespace SuffixArrayTest{
 		void testCase();
+
+		void testAllCases();
 	}
 }
 

@@ -32,6 +32,8 @@ namespace TinySTL{
 		void testEqual();
 		void testIsPermutation();
 		void testSearch();
+
+		void testAllCases();
 	}
 }
 
