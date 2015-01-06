@@ -1,7 +1,7 @@
 #ifndef _UTILITY_H_
 #define _UTILITY_H_
 
-#include "Algorithm.h"
+//#include "Algorithm.h"
 
 namespace TinySTL{
 	//************ [swap] ***************
