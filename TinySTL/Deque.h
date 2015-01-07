@@ -17,7 +17,8 @@ namespace TinySTL{
 			template<class T, class Alloc>
 			friend class deque;
 		private:
-			typedef TinySTL::deque<T>* cntrPtr;
+			//typedef TinySTL::deque<T>* cntrPtr;
+			typedef const TinySTL::deque<T>* cntrPtr;
 			size_t mapIndex_;
 			T *cur_;
 			cntrPtr container_;
