@@ -4,6 +4,7 @@
 #include "Allocator.h"
 #include "Iterator.h"
 #include "ReverseIterator.h"
+#include "Utility.h"
 
 namespace TinySTL{
 	template<class T, class Alloc = allocator<T>>
@@ -203,8 +204,7 @@ namespace TinySTL{
 
 		iterator begin(){ return beg_; }
 		iterator end(){ return end_; }
-	private:
-		//对外不提供const_iterator，但为了其他const函数能使用begin()和end()因此提供两个私有的const版本
+		//迭代器设计失误，会使下面两个函数丧失const特性，暂时没有效解决办法故只能先这样妥协
 		iterator begin()const{ return beg_; }
 		iterator end()const{ return end_; }
 	public:
@@ -212,11 +212,12 @@ namespace TinySTL{
 		bool empty() const{ return begin() == end(); }
 
 		reference operator[] (size_type n){ return *(begin() + n); }
-		//const_reference operator[] (size_type n) const{ return *(cbegin() + n); }
 		reference front(){ return *begin(); }
-		//const_reference front() const{ return *cbegin(); }
 		reference back(){ return *(end() - 1); }
-		//const_reference back() const{ return *(cend() - 1); }
+		//由于const迭代器的设计失误故以下三个const函数会丧失const特性
+		const_reference operator[] (size_type n) const{ return *(begin() + n); }
+		const_reference front() const{ return *begin(); }
+		const_reference back() const{ return *(end() - 1); }
 
 		void push_back(const value_type& val);
 		void push_front(const value_type& val);
@@ -380,6 +381,7 @@ namespace TinySTL{
 		beg_.swap(x.beg_);
 		end_.swap(x.end_);
 	}
+
 	template <class T, class Alloc>
 	bool operator== (const deque<T, Alloc>& lhs, const deque<T, Alloc>& rhs){
 		auto cit1 = lhs.begin(), cit2 = rhs.begin();
