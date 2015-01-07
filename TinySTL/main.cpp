@@ -6,6 +6,7 @@
 #include "Test\AlgorithmTest.h"
 #include "Test\BitmapTest.h"
 #include "Test\CircularBufferTest.h"
+#include "Test\DequeTest.h"
 #include "Test\PairTest.h"
 #include "Test\PriorityQueueTest.h"
 #include "Test\QueueTest.h"
@@ -21,6 +22,7 @@ int main(){
 	TinySTL::AlgorithmTest::testAllCases();
 	TinySTL::BitmapTest::testAllCases();
 	TinySTL::CircularBufferTest::testAllCases();
+	TinySTL::DequeTest::testAllCases();
 	TinySTL::PairTest::testAllCases();
 	TinySTL::PriorityQueueTest::testAllCases();
 	TinySTL::QueueTest::testAllCases();
