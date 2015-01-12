@@ -1,4 +1,4 @@
-#include "Alloc.h"
+#include "../Alloc.h"
 
 namespace TinySTL{
 	char *alloc::start_free = 0;
