@@ -16,6 +16,8 @@ namespace TinySTL{
 		template<class T>
 		using tsL = TinySTL::list < T > ;
 
+		void testCase1();
+
 		void testAllCases();
 	}
 }
