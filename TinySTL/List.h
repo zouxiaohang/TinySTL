@@ -186,8 +186,9 @@ namespace TinySTL{
 		nodePtr newNode(const T& val = T()){
 			nodePtr res = nodeAllocator::allocate();
 			res->container = this;
-			//res->data = val; -> bug
-			nodeAllocator::construct(&(res->data), val);//fix
+			//res->data = val; //-> bug
+			//nodeAllocator::construct(&(res->data), val);
+			TinySTL::construct(&(res->data), val);//fix
 			res->prev = nullptr;
 			res->next = nullptr;
 			return res;
@@ -215,7 +216,8 @@ namespace TinySTL{
 		friend bool operator== (const list<T>& lhs, const list<T>& rhs);
 		template <class T>
 		friend bool operator!= (const list<T>& lhs, const list<T>& rhs);
-	};
+	};//end of List
+
 	template<class T>
 	void list<T>::push_front(const value_type& val){
 		auto node = newNode(val);
