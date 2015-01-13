@@ -44,9 +44,14 @@ namespace TinySTL{
 	template<class T>
 	template<class InputIterator>
 	void list<T>::insert_aux(iterator position, InputIterator first, InputIterator last, std::false_type){
-		for (; first != last; ++first){
-			insert(position, *first);
+		//for (; first != last; ++first){
+		//	insert(position, *first);
+		//	position = insert(position, *first);
+		//}
+		for (--last; first != last; --last){
+			position = insert(position, *last);
 		}
+		insert(position, *last);
 	}
 	template<class T>
 	typename list<T>::nodePtr list<T>::newNode(const T& val = T()){
@@ -156,6 +161,14 @@ namespace TinySTL{
 	}
 	template<class T>
 	typename list<T>::iterator list<T>::insert(iterator position, const value_type& val){
+		if (position == begin()){
+			push_front(val);
+			return begin();
+		}else if (position == end()){
+			auto ret = position;
+			push_back(val);
+			return ret;
+		}
 		auto node = newNode(val);
 		auto prev = position.p->prev;
 		node->next = position.p;
