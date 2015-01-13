@@ -86,6 +86,7 @@ TinySTL
   * bitmap：100%
   * circular_buffer：100%
   * deque：100%
+  * list：100%
 
 #TinySTL性能测试:
 ###测试环境：Windows 7 && VS2013 && release模式
