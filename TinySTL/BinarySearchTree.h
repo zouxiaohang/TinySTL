@@ -6,7 +6,6 @@
 #include "Stack.h"
 #include "String.h"
 
-#include <deque>
 #include <set>
 
 namespace TinySTL{
