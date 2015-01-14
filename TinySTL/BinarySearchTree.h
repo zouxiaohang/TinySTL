@@ -10,7 +10,7 @@
 #include <set>
 
 namespace TinySTL{
-	namespace {
+	namespace Detail{
 		template<class T>
 		class bst_iter;
 	}
@@ -19,7 +19,7 @@ namespace TinySTL{
 	class binary_search_tree{
 	private:
 		template<class T>
-		friend class bst_iter;
+		friend class Detail::bst_iter;
 	private:
 		struct node{
 			typedef T value_type;
@@ -32,7 +32,7 @@ namespace TinySTL{
 		typedef TinySTL::allocator<node> nodeAllocator;
 	public:
 		typedef T value_type;
-		typedef bst_iter<node> const_iterator;
+		typedef Detail::bst_iter<node> const_iterator;
 		typedef const T& const_reference;
 		typedef size_t size_type;
 	private:
@@ -42,9 +42,7 @@ namespace TinySTL{
 		binary_search_tree() :root_(0), size_(0){}
 		binary_search_tree(const binary_search_tree&) = delete;
 		binary_search_tree& operator=(const binary_search_tree&) = delete;
-		~binary_search_tree(){
-			deallocateAllNodes(root_);
-		}
+		~binary_search_tree();
 
 		void insert(const T& val);
 		template<class Iterator>
@@ -68,14 +66,7 @@ namespace TinySTL{
 		void print_postorder(const string& delim = " ", std::ostream& os = std::cout)const;
 		void print_levelorder(const string& delim = " ", std::ostream& os = std::cout)const;
 	private:
-		void deallocateAllNodes(node *ptr){
-			if (ptr){
-				deallocateAllNodes(ptr->left_);
-				deallocateAllNodes(ptr->right_);
-				nodeAllocator::destroy(ptr);
-				nodeAllocator::deallocate(ptr);
-			}
-		}
+		void deallocateAllNodes(node *ptr);
 		size_t height_aux(node *p)const;
 		void erase_elem(const T& val, node *&ptr);
 		void insert_elem(const T& val, node *&ptr);
@@ -86,193 +77,19 @@ namespace TinySTL{
 		void print_inorder_aux(const string& delim, std::ostream& os, const node *ptr)const;
 		void print_postorder_aux(const string& delim, std::ostream& os, const node *ptr)const;
 	};//end of bst class
-	template<class T>
-	size_t binary_search_tree<T>::height_aux(node *p)const{
-		TinySTL::queue<node *> q/*存放下一层的node*/, level/*存放当前层的node*/;
-		size_t nlevel = 0;
-		if (p != 0){
-			level.push(p);
-			++nlevel;
-			while (!(q.empty() && level.empty())){
-				if (level.empty()){
-					++nlevel;
-					while (!q.empty()){//当前层为空，将下一层的node全部转移至当前层
-						level.push(q.front());
-						q.pop();
-					}
-				}
-				auto temp = level.front();
-				level.pop();
-				if (temp->left_ != 0) q.push(temp->left_);
-				if (temp->right_ != 0) q.push(temp->right_);
-			}
-		}
-		return nlevel;
-	}
-	template<class T>
-	void binary_search_tree<T>::erase_elem(const T& val, node *&ptr){
-		if (ptr == 0)
-			return;
-		if (ptr->data_ != val){
-			if (val < ptr->data_)
-				return erase_elem(val, ptr->left_);
-			else
-				return erase_elem(val, ptr->right_);
-		}else{ // found
-			if (ptr->left_ != 0 && ptr->right_ != 0){// has two children
-				size_t choose = size_ % 2;
-				//随机选择删除左右，使得删除操作更平衡
-				auto pos = (choose == 0?
-					const_cast<node *>(find_min_aux(ptr->right_).ptr_) : const_cast<node *>(find_max_aux(ptr->left_).ptr_));
-				ptr->data_ = pos->data_;
-				return (choose == 0 ? erase_elem(pos->data_, ptr->right_) : erase_elem(pos->data_, ptr->left_));
-			}else{ //has one or no child
-				auto temp = ptr;
-				if (ptr->left_ == 0)
-					ptr = ptr->right_;
-				else
-					ptr = ptr->left_;
-				nodeAllocator::destroy(temp);
-				nodeAllocator::deallocate(temp);
-				--size_;
-			}
-		}
-	}
-	template<class T>
-	void binary_search_tree<T>::erase(const T& val){
-		erase_elem(val, root_);
-	}
-	template<class T>
-	void binary_search_tree<T>::insert_elem(const T& val, node *&ptr){//重复的元素不插入
-		if (ptr == 0){
-			ptr = nodeAllocator::allocate();
-			TinySTL::construct(&(ptr->data_), val);
-			//memset(ptr, 0, sizeof(node));
-			//ptr->data_ = val;
-			ptr->left_ = ptr->right_ = 0;
-			++size_;
-		}
-		else{
-			if (val < ptr->data_){
-				return insert_elem(val, ptr->left_);
-			}
-			else if (val > ptr->data_){
-				return insert_elem(val, ptr->right_);
-			}
-		}
-	}
-	template<class T>
-	void binary_search_tree<T>::insert(const T& val){
-		insert_elem(val, root_);
-	}
-	template<class T>
-	template<class Iterator>
-	void binary_search_tree<T>::insert(Iterator first, Iterator last){
-		for (; first != last; ++first)
-			insert(*first);
-	}
-	template<class T>
-	void binary_search_tree<T>::print_levelorder(const string& delim, std::ostream& os)const{
-		auto temp = root_;
-		if (temp != 0){
-			std::deque<node *> q;
-			q.push_back(temp);
-			while (!q.empty()){
-				temp = q.front();
-				q.pop_front();
-				if (temp->left_ != 0) q.push_back(temp->left_);
-				if (temp->right_ != 0) q.push_back(temp->right_);
-				os << temp->data_ << delim;
-			}
-		}
-	}
-	template<class T>
-	void binary_search_tree<T>::print_preorder_aux(const string& delim, std::ostream& os, const node *ptr)const{
-		if (ptr){
-			os << ptr->data_ << delim;
-			print_preorder_aux(delim, os, ptr->left_);
-			print_preorder_aux(delim, os, ptr->right_);
-		}
-	}
-	template<class T>
-	void binary_search_tree<T>::print_preorder(const string& delim, std::ostream& os)const{
-		print_preorder_aux(delim, os, root_);
-	}
-	template<class T>
-	void binary_search_tree<T>::print_inorder_aux(const string& delim, std::ostream& os, const node *ptr)const{
-		if (ptr){
-			print_inorder_aux(delim, os, ptr->left_);
-			os << ptr->data_ << delim;
-			print_inorder_aux(delim, os, ptr->right_);
-		}
-	}
-	template<class T>
-	void binary_search_tree<T>::print_inorder(const string& delim, std::ostream& os)const{
-		print_inorder_aux(delim, os, root_);
-	}
-	template<class T>
-	void binary_search_tree<T>::print_postorder_aux(const string& delim, std::ostream& os, const node *ptr)const{
-		if (ptr){
-			print_postorder_aux(delim, os, ptr->left_);
-			print_postorder_aux(delim, os, ptr->right_);
-			os << ptr->data_ << delim;
-		}
-	}
-	template<class T>
-	void binary_search_tree<T>::print_postorder(const string& delim, std::ostream& os)const{
-		print_postorder_aux(delim, os, root_);
-	}
-	template<class T>
-	typename binary_search_tree<T>::const_iterator binary_search_tree<T>::find_min_aux(const node *ptr)const{
-		while (ptr && ptr->left_ != 0){
-			ptr = ptr->left_;
-		}
-		return const_iterator(ptr, this);
-	}
-	template<class T>
-	typename binary_search_tree<T>::const_iterator binary_search_tree<T>::find_min()const{
-		return find_min_aux(root_);
-	}
-	template<class T>
-	typename binary_search_tree<T>::const_iterator binary_search_tree<T>::find_max_aux(const node *ptr)const{
-		while (ptr && ptr->right_ != 0){
-			ptr = ptr->right_;
-		}
-		return const_iterator(ptr, this);
-	}
-	template<class T>
-	typename binary_search_tree<T>::const_iterator binary_search_tree<T>::find_max()const{
-		return find_max_aux(root_);
-	}
-	template<class T>
-	typename binary_search_tree<T>::const_iterator binary_search_tree<T>::find_aux(const T& val, const node *ptr)const{
-		while (ptr){
-			if (val == ptr->data_)
-				break;
-			else if (val < ptr->data_)
-				ptr = ptr->left_;
-			else
-				ptr = ptr->right_;
-		}
-		return const_iterator(ptr, this);
-	}
-	template<class T>
-	typename binary_search_tree<T>::const_iterator binary_search_tree<T>::find(const T& val)const{
-		return find_aux(val, root_);
-	}
 
-	namespace{
+	namespace Detail{
 		//class of bst iterator
 		template<class T>//T = node
 		class bst_iter{
 		private:
 			template<class T>
-			friend class binary_search_tree;
+			friend class ::TinySTL::binary_search_tree;
 		private:
-			typedef typename binary_search_tree<typename T::value_type>::value_type value_type;
-			typedef typename binary_search_tree<typename T::value_type>::const_reference const_reference;
+			typedef typename ::TinySTL::binary_search_tree<typename T::value_type>::value_type value_type;
+			typedef typename ::TinySTL::binary_search_tree<typename T::value_type>::const_reference const_reference;
 			typedef typename const T::value_type *const_pointer;
-			typedef const binary_search_tree<typename T::value_type> * cntrPtr;
+			typedef const ::TinySTL::binary_search_tree<typename T::value_type> * cntrPtr;
 		private:
 			const T *ptr_;
 			cntrPtr container_;
@@ -280,20 +97,7 @@ namespace TinySTL{
 			std::set<const T *> rvisited_;//当前节点的右子树是否被访问过
 			std::set<const T *> visited_;//当前节点是否被访问过（此node被访问说明其左子树已被访问了）
 		public:
-			bst_iter(const T *ptr, cntrPtr container)
-				:ptr_(ptr), container_(container){
-				if (!ptr_)
-					return;
-				auto temp = container_->root_;
-				while (temp && temp != ptr_ && temp->data_ != ptr_->data_){
-					parent_.push(temp);
-					if (temp->data_ < ptr_->data_){
-						temp = temp->right_;
-					}else if (temp->data_ > ptr_->data_){
-						temp = temp->left_;
-					}
-				}
-			}
+			bst_iter(const T *ptr, cntrPtr container);
 
 			operator const T*(){ return ptr_; }
 			const_reference operator*()const{ return ptr_->data_; }
@@ -304,88 +108,14 @@ namespace TinySTL{
 
 			bst_iter& operator ++();
 			bst_iter operator ++(int);
-			//bst_iter& operator --();
-			//bst_iter operator --(int);
 		public:
 			template<class T>
 			friend bool operator ==(const bst_iter<T>& it1, const bst_iter<T>& it2);
 			template<class T>
 			friend bool operator !=(const bst_iter<T>& it1, const bst_iter<T>& it2);
 		};//end of bst_iter
-		template<class T>
-		bst_iter<T>& bst_iter<T>::operator ++(){
-			visited_.insert(ptr_);//此node被访问
-			if (ptr_->right_){//此node还有右子树
-				rvisited_.insert(ptr_);
-				parent_.push(ptr_);
-				ptr_ = ptr_->right_;
-				while (ptr_ && ptr_->left_){
-					parent_.push(ptr_);
-					ptr_ = ptr_->left_;
-				}
-			}else{//node无右子树则只能向父节点路径移动
-				
-				while (!parent_.empty()){
-					ptr_ = parent_.top();
-					parent_.pop();
-					if (visited_.count(ptr_) == 0){//父节点尚未访问
-						visited_.insert(ptr_);
-						break;
-					}else if (rvisited_.count(ptr_) == 0){//父节点的右子树尚未被访问
-						rvisited_.insert(ptr_);
-						if (ptr_->right_){
-							parent_.push(ptr_);
-							ptr_ = ptr_->right_;
-							while (ptr_ && ptr_->left_){
-								parent_.push(ptr_);
-								ptr_ = ptr_->left_;
-							}
-						}
-					}
-					ptr_ = 0;
-				}
-			}
-			return *this;
-		}
-		template<class T>
-		bst_iter<T> bst_iter<T>::operator ++(int){
-			auto res = *this;
-			++*this;
-			return res;
-		}
-		//template<class T>
-		//bst_iter<T>& bst_iter<T>::operator --(){
-		//	visited_.erase(ptr_);//设为未访问
-		//	if (ptr_->left_ != 0){
-		//		parent_.push(ptr_);
-		//		ptr_ = ptr_->left_;
-		//		while (ptr_ && ptr_->right_){
-		//			parent_.push(ptr_);
-		//			ptr_ = ptr_->right_;
-		//		}
-		//	}else{
-		//		if (!parent_.empty() && visited_.count(parent_.top()) == 1){//父节点已经访问了
-		//			ptr_ = parent_.top();
-		//			parent_.pop();
-		//		}
-		//	}
-		//	return *this;
-		//}
-		//template<class T>
-		//bst_iter<T> bst_iter<T>::operator --(int){
-		//	auto res = *this;
-		//	--*this;
-		//	return res;
-		//}
-		template<class T>
-		bool operator ==(const bst_iter<T>& it1, const bst_iter<T>& it2){
-			return it1.ptr_ == it2.ptr_;
-		}
-		template<class T>
-		bool operator !=(const bst_iter<T>& it1, const bst_iter<T>& it2){
-			return !(it1 == it2);
-		}
 	}
 }
 
+#include "Detail\BinarySearchTree.impl.h"
 #endif
