@@ -5,6 +5,7 @@
 
 #include "Test\AlgorithmTest.h"
 #include "Test\BitmapTest.h"
+#include "Test\BinarySearchTreeTest.h"
 #include "Test\CircularBufferTest.h"
 #include "Test\DequeTest.h"
 #include "Test\ListTest.h"
@@ -22,6 +23,7 @@ using namespace TinySTL::Profiler;
 int main(){
 	TinySTL::AlgorithmTest::testAllCases();
 	TinySTL::BitmapTest::testAllCases();
+	TinySTL::BinarySearchTreeTest::testAllCases();
 	TinySTL::CircularBufferTest::testAllCases();
 	TinySTL::DequeTest::testAllCases();
 	TinySTL::ListTest::testAllCases();
