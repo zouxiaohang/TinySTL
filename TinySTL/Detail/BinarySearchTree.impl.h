@@ -12,6 +12,8 @@ namespace TinySTL{
 			while (temp && temp != ptr_ && temp->data_ != ptr_->data_){
 				parent_.push(temp);
 				if (temp->data_ < ptr_->data_){
+					//temp向右走说明temo指向的父节点不需要再次访问了
+					visited_.insert(temp);//add 2015.01.14
 					temp = temp->right_;
 				}
 				else if (temp->data_ > ptr_->data_){
@@ -23,37 +25,25 @@ namespace TinySTL{
 		bst_iter<T>& bst_iter<T>::operator ++(){
 			visited_.insert(ptr_);//此node被访问
 			if (ptr_->right_){//此node还有右子树
-				rvisited_.insert(ptr_);
+				//rvisited_.insert(ptr_);
 				parent_.push(ptr_);
 				ptr_ = ptr_->right_;
 				while (ptr_ && ptr_->left_){
 					parent_.push(ptr_);
 					ptr_ = ptr_->left_;
 				}
-			}
-			else{//node无右子树则只能向父节点路径移动
-
+			}else{//node无右子树则只能向父节点路径移动
+				ptr_ = 0;//add 2015.01.14
 				while (!parent_.empty()){
 					ptr_ = parent_.top();
 					parent_.pop();
-					if (visited_.count(ptr_) == 0){//父节点尚未访问
+					if (visited_.count(ptr_) == 0){//父节点尚未访问,此时ptr_指向此节点
 						visited_.insert(ptr_);
 						break;
 					}
-					else if (rvisited_.count(ptr_) == 0){//父节点的右子树尚未被访问
-						rvisited_.insert(ptr_);
-						if (ptr_->right_){
-							parent_.push(ptr_);
-							ptr_ = ptr_->right_;
-							while (ptr_ && ptr_->left_){
-								parent_.push(ptr_);
-								ptr_ = ptr_->left_;
-							}
-						}
-					}
-					ptr_ = 0;
-				}
-			}
+					ptr_ = 0;//设为哨兵
+				}//end of while
+			}//end of if
 			return *this;
 		}
 		template<class T>

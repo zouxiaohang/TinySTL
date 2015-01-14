@@ -16,6 +16,10 @@ namespace TinySTL{
 		template<class T>
 		using tsBst = TinySTL::binary_search_tree < T > ;
 
+		void testCase1();
+		void testCase2();
+		void testCase3();
+		void testCase4();
 
 		void testAllCases();
 	}

@@ -79,13 +79,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Alloc.cpp" />
+    <ClCompile Include="Detail\Alloc.cpp" />
+    <ClCompile Include="Detail\String.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Profiler\Profiler.cpp" />
-    <ClCompile Include="String.cpp" />
     <ClCompile Include="Test\AlgorithmTest.cpp" />
+    <ClCompile Include="Test\BinarySearchTreeTest.cpp" />
     <ClCompile Include="Test\BitmapTest.cpp" />
     <ClCompile Include="Test\CircularBufferTest.cpp" />
+    <ClCompile Include="Test\DequeTest.cpp" />
+    <ClCompile Include="Test\ListTest.cpp" />
     <ClCompile Include="Test\PairTest.cpp" />
     <ClCompile Include="Test\PriorityQueueTest.cpp" />
     <ClCompile Include="Test\QueueTest.cpp" />
@@ -104,6 +107,12 @@
     <ClInclude Include="CircularBuffer.h" />
     <ClInclude Include="Construct.h" />
     <ClInclude Include="Deque.h" />
+    <ClInclude Include="Detail\BinarySearchTree.impl.h" />
+    <ClInclude Include="Detail\Bitmap.impl.h" />
+    <ClInclude Include="Detail\CircularBuffer.impl.h" />
+    <ClInclude Include="Detail\Deque.impl.h" />
+    <ClInclude Include="Detail\List.impl.h" />
+    <ClInclude Include="Detail\Vector.impl.h" />
     <ClInclude Include="Functional.h" />
     <ClInclude Include="Iterator.h" />
     <ClInclude Include="List.h" />
@@ -114,8 +123,11 @@
     <ClInclude Include="String.h" />
     <ClInclude Include="SuffixArray.h" />
     <ClInclude Include="Test\AlgorithmTest.h" />
+    <ClInclude Include="Test\BinarySearchTreeTest.h" />
     <ClInclude Include="Test\BitmapTest.h" />
     <ClInclude Include="Test\CircularBufferTest.h" />
+    <ClInclude Include="Test\DequeTest.h" />
+    <ClInclude Include="Test\ListTest.h" />
     <ClInclude Include="Test\PairTest.h" />
     <ClInclude Include="Test\PriorityQueueTest.h" />
     <ClInclude Include="Test\QueueTest.h" />

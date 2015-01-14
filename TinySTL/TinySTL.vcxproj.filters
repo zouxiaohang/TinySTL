@@ -22,6 +22,9 @@
     <Filter Include="ScreenShots">
       <UniqueIdentifier>{f20d9032-1c1d-424a-a8aa-f39c87789d3b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Detail">
+      <UniqueIdentifier>{7dd5c5f0-33b6-44c6-b2b9-d4c0ec1d4c13}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Profiler\Profiler.cpp">
@@ -60,11 +63,20 @@
     <ClCompile Include="Test\CircularBufferTest.cpp">
       <Filter>Test</Filter>
     </ClCompile>
-    <ClCompile Include="Alloc.cpp">
-      <Filter>头文件</Filter>
+    <ClCompile Include="Test\DequeTest.cpp">
+      <Filter>Test</Filter>
     </ClCompile>
-    <ClCompile Include="String.cpp">
-      <Filter>头文件</Filter>
+    <ClCompile Include="Test\ListTest.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
+    <ClCompile Include="Detail\Alloc.cpp">
+      <Filter>Detail</Filter>
+    </ClCompile>
+    <ClCompile Include="Detail\String.cpp">
+      <Filter>Detail</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\BinarySearchTreeTest.cpp">
+      <Filter>Test</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -166,6 +178,33 @@
     </ClInclude>
     <ClInclude Include="Test\CircularBufferTest.h">
       <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\DequeTest.h">
+      <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\ListTest.h">
+      <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Detail\Deque.impl.h">
+      <Filter>Detail</Filter>
+    </ClInclude>
+    <ClInclude Include="Detail\Bitmap.impl.h">
+      <Filter>Detail</Filter>
+    </ClInclude>
+    <ClInclude Include="Detail\CircularBuffer.impl.h">
+      <Filter>Detail</Filter>
+    </ClInclude>
+    <ClInclude Include="Detail\Vector.impl.h">
+      <Filter>Detail</Filter>
+    </ClInclude>
+    <ClInclude Include="Detail\List.impl.h">
+      <Filter>Detail</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\BinarySearchTreeTest.h">
+      <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Detail\BinarySearchTree.impl.h">
+      <Filter>Detail</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

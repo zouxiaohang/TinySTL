@@ -93,7 +93,7 @@ namespace TinySTL{
 			const T *ptr_;
 			cntrPtr container_;
 			stack<const T *> parent_;//保存从root到ptr_的父节点的路径
-			std::set<const T *> rvisited_;//当前节点的右子树是否被访问过
+			//std::set<const T *> rvisited_;//当前节点的右子树是否被访问过
 			std::set<const T *> visited_;//当前节点是否被访问过（此node被访问说明其左子树已被访问了）
 		public:
 			bst_iter(const T *ptr, cntrPtr container);

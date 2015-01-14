@@ -36,7 +36,7 @@ namespace TinySTL{
 			std::vector<int> v;
 			std::random_device rd;
 
-			for (auto i = 0; i != 10; ++i){
+			for (auto i = 0; i != 100; ++i){
 				auto r = rd() % 65536;
 				bst.insert(r);
 				v.push_back(r);
