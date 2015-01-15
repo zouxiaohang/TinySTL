@@ -54,6 +54,12 @@ namespace TinySTL{
 			v.erase(std::unique(v.begin(), v.end()), v.end());
 			assert(container_equal(avl, v));
 
+			for (auto i = 0; i != 20; ++i){
+				avl.erase(*avl.cbegin());
+				v.erase(v.begin());
+				assert(container_equal(avl, v));
+			}
+
 			tsAVL<int> avl1;
 			avl1.insert(v.begin(), v.end());
 			assert(container_equal(avl1, v));

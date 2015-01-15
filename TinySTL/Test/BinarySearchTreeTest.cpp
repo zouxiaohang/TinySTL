@@ -45,6 +45,12 @@ namespace TinySTL{
 			v.erase(std::unique(v.begin(), v.end()), v.end());
 			assert(container_equal(bst, v));
 
+			for (auto i = 0; i != 20; ++i){
+				bst.erase(*bst.cbegin());
+				v.erase(v.begin());
+				assert(container_equal(bst, v));
+			}
+			
 			tsBst<int> bst1;
 			bst1.insert(v.begin(), v.end());
 			assert(container_equal(bst1, v));
