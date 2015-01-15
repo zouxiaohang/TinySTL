@@ -108,27 +108,26 @@ namespace TinySTL{
 	void avl_tree<T>::erase_elem(const T& val, node *&p){
 		if (p == 0)
 			return;
-		if (p->data_ < val){
-			erase_elem(val, p->right_);
-		}
-		else if (p->data_ > val){
-			erase_elem(val, p->left_);
-		}
-		else{// found
-			if (p->left_ != 0 && p->right_ != 0){//has two children
+		if (p->data_ != val){
+			if (val < p->data_)
+				return erase_elem(val, p->left_);
+			else
+				return erase_elem(val, p->right_);
+		}else{ // found
+			if (p->left_ != 0 && p->right_ != 0){// has two children
 				size_t choose = size_ % 2;
 				//随机选择删除左右，使得删除操作更平衡
 				auto pos = (choose == 0 ?
 					const_cast<node *>(find_min_aux(p->right_).ptr_) : const_cast<node *>(find_max_aux(p->left_).ptr_));
 				p->data_ = pos->data_;
-				(choose == 0 ? erase_elem(pos->data_, p->right_) : erase_elem(pos->data_, p->left_));
-			}
-			else{ //has one or no child
+				return (choose == 0 ? erase_elem(pos->data_, p->right_) : erase_elem(pos->data_, p->left_));
+			}else{ //has one or no child
 				auto temp = p;
 				if (p->left_ == 0)
 					p = p->right_;
 				else
 					p = p->left_;
+				dataAllocator::destroy(temp);
 				dataAllocator::deallocate(temp);
 				--size_;
 			}
@@ -140,8 +139,7 @@ namespace TinySTL{
 					singleLeftLeftRotate(p);
 				else
 					doubleLeftRightRotate(p);
-			}
-			else if (getHeight(p->right_) - getHeight(p->left_) == 2){
+			}else if (getHeight(p->right_) - getHeight(p->left_) == 2){
 				if (p->right_->left_ == 0)
 					singleRightRightRotate(p);
 				else
