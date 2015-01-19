@@ -18,6 +18,7 @@ namespace TinySTL{
 		typedef Key value_type;
 		typedef size_t size_type;
 		typedef Hash haser;
+		typedef KeyEqual key_equal;
 		typedef Allocator allocator_type;
 		typedef value_type& reference;
 		typedef const value_type& const_reference;
@@ -32,6 +33,17 @@ namespace TinySTL{
 		Unordered_set(InputIterator first, InputIterator last);
 		//Unordered_set(const Unordered_set& ust);
 		//Unordered_set& operator = (const Unordered_set& ust);
+
+		size_type size()const;
+		bool empty()const;
+		size_type bucket_count()const;
+		size_type bucket_size(size_type i)const;
+		size_type bucket(const key_type& key)const;
+		float load_factor()const;
+
+		haser hash_function()const;
+		key_equal key_eq()const;
+		allocator_type get_allocator()const;
 	private:
 		size_type next_prime(size_type n)const;
 		size_type bucket_index(const key_type& key)const;
