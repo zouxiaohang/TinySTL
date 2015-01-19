@@ -44,6 +44,7 @@ TinySTL
     * queue：100%
     * pair：100%
     * list：100%
+	* unordered_set：100%
 * STL Algorithms:  
     * fill：100% 
     * fill_n：100% 
@@ -376,3 +377,26 @@ TinySTL
 	TinySTL::Test::print_container(heightArray, "heightArray");
     
 ![image](https://raw.githubusercontent.com/zouxiaohang/TinySTL/master/TinySTL/ScreenShots/suffix_array.png)
+
+
+
+
+####(13):unordered_set&lt;int>
+
+    TinySTL::Unordered_set<int> ust(10);
+	//std::unordered_set<int> ust(10);
+	ProfilerInstance::start();
+	for (size_t i = 0; i != 100000; ++i){
+		ust.insert(i);
+	}
+	ProfilerInstance::finish();
+	ProfilerInstance::dumpDuringTime();
+    
+|container|quantity|time(ms)|  
+|---------|--------|--------|  
+|TinySTL::unordered_set&lt;int>|1万|8|  
+|TinySTL::unordered_set&lt;int>|10万|139|  
+|TinySTL::unordered_set&lt;int>|100万|1214|  
+|std::unordered_set&lt;int>|1万|64|  
+|std::unordered_set&lt;int>|10万|884|  
+|std::unordered_set&lt;int>|100万|2781| 
