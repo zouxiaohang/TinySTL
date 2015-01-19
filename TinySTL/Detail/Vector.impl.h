@@ -59,7 +59,7 @@ namespace TinySTL{
 		}
 		else if (n > size() && n <= capacity()){
 			auto lengthOfInsert = n - size();
-			finish_ = uninitialized_fill_n(finish_, lengthOfInsert, val);
+			finish_ = TinySTL::uninitialized_fill_n(finish_, lengthOfInsert, val);
 		}
 		else if (n > capacity()){
 			auto lengthOfInsert = n - size();
