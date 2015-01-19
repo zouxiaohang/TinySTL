@@ -15,6 +15,9 @@ namespace TinySTL{
 		class KeyEqual = TinySTL::equal_to<Key>, class Allocator = TinySTL::allocator < Key >>
 		class ust_iterator{
 		private:
+			template<class Key, class Hash, class KeyEqual, class Allocator>
+			friend class Unordered_set;
+		private:
 			typedef Unordered_set<Key, Hash, KeyEqual, Allocator>* cntrPtr;
 			size_t bucket_index_;
 			ListIterator iterator_;
@@ -51,6 +54,7 @@ namespace TinySTL{
 		typedef Allocator allocator_type;
 		typedef value_type& reference;
 		typedef const value_type& const_reference;
+		typedef typename TinySTL::list<key_type>::iterator local_iterator;
 		typedef Detail::ust_iterator<Key, typename TinySTL::list<key_type>::iterator, Hash, KeyEqual, Allocator> iterator;
 	private:
 		TinySTL::vector<TinySTL::list<key_type>> buckets_;
@@ -73,6 +77,17 @@ namespace TinySTL{
 
 		iterator begin();
 		iterator end();
+		local_iterator begin(size_type i);
+		local_iterator end(size_type i);
+
+		iterator find(const key_type& key);
+		size_type count(const key_type& key);
+
+		TinySTL::pair<iterator, bool> insert(const value_type& val);
+		template<class InputIterator>
+		void insert(InputIterator first, InputIterator last);
+		iterator erase(iterator position);
+		size_type erase(const key_type& key);
 
 		haser hash_function()const;
 		key_equal key_eq()const;

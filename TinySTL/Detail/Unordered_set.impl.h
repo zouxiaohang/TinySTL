@@ -173,6 +173,70 @@ namespace TinySTL{
 		Unordered_set<Key, Hash, KeyEqual, Allocator>::end(){
 		return iterator(buckets_.size() - 1, buckets_[buckets_.size() - 1].end(), this);
 	}
+	template<class Key, class Hash, class KeyEqual, class Allocator>
+	typename Unordered_set<Key, Hash, KeyEqual, Allocator>::local_iterator 
+		Unordered_set<Key, Hash, KeyEqual, Allocator>::begin(size_type i){
+		return buckets_[i].begin();
+	}
+	template<class Key, class Hash, class KeyEqual, class Allocator>
+	typename Unordered_set<Key, Hash, KeyEqual, Allocator>::local_iterator 
+		Unordered_set<Key, Hash, KeyEqual, Allocator>::end(size_type i){
+		return buckets_[i].end();
+	}
+	template<class Key, class Hash, class KeyEqual, class Allocator>
+	typename Unordered_set<Key, Hash, KeyEqual, Allocator>::iterator 
+		Unordered_set<Key, Hash, KeyEqual, Allocator>::find(const key_type& key){
+		auto index = bucket_index(key);
+		for (auto it = begin(index); it != end(index); ++it){
+			if (key_equal()(key, *it))
+				return iterator(index, it, this);
+		}
+		return end();
+	}
+	template<class Key, class Hash, class KeyEqual, class Allocator>
+	typename Unordered_set<Key, Hash, KeyEqual, Allocator>::size_type 
+		Unordered_set<Key, Hash, KeyEqual, Allocator>::count(const key_type& key){
+		auto it = find(key);
+		return it == end() ? 0 : 1;
+	}
+	template<class Key, class Hash, class KeyEqual, class Allocator>
+	TinySTL::pair<typename Unordered_set<Key, Hash, KeyEqual, Allocator>::iterator, bool> 
+		Unordered_set<Key, Hash, KeyEqual, Allocator>::insert(const value_type& val){
+		if (!has_key(val)){
+			auto index = bucket_index(val);
+			buckets_[index].push_front(val);
+			++size_;
+			return TinySTL::pair<iterator, bool>(iterator(index, buckets_[index].begin(), this), true);
+		}
+		return TinySTL::pair<iterator, bool>(end(), false);
+	}
+	template<class Key, class Hash, class KeyEqual, class Allocator>
+	template<class InputIterator>
+	void Unordered_set<Key, Hash, KeyEqual, Allocator>::insert(InputIterator first, InputIterator last){
+		for (; first != last; ++first){
+			insert(*first);
+		}
+	}
+	template<class Key, class Hash, class KeyEqual, class Allocator>
+	typename Unordered_set<Key, Hash, KeyEqual, Allocator>::iterator 
+		Unordered_set<Key, Hash, KeyEqual, Allocator>::erase(iterator position){
+		--size_;
+		auto t = position++;
+		auto index = t.bucket_index_;
+		auto it = buckets_[index].erase(t.iterator_);
+		return position;
+	}
+	template<class Key, class Hash, class KeyEqual, class Allocator>
+	typename Unordered_set<Key, Hash, KeyEqual, Allocator>::size_type 
+		Unordered_set<Key, Hash, KeyEqual, Allocator>::erase(const key_type& key){
+		auto it = find(key);
+		if (it == end()){
+			return 0;
+		}else{
+			erase(it);
+			return 1;
+		}
+	}
 }
 
 #endif
