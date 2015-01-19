@@ -4,6 +4,53 @@
 #include <functional>
 
 namespace TinySTL{
+	namespace Detail{
+		template<class Key, class ListIterator, class Hash, class KeyEqual, class Allocator>
+		ust_iterator<Key, ListIterator, Hash, KeyEqual, Allocator>::ust_iterator(size_t index, ListIterator it, cntrPtr ptr)
+			:bucket_index_(index), iterator_(it), container_(ptr){}
+		template<class Key, class ListIterator, class Hash, class KeyEqual, class Allocator>
+		ust_iterator<Key, ListIterator, Hash, KeyEqual, Allocator>&
+			ust_iterator<Key, ListIterator, Hash, KeyEqual, Allocator>::operator ++(){
+			++iterator_;
+			//如果前进一位后到达了list的末尾，则需要跳转到下一个有item的bucket的list
+			if (iterator_ == container_->buckets_[bucket_index_].end()){
+				for (;;){
+					if (bucket_index_ == container_->buckets_.size() - 1){
+						*this = container_->end();
+						break;
+					}
+					else{
+						++bucket_index_;
+						if (!(container_->buckets_[bucket_index_].empty())){//此list不为空
+							iterator_ = container_->buckets_[bucket_index_].begin();
+							break;
+						}
+					}
+				}
+			}
+			return *this;
+		}
+		template<class Key, class ListIterator, class Hash, class KeyEqual, class Allocator>
+		ust_iterator<Key, ListIterator, Hash, KeyEqual, Allocator>
+			ust_iterator<Key, ListIterator, Hash, KeyEqual, Allocator>::operator ++(int){
+			auto res = *this;
+			++*this;
+			return res;
+		}
+		template<class Key, class ListIterator, class Hash, class KeyEqual, class Allocator>
+		bool operator ==(const ust_iterator<Key, ListIterator, Hash, KeyEqual, Allocator>& lhs,
+			const ust_iterator<Key, ListIterator, Hash, KeyEqual, Allocator>& rhs){
+			return lhs.bucket_index_ == rhs.bucket_index_ &&
+				lhs.iterator_ == rhs.iterator_ &&
+				lhs.container_ == rhs.container_;
+		}
+		template<class Key, class ListIterator, class Hash, class KeyEqual, class Allocator>
+		bool operator !=(const ust_iterator<Key, ListIterator, Hash, KeyEqual, Allocator>& lhs,
+			const ust_iterator<Key, ListIterator, Hash, KeyEqual, Allocator>& rhs){
+			return !(lhs == rhs);
+		}
+	}//end of Detail namespace
+
 	template<class Key, class Hash, class KeyEqual, class Allocator>
 	typename Unordered_set<Key, Hash, KeyEqual, Allocator>::size_type 
 		Unordered_set<Key, Hash, KeyEqual, Allocator>::size()const{ 
@@ -78,6 +125,18 @@ namespace TinySTL{
 		return prime_list_[i];
 	}
 	template<class Key, class Hash, class KeyEqual, class Allocator>
+	Unordered_set<Key, Hash, KeyEqual, Allocator>::Unordered_set(const Unordered_set& ust){
+		buckets_ = ust.buckets_;
+		size_ = ust.size_;
+	}
+	template<class Key, class Hash, class KeyEqual, class Allocator>
+	Unordered_set<Key, Hash, KeyEqual, Allocator>& Unordered_set<Key, Hash, KeyEqual, Allocator>::operator = (const Unordered_set& ust){
+		if (this != &ust){
+			buckets_ = ust.buckets_;
+			size_ = ust.size_;
+		}
+	}
+	template<class Key, class Hash, class KeyEqual, class Allocator>
 	Unordered_set<Key, Hash, KeyEqual, Allocator>::Unordered_set(size_type bucket_count){
 		bucket_count = next_prime(bucket_count);
 		buckets_.resize(bucket_count);
@@ -96,6 +155,23 @@ namespace TinySTL{
 				++size_;
 			}
 		}
+	}
+	template<class Key, class Hash, class KeyEqual, class Allocator>
+	typename Unordered_set<Key, Hash, KeyEqual, Allocator>::iterator 
+		Unordered_set<Key, Hash, KeyEqual, Allocator>::begin(){
+		size_type index = 0;
+		for (; index != buckets_.size(); ++index){
+			if (!(buckets_[index].empty()))
+				break;
+		}
+		if (index == buckets_.size())
+			return end();
+		return iterator(index, buckets_[index].begin(), this);
+	}
+	template<class Key, class Hash, class KeyEqual, class Allocator>
+	typename Unordered_set<Key, Hash, KeyEqual, Allocator>::iterator 
+		Unordered_set<Key, Hash, KeyEqual, Allocator>::end(){
+		return iterator(buckets_.size() - 1, buckets_[buckets_.size() - 1].end(), this);
 	}
 }
 
