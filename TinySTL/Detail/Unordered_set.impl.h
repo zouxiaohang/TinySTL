@@ -1,7 +1,7 @@
 #ifndef _UNORDERED_SET_IMPL_H_
 #define _UNORDERED_SET_IMPL_H_
 
-#include <functional>
+#include <functional>//for bind
 
 namespace TinySTL{
 	namespace Detail{
@@ -128,12 +128,14 @@ namespace TinySTL{
 	Unordered_set<Key, Hash, KeyEqual, Allocator>::Unordered_set(const Unordered_set& ust){
 		buckets_ = ust.buckets_;
 		size_ = ust.size_;
+		max_load_factor_ = ust.max_load_factor_;
 	}
 	template<class Key, class Hash, class KeyEqual, class Allocator>
 	Unordered_set<Key, Hash, KeyEqual, Allocator>& Unordered_set<Key, Hash, KeyEqual, Allocator>::operator = (const Unordered_set& ust){
 		if (this != &ust){
 			buckets_ = ust.buckets_;
 			size_ = ust.size_;
+			max_load_factor_ = ust.max_load_factor_;
 		}
 	}
 	template<class Key, class Hash, class KeyEqual, class Allocator>
@@ -141,11 +143,13 @@ namespace TinySTL{
 		bucket_count = next_prime(bucket_count);
 		buckets_.resize(bucket_count);
 		size_ = 0;
+		max_load_factor_ = 1.0;
 	}
 	template<class Key, class Hash, class KeyEqual, class Allocator>
 	template<class InputIterator>
 	Unordered_set<Key, Hash, KeyEqual, Allocator>::Unordered_set(InputIterator first, InputIterator last){
 		size_ = 0;
+		max_load_factor_ = 1.0;
 		auto len = last - first;
 		buckets_.resize(next_prime(len));
 		for (; first != last; ++first){
@@ -203,6 +207,8 @@ namespace TinySTL{
 	TinySTL::pair<typename Unordered_set<Key, Hash, KeyEqual, Allocator>::iterator, bool> 
 		Unordered_set<Key, Hash, KeyEqual, Allocator>::insert(const value_type& val){
 		if (!has_key(val)){
+			if (load_factor() > max_load_factor())
+				rehash(next_prime(size()));
 			auto index = bucket_index(val);
 			buckets_[index].push_front(val);
 			++size_;
@@ -236,6 +242,31 @@ namespace TinySTL{
 			erase(it);
 			return 1;
 		}
+	}
+	template<class Key, class Hash, class KeyEqual, class Allocator>
+	float Unordered_set<Key, Hash, KeyEqual, Allocator>::max_load_factor()const{
+		return max_load_factor_;
+	}
+	template<class Key, class Hash, class KeyEqual, class Allocator>
+	void Unordered_set<Key, Hash, KeyEqual, Allocator>::max_load_factor(float z){
+		max_load_factor_ = z;
+	}
+	template<class Key, class Hash, class KeyEqual, class Allocator>
+	void Unordered_set<Key, Hash, KeyEqual, Allocator>::rehash(size_type n){
+		if (n <= buckets_.size())
+			return;
+		Unordered_set temp(next_prime(n));
+		for (auto& val : *this){
+			temp.insert(val);
+		}
+		TinySTL::swap(*this, temp);
+	}
+	template<class Key, class Hash, class KeyEqual, class Allocator>
+	void swap(Unordered_set<Key, Hash, KeyEqual, Allocator>& lhs,
+		Unordered_set<Key, Hash, KeyEqual, Allocator>& rhs){
+		TinySTL::swap(lhs.buckets_, rhs.buckets_);
+		TinySTL::swap(lhs.size_, rhs.size_);
+		TinySTL::swap(lhs.max_load_factor_, rhs.max_load_factor_);
 	}
 }
 

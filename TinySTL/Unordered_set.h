@@ -59,6 +59,7 @@ namespace TinySTL{
 	private:
 		TinySTL::vector<TinySTL::list<key_type>> buckets_;
 		size_type size_;
+		float max_load_factor_;
 #define PRIME_LIST_SIZE 28
 		static size_t prime_list_[PRIME_LIST_SIZE];
 	public:
@@ -74,6 +75,9 @@ namespace TinySTL{
 		size_type bucket_size(size_type i)const;
 		size_type bucket(const key_type& key)const;
 		float load_factor()const;
+		float max_load_factor()const;
+		void max_load_factor(float z);
+		void rehash(size_type n);
 
 		iterator begin();
 		iterator end();
@@ -96,7 +100,12 @@ namespace TinySTL{
 		size_type next_prime(size_type n)const;
 		size_type bucket_index(const key_type& key)const;
 		bool has_key(const key_type& key);
+	public:
+		template<class Key, class Hash, class KeyEqual, class Allocator>
+		friend void swap(Unordered_set<Key, Hash, KeyEqual, Allocator>& lhs,
+			Unordered_set<Key, Hash, KeyEqual, Allocator>& rhs);
 	};
+	
 }//end of namespace TinySTL
 
 #include "Detail\Unordered_set.impl.h"
