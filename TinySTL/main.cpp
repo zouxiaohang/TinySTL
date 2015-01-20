@@ -16,9 +16,9 @@
 #include "Test\StackTest.h"
 #include "Test\StringTest.h"
 #include "Test\SuffixArrayTest.h"
+#include "Test\Unordered_setTest.h"
 #include "Test\VectorTest.h"
 
-using namespace std;
 using namespace TinySTL::Profiler;
 
 int main(){
@@ -35,6 +35,7 @@ int main(){
 	TinySTL::StackTest::testAllCases();
 	TinySTL::StringTest::testAllCases();
 	TinySTL::SuffixArrayTest::testAllCases();
+	TinySTL::Unordered_setTest::testAllCases();
 	TinySTL::VectorTest::testAllCases();
 
 	system("pause");
