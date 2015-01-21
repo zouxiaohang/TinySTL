@@ -386,15 +386,19 @@ TinySTL
 
     TinySTL::Unordered_set<int> ust(10);
 	//std::unordered_set<int> ust(10);
-	const size_t count = 1000000;
+	const size_t insert_count = 1000000;
+	const uint64_t query_count = 100000000;
+	//calculate total insert time
 	ProfilerInstance::start();
-	for (size_t i = 0; i != count; ++i){
+	for (size_t i = 0; i != insert_count; ++i){
 		ust.insert(i);//per insert time
 	}
 	ProfilerInstance::finish();
 	ProfilerInstance::dumpDuringTime();
+
+	//calculate total query time
 	ProfilerInstance::start();
-	for (size_t i = 0; i != count * 100; ++i){
+	for (uint64_t i = 0; i != query_count; ++i){
 		ust.count(i);//per query time
 	}
 	ProfilerInstance::finish();
@@ -402,9 +406,9 @@ TinySTL
     
 |container|quantity|insert time(ms)|query time(ms)|    
 |---------|--------|--------|--------|    
-|TinySTL::unordered_set&lt;int>|1/100万|8|0|      
-|TinySTL::unordered_set&lt;int>|10/1000万|139|0|    
-|TinySTL::unordered_set&lt;int>|100/10000万|1214|0|    
-|std::unordered_set&lt;int>|1/100万|64|0|    
-|std::unordered_set&lt;int>|10/1000万|884|0|    
-|std::unordered_set&lt;int>|100/10000万|2781|0|   
+|TinySTL::unordered_set&lt;int>|1万/1亿|8|97|      
+|TinySTL::unordered_set&lt;int>|10万/10亿|139|1000|    
+|TinySTL::unordered_set&lt;int>|100万/100亿|1214|9546|    
+|std::unordered_set&lt;int>|1万/1亿|64|101|    
+|std::unordered_set&lt;int>|10万/10亿|884|953|    
+|std::unordered_set&lt;int>|100万/100亿|2781|9682|   
