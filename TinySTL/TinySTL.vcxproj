@@ -54,7 +54,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -69,7 +69,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -84,6 +84,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Profiler\Profiler.cpp" />
     <ClCompile Include="Test\AlgorithmTest.cpp" />
+    <ClCompile Include="Test\AVLTreeTest.cpp" />
     <ClCompile Include="Test\BinarySearchTreeTest.cpp" />
     <ClCompile Include="Test\BitmapTest.cpp" />
     <ClCompile Include="Test\CircularBufferTest.cpp" />
@@ -95,6 +96,7 @@
     <ClCompile Include="Test\StackTest.cpp" />
     <ClCompile Include="Test\StringTest.cpp" />
     <ClCompile Include="Test\SuffixArrayTest.cpp" />
+    <ClCompile Include="Test\Unordered_setTest.cpp" />
     <ClCompile Include="Test\VectorTest.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -107,11 +109,13 @@
     <ClInclude Include="CircularBuffer.h" />
     <ClInclude Include="Construct.h" />
     <ClInclude Include="Deque.h" />
+    <ClInclude Include="Detail\AVLTree.impl.h" />
     <ClInclude Include="Detail\BinarySearchTree.impl.h" />
     <ClInclude Include="Detail\Bitmap.impl.h" />
     <ClInclude Include="Detail\CircularBuffer.impl.h" />
     <ClInclude Include="Detail\Deque.impl.h" />
     <ClInclude Include="Detail\List.impl.h" />
+    <ClInclude Include="Detail\Unordered_set.impl.h" />
     <ClInclude Include="Detail\Vector.impl.h" />
     <ClInclude Include="Functional.h" />
     <ClInclude Include="Iterator.h" />
@@ -123,6 +127,7 @@
     <ClInclude Include="String.h" />
     <ClInclude Include="SuffixArray.h" />
     <ClInclude Include="Test\AlgorithmTest.h" />
+    <ClInclude Include="Test\AVLTreeTest.h" />
     <ClInclude Include="Test\BinarySearchTreeTest.h" />
     <ClInclude Include="Test\BitmapTest.h" />
     <ClInclude Include="Test\CircularBufferTest.h" />
@@ -135,9 +140,11 @@
     <ClInclude Include="Test\StringTest.h" />
     <ClInclude Include="Test\SuffixArrayTest.h" />
     <ClInclude Include="Test\TestUtil.h" />
+    <ClInclude Include="Test\Unordered_setTest.h" />
     <ClInclude Include="Test\VectorTest.h" />
     <ClInclude Include="TypeTraits.h" />
     <ClInclude Include="UninitializedFunctions.h" />
+    <ClInclude Include="Unordered_set.h" />
     <ClInclude Include="Utility.h" />
     <ClInclude Include="Vector.h" />
   </ItemGroup>

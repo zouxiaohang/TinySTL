@@ -78,6 +78,12 @@
     <ClCompile Include="Test\BinarySearchTreeTest.cpp">
       <Filter>Test</Filter>
     </ClCompile>
+    <ClCompile Include="Test\AVLTreeTest.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\Unordered_setTest.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TypeTraits.h">
@@ -205,6 +211,21 @@
     </ClInclude>
     <ClInclude Include="Detail\BinarySearchTree.impl.h">
       <Filter>Detail</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\AVLTreeTest.h">
+      <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Detail\AVLTree.impl.h">
+      <Filter>Detail</Filter>
+    </ClInclude>
+    <ClInclude Include="Unordered_set.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Detail\Unordered_set.impl.h">
+      <Filter>Detail</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\Unordered_setTest.h">
+      <Filter>Test</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

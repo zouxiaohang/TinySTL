@@ -4,6 +4,7 @@
 #include "Allocator.h"
 #include "Algorithm.h"
 #include "Functional.h"
+#include "Iterator.h"
 #include "List.h"
 #include "Vector.h"
 
@@ -13,7 +14,7 @@ namespace TinySTL{
 	namespace Detail{
 		template<class Key, class ListIterator, class Hash = std::hash<Key>,
 		class KeyEqual = TinySTL::equal_to<Key>, class Allocator = TinySTL::allocator < Key >>
-		class ust_iterator{
+		class ust_iterator : public iterator<forward_iterator_tag, Key>{
 		private:
 			template<class Key, class Hash, class KeyEqual, class Allocator>
 			friend class Unordered_set;

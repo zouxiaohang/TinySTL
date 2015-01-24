@@ -2,6 +2,7 @@
 #define _AVL_TREE_H_
 
 #include "Allocator.h"
+#include "Iterator.h"
 #include "Stack.h"
 #include "String.h"
 
@@ -83,12 +84,13 @@ namespace TinySTL{
 	namespace Detail{
 		//class of avl tree iterator
 		template<class T>//T = node
-		class avl_iter{
+		class avl_iter :
+			public iterator<forward_iterator_tag, typename avl_tree<typename T::value_type>::value_type>{
 		private:
 			template<class T>
 			friend class avl_tree;
 		private:
-			typedef typename avl_tree<typename T::value_type>::value_type value_type;
+			//typedef typename avl_tree<typename T::value_type>::value_type value_type;
 			typedef typename avl_tree<typename T::value_type>::const_reference const_reference;
 			typedef typename const T::value_type *const_pointer;
 			typedef const avl_tree<typename T::value_type> * cntrPtr;

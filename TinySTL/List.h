@@ -27,7 +27,7 @@ namespace TinySTL{
 		};
 		//the class of list iterator
 		template<class T>
-		struct listIterator :public bidirectional_iterator<T, ptrdiff_t>{
+		struct listIterator :public iterator<bidirectional_iterator_tag, T>{
 			template<class T>
 			friend class list;
 		public:
