@@ -13,6 +13,7 @@
 #include <list>
 #include <vector>
 
+#include "../BinarySearchTree.h"
 #include "../List.h"
 #include "../Vector.h"
 

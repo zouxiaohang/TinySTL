@@ -446,11 +446,19 @@ namespace TinySTL{
 	namespace {
 		template<class InputIterator, class Distance>
 		void _advance(InputIterator& it, Distance n, input_iterator_tag){
+			assert(n >= 0);
+			while (n--){
+				++it;
+			}
+		}
+		template<class BidirectionIterator, class Distance>
+		void _advance(BidirectionIterator& it, Distance n, bidirectional_iterator_tag){
 			if (n < 0){
 				while (n++){
 					--it;
 				}
-			}else{
+			}
+			else{
 				while (n--){
 					++it;
 				}

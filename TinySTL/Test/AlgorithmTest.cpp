@@ -170,16 +170,20 @@ namespace TinySTL{
 		void testAdvance(){
 			TinySTL::vector<int> v;
 			TinySTL::list<int> l;
+			TinySTL::binary_search_tree<int> bst;
 			for (auto i = 0; i != 10; ++i){
 				v.push_back(i);
 				l.push_back(i);
+				bst.insert(i);
 			}
 			auto vit = v.begin();
 			auto lit = l.begin();
+			auto bit = bst.cbegin();
 
 			TinySTL::advance(vit, 5);
 			TinySTL::advance(lit, 5);
-			assert(*vit == 5 && *lit == 5);
+			TinySTL::advance(bit, 5);
+			assert(*vit == 5 && *lit == 5 && *bit == 5);
 
 			TinySTL::advance(vit, -5);
 			TinySTL::advance(lit, -5);
