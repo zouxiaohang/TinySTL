@@ -167,6 +167,24 @@ namespace TinySTL{
 			it = std::search(v.begin(), v.end(), needle2, needle2 + 3, [](int i, int j){return i == j; });
 			assert(it == v.end());
 		}
+		void testAdvance(){
+			TinySTL::vector<int> v;
+			TinySTL::list<int> l;
+			for (auto i = 0; i != 10; ++i){
+				v.push_back(i);
+				l.push_back(i);
+			}
+			auto vit = v.begin();
+			auto lit = l.begin();
+
+			TinySTL::advance(vit, 5);
+			TinySTL::advance(lit, 5);
+			assert(*vit == 5 && *lit == 5);
+
+			TinySTL::advance(vit, -5);
+			TinySTL::advance(lit, -5);
+			assert(*vit == 0 && *lit == 0);
+		}
 
 
 		void testAllCases(){
@@ -188,6 +206,7 @@ namespace TinySTL{
 			testEqual();
 			testIsPermutation();
 			testSearch();
+			testAdvance();
 		}
 	}
 }

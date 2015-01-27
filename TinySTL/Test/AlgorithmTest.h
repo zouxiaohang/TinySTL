@@ -10,7 +10,12 @@
 #include <cctype>
 #include <cstring>
 #include <cassert>
+#include <list>
 #include <vector>
+
+#include "../List.h"
+#include "../Vector.h"
+
 
 namespace TinySTL{
 	namespace AlgorithmTest{
@@ -32,6 +37,7 @@ namespace TinySTL{
 		void testEqual();
 		void testIsPermutation();
 		void testSearch();
+		void testAdvance();
 
 		void testAllCases();
 	}

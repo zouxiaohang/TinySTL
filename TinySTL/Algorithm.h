@@ -441,6 +441,35 @@ namespace TinySTL{
 		}
 		return last1;
 	}
+	//********** [advance] ******************************
+	//********* [Algorithm Complexity: O(N)] ****************
+	namespace {
+		template<class InputIterator, class Distance>
+		void _advance(InputIterator& it, Distance n, input_iterator_tag){
+			if (n < 0){
+				while (n++){
+					--it;
+				}
+			}else{
+				while (n--){
+					++it;
+				}
+			}
+		}
+		template<class RandomIterator, class Distance>
+		void _advance(RandomIterator& it, Distance n, random_access_iterator_tag){
+			if (n < 0){
+				it -= (-n);
+			}else{
+				it += n;
+			}
+		}
+	}
+	template <class InputIterator, class Distance> 
+	void advance(InputIterator& it, Distance n){
+		typedef iterator_traits<InputIterator>::iterator_category iterator_category;
+		_advance(it, n, iterator_category());
+	}
 }
 
 
