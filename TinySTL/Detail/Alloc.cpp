@@ -102,7 +102,7 @@ namespace TinySTL{
 				for (int i = 0; i <= EMaxBytes::MAXBYTES; i += EAlign::ALIGN){
 					my_free_list = free_list + FREELIST_INDEX(i);
 					p = *my_free_list;
-					if (!p){
+					if (p != 0){
 						*my_free_list = p->next;
 						start_free = (char *)p;
 						end_free = start_free + i;
