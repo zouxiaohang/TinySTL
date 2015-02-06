@@ -501,10 +501,15 @@ namespace TinySTL{
 		void bubble_sort(RandomIterator first, RandomIterator last, BinaryPredicate pred){
 			auto len = last - first;
 			for (auto i = len; i != 0; --i){
+				bool swaped = false;
 				for (auto p = first; p != (first + i - 1); ++p){
-					if (pred(*(p + 1), *p))
+					if (pred(*(p + 1), *p)){
 						swap(*(p + 1), *p);
+						swaped = true;
+					}
 				}
+				if (!swaped)
+					break;
 			}
 		}
 	}
