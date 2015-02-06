@@ -69,6 +69,7 @@ TinySTL
 	* is_permutation：100%
 	* search：100%
 	* advance：100%
+	* sort：100%
 * 其他组件：
     * circular_buffer：100%   
     * bitmap：100%
@@ -413,3 +414,27 @@ TinySTL
 |std::unordered_set&lt;int>|1万/1亿|64|101|    
 |std::unordered_set&lt;int>|10万/10亿|884|953|    
 |std::unordered_set&lt;int>|100万/100亿|2781|9682|   
+
+
+
+
+####(4):sort
+
+    std::random_device rd;
+	const int len = 10000000;
+	int arr[len];
+	std::generate(std::begin(arr), std::end(arr), [&rd](){return rd(); });
+	ProfilerInstance::start();
+	TinySTL::sort(std::begin(arr), std::end(arr));
+	//std::sort(std::begin(arr), std::end(arr));
+	ProfilerInstance::finish();
+	ProfilerInstance::dumpDuringTime();
+    
+|algorithm|quantity|time(ms)|  
+|---------|--------|--------|  
+|TinySTL::sort|10万|11|  
+|TinySTL::sort|100万|133|  
+|TinySTL::sort|1000万|1547|  
+|std::sort|10万|13|  
+|std::sort|100万|147|  
+|std::sort|1000万|1730| 
