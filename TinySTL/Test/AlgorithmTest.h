@@ -11,6 +11,7 @@
 #include <cstring>
 #include <cassert>
 #include <list>
+#include <random>
 #include <vector>
 
 #include "../BinarySearchTree.h"
@@ -39,6 +40,7 @@ namespace TinySTL{
 		void testIsPermutation();
 		void testSearch();
 		void testAdvance();
+		void testSort();
 
 		void testAllCases();
 	}

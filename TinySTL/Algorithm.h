@@ -457,8 +457,7 @@ namespace TinySTL{
 				while (n++){
 					--it;
 				}
-			}
-			else{
+			}else{
 				while (n--){
 					++it;
 				}
@@ -478,6 +477,62 @@ namespace TinySTL{
 		typedef iterator_traits<InputIterator>::iterator_category iterator_category;
 		_advance(it, n, iterator_category());
 	}
+	//********** [sort] ******************************
+	//********* [Algorithm Complexity: O(NlogN)] ****************
+	namespace {
+		template<class RandomIterator, class BinaryPredicate>
+		typename iterator_traits<RandomIterator>::value_type
+			mid3(RandomIterator first, RandomIterator last, BinaryPredicate pred){//[first, last]
+			auto mid = first + (last + 1 - first) / 2;
+			if (pred(*mid, *first)){
+				swap(*mid, *first);
+			}
+			if (pred(*last, *mid)){
+				swap(*last, *mid);
+			}
+			if (pred(*last, *first)){
+				swap(*last, *first);
+			}
+			auto ret = *mid;
+			swap(*mid, *(last - 1));//将mid item换位作为哨兵
+			return ret;
+		}
+		template<class RandomIterator, class BinaryPredicate>
+		void bubble_sort(RandomIterator first, RandomIterator last, BinaryPredicate pred){
+			auto len = last - first;
+			for (auto i = len; i != 0; --i){
+				for (auto p = first; p != (first + i - 1); ++p){
+					if (pred(*(p + 1), *p))
+						swap(*(p + 1), *p);
+				}
+			}
+		}
+	}
+	template<class RandomIterator>
+	void sort(RandomIterator first, RandomIterator last){
+		return sort(first, last, less<typename iterator_traits<RandomIterator>::value_type>());
+	}
+	template<class RandomIterator, class BinaryPredicate>
+	void sort(RandomIterator first, RandomIterator last, BinaryPredicate pred){
+		static int n = 1;
+		if (first >= last || first + 1 == last)
+			return;
+		if (last - first <= 20)//区间长度小于等于20的采用冒泡排序更快
+			return bubble_sort(first, last, pred);
+		auto mid = mid3(first, last - 1, pred);
+		auto p1 = first, p2 = last - 2;
+		while (p1 < p2){
+			while (pred(*p1, mid) && p1 < p2) ++p1;
+			while (!pred(*p2, mid) && p1 < p2) --p2;
+			if (p1 < p2){
+				swap(*p1, *p2);
+			}
+		}
+		swap(*p1, *(last - 2));//将作为哨兵的mid item换回原来的位置
+		sort(first, p1);
+		sort(p1 + 1, last);
+	}
+
 }
 
 

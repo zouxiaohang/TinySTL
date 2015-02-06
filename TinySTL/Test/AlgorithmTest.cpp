@@ -189,6 +189,29 @@ namespace TinySTL{
 			TinySTL::advance(lit, -5);
 			assert(*vit == 0 && *lit == 0);
 		}
+		void testSort(){
+			int arr1[1] = { 0 };
+			TinySTL::sort(std::begin(arr1), std::end(arr1));
+			assert(std::is_sorted(std::begin(arr1), std::end(arr1)));
+
+			int arr2[2] = { 1, 0 };
+			TinySTL::sort(std::begin(arr2), std::end(arr2));
+			assert(std::is_sorted(std::begin(arr2), std::end(arr2)));
+
+			int arr3[3] = { 2, 1, 3 };
+			TinySTL::sort(std::begin(arr3), std::end(arr3));
+			assert(std::is_sorted(std::begin(arr3), std::end(arr3)));
+
+			int arr4[10000];
+			std::random_device rd;
+			for (auto i = 0; i != 100; ++i){
+				for (auto& n : arr4){
+					n = rd() % 65536;
+				}
+				TinySTL::sort(std::begin(arr4), std::end(arr4));
+				assert(std::is_sorted(std::begin(arr4), std::end(arr4)));
+			}
+		}
 
 
 		void testAllCases(){
@@ -211,6 +234,7 @@ namespace TinySTL{
 			testIsPermutation();
 			testSearch();
 			testAdvance();
+			testSort();
 		}
 	}
 }
