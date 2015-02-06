@@ -514,7 +514,6 @@ namespace TinySTL{
 	}
 	template<class RandomIterator, class BinaryPredicate>
 	void sort(RandomIterator first, RandomIterator last, BinaryPredicate pred){
-		static int n = 1;
 		if (first >= last || first + 1 == last)
 			return;
 		if (last - first <= 20)//区间长度小于等于20的采用冒泡排序更快
@@ -522,15 +521,15 @@ namespace TinySTL{
 		auto mid = mid3(first, last - 1, pred);
 		auto p1 = first, p2 = last - 2;
 		while (p1 < p2){
-			while (pred(*p1, mid) && p1 < p2) ++p1;
-			while (!pred(*p2, mid) && p1 < p2) --p2;
+			while (pred(*p1, mid) && (p1 < p2)) ++p1;
+			while (!pred(*p2, mid) && (p1 < p2)) --p2;
 			if (p1 < p2){
 				swap(*p1, *p2);
 			}
 		}
 		swap(*p1, *(last - 2));//将作为哨兵的mid item换回原来的位置
-		sort(first, p1);
-		sort(p1 + 1, last);
+		sort(first, p1, pred);
+		sort(p1 + 1, last, pred);
 	}
 
 }
