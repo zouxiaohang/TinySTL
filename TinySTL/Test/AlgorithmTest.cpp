@@ -202,9 +202,9 @@ namespace TinySTL{
 			TinySTL::sort(std::begin(arr3), std::end(arr3));
 			assert(std::is_sorted(std::begin(arr3), std::end(arr3)));
 
-			int arr4[10000];
+			int arr4[100];
 			std::random_device rd;
-			for (auto i = 0; i != 100; ++i){
+			for (auto i = 0; i != 10; ++i){
 				for (auto& n : arr4){
 					n = rd() % 65536;
 				}
@@ -212,7 +212,28 @@ namespace TinySTL{
 				assert(std::is_sorted(std::begin(arr4), std::end(arr4)));
 			}
 		}
+		void testGenerate(){
+			int arr1[100], arr2[100];
+			auto f = [](int i){ return i; };
+			for (auto i = 0; i != 100; ++i){
+				auto func = std::bind(f, i);
+				TinySTL::generate(std::begin(arr1), std::end(arr1), func);
+				std::generate(std::begin(arr2), std::end(arr2), func);
+			}
+			assert(TinySTL::Test::container_equal(arr1, arr2));
+		}
+		void testDistance(){
+			TinySTL::list<int> l(10, 0);
+			TinySTL::vector<int> v(10, 0);
 
+			auto lit = l.begin();
+			TinySTL::advance(lit, 5);
+			auto vit = v.begin();
+			TinySTL::advance(vit, 5);
+
+			assert(TinySTL::distance(l.begin(), lit) == 5);
+			assert(TinySTL::distance(v.begin(), vit) == 5);
+		}
 
 		void testAllCases(){
 			testFill();
@@ -235,6 +256,8 @@ namespace TinySTL{
 			testSearch();
 			testAdvance();
 			testSort();
+			testGenerate();
+			testDistance();
 		}
 	}
 }

@@ -70,6 +70,8 @@ TinySTL
 	* search：100%
 	* advance：100%
 	* sort：100%
+	* generate：100%
+	* distance：100%
 * 其他组件：
     * circular_buffer：100%   
     * bitmap：100%

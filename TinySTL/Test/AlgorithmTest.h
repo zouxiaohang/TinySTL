@@ -10,6 +10,7 @@
 #include <cctype>
 #include <cstring>
 #include <cassert>
+#include <functional>
 #include <list>
 #include <random>
 #include <vector>
@@ -41,6 +42,8 @@ namespace TinySTL{
 		void testSearch();
 		void testAdvance();
 		void testSort();
+		void testGenerate();
+		void testDistance();
 
 		void testAllCases();
 	}

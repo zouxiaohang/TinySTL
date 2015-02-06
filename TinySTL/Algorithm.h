@@ -531,7 +531,37 @@ namespace TinySTL{
 		sort(first, p1, pred);
 		sort(p1 + 1, last, pred);
 	}
-
+	//********** [generate] ******************************
+	//********* [Algorithm Complexity: O(N)] ****************
+	template<class InputIterator, class Function>
+	void generate(InputIterator first, InputIterator last, Function func){
+		for (; first != last; ++first){
+			*first = func();
+		}
+	}
+	//********** [distance] ******************************
+	//********* [Algorithm Complexity: O(N)] ****************
+	template<class InputIterator>
+	typename iterator_traits<InputIterator>::difference_type
+		_distance(InputIterator first, InputIterator last, input_iterator_tag){
+		typename iterator_traits<InputIterator>::difference_type dist = 0;
+		while (first++ != last){
+			++dist;
+		}
+		return dist;
+	}
+	template<class RandomIterator>
+	typename iterator_traits<RandomIterator>::difference_type
+		_distance(RandomIterator first, RandomIterator last, random_access_iterator_tag){
+		auto dist = last - first;
+		return dist;
+	}
+	template<class Iterator>
+	typename iterator_traits<Iterator>::difference_type
+		distance(Iterator first, Iterator last){
+		typedef typename iterator_traits<Iterator>::iterator_category iterator_category;
+		return _distance(first, last, iterator_category());
+	}
 }
 
 

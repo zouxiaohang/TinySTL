@@ -76,6 +76,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <StackReserveSize>0x10000000</StackReserveSize>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
