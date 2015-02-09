@@ -41,7 +41,7 @@ namespace TinySTL{
 			listIterator& operator --();
 			listIterator operator --(int);
 			T& operator *(){ return p->data; }
-			T* operator &(){ return &(operator*()); }
+			T* operator ->(){ return &(operator*()); }
 
 			template<class T>
 			friend bool operator ==(const listIterator<T>& lhs, const listIterator<T>& rhs);
