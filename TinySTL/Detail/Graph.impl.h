@@ -42,11 +42,26 @@ namespace TinySTL{
 				if (equal_func(pair.first.first, index))
 					return bucket_iterator(this, (pair.second).end());
 			}
-			throw std::exception("return end error");
+			//throw std::exception("return end error");
+			return bucket_iterator();
 		}
 		template<class Index, class Value, class EqualFunc>
 		size_t graph<Index, Value, EqualFunc>::size()const{
 			return size_;
+		}
+		template<class Index, class Value, class EqualFunc>
+		typename graph<Index, Value, EqualFunc>::node_sets 
+			graph<Index, Value, EqualFunc>::adjacent_nodes(const Index& index){
+			node_sets s;
+			for (auto it = begin(index); it != end(index); ++it){
+				s.push_back(*it);
+			}
+			return s;
+		}
+		template<class Index, class Value, class EqualFunc>
+		typename graph<Index, Value, EqualFunc>::node_sets
+			graph<Index, Value, EqualFunc>::adjacent_nodes(const node& n){
+			return adjacent_nodes(n.first);
 		}
 		//********************************************************************************
 		template<class Index, class Value, class EqualFunc>

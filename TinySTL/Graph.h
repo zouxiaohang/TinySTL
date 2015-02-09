@@ -30,14 +30,15 @@ namespace TinySTL{
 			virtual ~graph(){};
 			virtual void add_node(const node& item, const node_sets& nodes) = 0;
 			//virtual void delte_node(const node& item) = 0;
-			//virtual node_sets adjacent_nodes(const node& n) = 0;
-			//virtual node_sets adjacent_nodes(const Index& index) = 0;
 			//virtual void DFS(visiter_func_type func) = 0;
 			//virtual void BFS(visiter_func_type func) = 0;
 
 			static node& new_node(const Index& index, const Value& val);
 			bool is_contained(const Index& index);
 			inline static node_sets empty_node_set();
+			node_sets adjacent_nodes(const Index& index);
+			node_sets adjacent_nodes(const node& n);
+
 			inline bool empty()const;
 			inline size_t size()const;
 			inline bucket_iterator begin(const Index& index);
@@ -56,7 +57,7 @@ namespace TinySTL{
 			typedef graph<Index, Value, EqualFunc> graph_type;
 			typedef typename list<typename graph_type::node>::iterator inner_it_type;
 		public:
-			graph_iterator(cntrPtr c, inner_it_type iit)
+			explicit graph_iterator(cntrPtr c = nullptr, inner_it_type iit = inner_it_type())
 				:container_(c), inner_it_(iit){}
 			graph_iterator& operator ++();
 			const graph_iterator operator ++(int);
