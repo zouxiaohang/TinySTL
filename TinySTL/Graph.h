@@ -3,6 +3,7 @@
 
 #include "Allocator.h"
 #include "List.h"
+#include "Unordered_set.h"
 #include "Utility.h"
 #include "Vector.h"
 
@@ -12,6 +13,7 @@ namespace TinySTL{
 	namespace Detail{
 		template<class Index, class Value, class EqualFunc>
 		class graph_iterator;
+
 		template<class Index, class Value, class EqualFunc = equal_to<Index>>
 		class graph{
 		public:
@@ -27,13 +29,18 @@ namespace TinySTL{
 			typedef std::function<void(node&)> visiter_func_type;
 		public:
 			graph() :size_(0){};
-			virtual ~graph(){};
+			virtual ~graph(){ cleanup(); };
+
 			virtual void add_node(const node& item, const node_sets& nodes) = 0;
 			//virtual void delte_node(const node& item) = 0;
-			//virtual void DFS(visiter_func_type func) = 0;
+
+			void DFS(const Index& index, visiter_func_type func);
 			//virtual void BFS(visiter_func_type func) = 0;
 
-			static node& new_node(const Index& index, const Value& val);
+			node& new_node(const Index& index, const Value& val);
+			void del_node(node *p);
+			node& get_node(const Index& index);
+
 			bool is_contained(const Index& index);
 			inline static node_sets empty_node_set();
 			node_sets adjacent_nodes(const Index& index);
@@ -47,6 +54,8 @@ namespace TinySTL{
 			list<pair<node, list<node>>> nodes_;
 			equal_func_type equal_func;
 			size_t size_;
+		protected:
+			void cleanup();
 		};
 
 		template<class Index, class Value, class EqualFunc = equal_to<Index>>

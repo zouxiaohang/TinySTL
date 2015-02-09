@@ -10,6 +10,27 @@ namespace TinySTL{
 			return *ptr;
 		}
 		template<class Index, class Value, class EqualFunc>
+		void graph<Index, Value, EqualFunc>::del_node(node *p){
+			nodeAllocator::destroy(p);
+			nodeAllocator::deallocate(p);
+		}
+		template<class Index, class Value, class EqualFunc>
+		typename graph<Index, Value, EqualFunc>::node& 
+			graph<Index, Value, EqualFunc>::get_node(const Index& index){
+			for (auto& pair : nodes_){
+				if (equal_func(pair.first.first, index))
+					return pair.first;
+			}
+		}
+		template<class Index, class Value, class EqualFunc>
+		void graph<Index, Value, EqualFunc>::cleanup(){
+			for (auto out = nodes_.begin(); out != nodes_.end(); ++out){
+				for (auto in = (out->second).begin(); in != (out->second).end(); ++in){
+					del_node(&(*in));
+				}
+			}
+		}
+		template<class Index, class Value, class EqualFunc>
 		bool graph<Index, Value, EqualFunc>::is_contained(const Index& index){
 			for (auto& pair : nodes_){
 				if (equal_func(pair.first.first, index))
@@ -63,15 +84,23 @@ namespace TinySTL{
 			graph<Index, Value, EqualFunc>::adjacent_nodes(const node& n){
 			return adjacent_nodes(n.first);
 		}
+		template<class Index, class Value, class EqualFunc>
+		void graph<Index, Value, EqualFunc>::DFS(const Index& index, visiter_func_type func){
+			node *start = &(get_node(index));
+			Unordered_set<Index, std::hash<Index>, EqualFunc> visited(7);
+
+			auto nodes = adjacent_nodes(start->first);
+			func(*start);
+			visited.insert(start->first);
+			for (auto& n : nodes){
+				if (visited.count(n.first) == 0)//has not visited
+					DFS(n.first, func);
+			}
+		}
 		//********************************************************************************
 		template<class Index, class Value, class EqualFunc>
 		graph_iterator<Index, Value, EqualFunc>& graph_iterator<Index, Value, EqualFunc>::operator ++(){
 			++inner_it_;
-			//if (inner_it_ == (outter_it_->second).end()){//to end
-			//	++outter_it_;
-			//	if (outter_it_ != container_->nodes_.end())//not to end
-			//		inner_it_ = (outter_it_->second).begin();
-			//}
 			return *this;
 		}
 		template<class Index, class Value, class EqualFunc>
