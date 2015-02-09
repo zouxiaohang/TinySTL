@@ -21,6 +21,7 @@ namespace TinySTL{
 				if (equal_func(pair.first.first, index))
 					return pair.first;
 			}
+			return node();
 		}
 		template<class Index, class Value, class EqualFunc>
 		void graph<Index, Value, EqualFunc>::cleanup(){
@@ -48,23 +49,31 @@ namespace TinySTL{
 			return nodes_.empty();
 		}
 		template<class Index, class Value, class EqualFunc>
-		typename graph<Index, Value, EqualFunc>::bucket_iterator
+		typename graph<Index, Value, EqualFunc>::inner_iterator
 			graph<Index, Value, EqualFunc>::begin(const Index& index){
 			for (auto& pair : nodes_){
 				if (equal_func(pair.first.first, index))
-					return bucket_iterator(this, (pair.second).begin());
+					return inner_iterator(this, (pair.second).begin());
 			}
 			return end(index);
 		}
 		template<class Index, class Value, class EqualFunc>
-		typename graph<Index, Value, EqualFunc>::bucket_iterator
+		typename graph<Index, Value, EqualFunc>::inner_iterator
 			graph<Index, Value, EqualFunc>::end(const Index& index){
 			for (auto& pair : nodes_){
 				if (equal_func(pair.first.first, index))
-					return bucket_iterator(this, (pair.second).end());
+					return inner_iterator(this, (pair.second).end());
 			}
 			//throw std::exception("return end error");
-			return bucket_iterator();
+			return inner_iterator();
+		}
+		template<class Index, class Value, class EqualFunc>
+		typename graph<Index, Value, EqualFunc>::iterator graph<Index, Value, EqualFunc>::begin(){
+			return iterator(this, nodes_.begin());
+		}
+		template<class Index, class Value, class EqualFunc>
+		typename graph<Index, Value, EqualFunc>::iterator graph<Index, Value, EqualFunc>::end(){
+			return iterator(this, nodes_.end());
 		}
 		template<class Index, class Value, class EqualFunc>
 		size_t graph<Index, Value, EqualFunc>::size()const{
@@ -99,26 +108,46 @@ namespace TinySTL{
 		}
 		//********************************************************************************
 		template<class Index, class Value, class EqualFunc>
-		graph_iterator<Index, Value, EqualFunc>& graph_iterator<Index, Value, EqualFunc>::operator ++(){
+		inner_iterator<Index, Value, EqualFunc>& inner_iterator<Index, Value, EqualFunc>::operator ++(){
 			++inner_it_;
 			return *this;
 		}
 		template<class Index, class Value, class EqualFunc>
-		const graph_iterator<Index, Value, EqualFunc> graph_iterator<Index, Value, EqualFunc>::operator ++(int){
+		const inner_iterator<Index, Value, EqualFunc> inner_iterator<Index, Value, EqualFunc>::operator ++(int){
 			auto temp = *this;
 			++*this;
 			return temp;
 		}
 		template<class Index, class Value, class EqualFunc>
-		bool operator ==(const graph_iterator<Index, Value, EqualFunc>& lhs,
-			const graph_iterator<Index, Value, EqualFunc>& rhs){
-			return lhs.container_ == rhs.container_ &&
-				//lhs.outter_it_ == rhs.outter_it_ &&
-				lhs.inner_it_ == rhs.inner_it_;
+		bool operator ==(const inner_iterator<Index, Value, EqualFunc>& lhs,
+			const inner_iterator<Index, Value, EqualFunc>& rhs){
+			return lhs.container_ == rhs.container_ && lhs.inner_it_ == rhs.inner_it_;
 		}
 		template<class Index, class Value, class EqualFunc>
-		bool operator !=(const graph_iterator<Index, Value, EqualFunc>& lhs,
-			const graph_iterator<Index, Value, EqualFunc>& rhs){
+		bool operator !=(const inner_iterator<Index, Value, EqualFunc>& lhs,
+			const inner_iterator<Index, Value, EqualFunc>& rhs){
+			return !(lhs == rhs);
+		}
+		//*********************************************************************************
+		template<class Index, class Value, class EqualFunc>
+		outter_iterator<Index, Value, EqualFunc>& outter_iterator<Index, Value, EqualFunc>::operator ++(){
+			++outter_it_;
+			return *this;
+		}
+		template<class Index, class Value, class EqualFunc>
+		const outter_iterator<Index, Value, EqualFunc> outter_iterator<Index, Value, EqualFunc>::operator ++(int){
+			auto temp = *this;
+			++*this;
+			return temp;
+		}
+		template<class Index, class Value, class EqualFunc>
+		bool operator ==(const outter_iterator<Index, Value, EqualFunc>& lhs,
+			const outter_iterator<Index, Value, EqualFunc>& rhs){
+			return lhs.container_ == rhs.container_ && lhs.outter_it_ == rhs.outter_it_;
+		}
+		template<class Index, class Value, class EqualFunc>
+		bool operator !=(const outter_iterator<Index, Value, EqualFunc>& lhs,
+			const outter_iterator<Index, Value, EqualFunc>& rhs){
 			return !(lhs == rhs);
 		}
 	}//end of Detail
