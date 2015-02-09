@@ -32,8 +32,7 @@ namespace TinySTL{
 					parent_.push(ptr_);
 					ptr_ = ptr_->left_;
 				}
-			}
-			else{//node无右子树则只能向父节点路径移动
+			}else{//node无右子树则只能向父节点路径移动
 				ptr_ = 0;//add 2015.01.14
 				while (!parent_.empty()){
 					ptr_ = parent_.top();
