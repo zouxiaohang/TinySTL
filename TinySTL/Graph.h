@@ -40,12 +40,14 @@ namespace TinySTL{
 
 			//node can be not in the graph
 			virtual void add_node(const node& item, const node_sets& nodes) = 0;
-			//node of the index must in the graph
-			virtual void add_node(const Index& index, const node_sets& nodes) = 0;
 			//virtual void delte_node(const node& item) = 0;
 
+			//node of the index must in the graph
+			virtual void add_node(const Index& index, const node_sets& nodes) = 0;
+			//virtual void delte_node(const Index& index) = 0;
+
 			void DFS(const Index& index, visiter_func_type func);
-			//virtual void BFS(visiter_func_type func) = 0;
+			void BFS(const Index& index, visiter_func_type func);
 
 			node& new_node(const Index& index, const Value& val);
 			void del_node(node *p);

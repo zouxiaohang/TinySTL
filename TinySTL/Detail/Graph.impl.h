@@ -101,10 +101,31 @@ namespace TinySTL{
 			auto nodes = adjacent_nodes(start->first);
 			func(*start);
 			visited.insert(start->first);
-			for (auto& n : nodes){
+			for (const auto& n : nodes){
 				if (visited.count(n.first) == 0)//has not visited
 					DFS(n.first, func);
 			}
+		}
+		template<class Index, class Value, class EqualFunc>
+		void graph<Index, Value, EqualFunc>::BFS(const Index& index, visiter_func_type func){
+			node *start = &(get_node(index));
+			Unordered_set<Index, std::hash<Index>, EqualFunc> visited(7);
+
+			auto nodes = adjacent_nodes(start->first);
+			func(*start);
+			visited.insert(start->first);
+			do{
+				node_sets temp;
+				for (auto it = nodes.begin(); it != nodes.end(); ++it){
+					if (visited.count(it->first) == 0){//has not visited
+						func(*it);
+						visited.insert(it->first);
+						auto s = adjacent_nodes(it->first);						
+						temp.insert(temp.end(), s.begin(), s.end());
+					}
+				}
+				nodes = temp;
+			} while (!nodes.empty());
 		}
 		template<class Index, class Value, class EqualFunc>
 		string graph<Index, Value, EqualFunc>::to_string(){
