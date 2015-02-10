@@ -3,11 +3,14 @@
 
 #include "Allocator.h"
 #include "List.h"
+#include "String.h"
 #include "Unordered_set.h"
 #include "Utility.h"
 #include "Vector.h"
 
 #include <functional>
+#include <iomanip>
+#include <sstream>
 
 namespace TinySTL{
 	namespace Detail{
@@ -17,7 +20,7 @@ namespace TinySTL{
 		class outter_iterator;
 
 		template<class Index, class Value, class EqualFunc = equal_to<Index>>
-		class graph{
+		class graph{//base class
 		public:
 			friend class inner_iterator < Index, Value, EqualFunc >;
 			friend class outter_iterator < Index, Value, EqualFunc > ;
@@ -35,7 +38,10 @@ namespace TinySTL{
 			graph() :size_(0){};
 			virtual ~graph(){ cleanup(); };
 
+			//node can be not in the graph
 			virtual void add_node(const node& item, const node_sets& nodes) = 0;
+			//node of the index must in the graph
+			virtual void add_node(const Index& index, const node_sets& nodes) = 0;
 			//virtual void delte_node(const node& item) = 0;
 
 			void DFS(const Index& index, visiter_func_type func);
@@ -56,6 +62,8 @@ namespace TinySTL{
 			inline inner_iterator end(const Index& index);
 			inline iterator begin();
 			inline iterator end();
+
+			string to_string();
 		protected:
 			list<pair<node, list<node>>> nodes_;
 			equal_func_type equal_func;
@@ -124,6 +132,9 @@ namespace TinySTL{
 		~directed_graph(){}
 		//node n -> every node in the nodes set
 		void add_node(const node& n, const node_sets& nodes) override;
+		void add_node(const Index& index, const node_sets& nodes) override;
+	private:
+		void add_node_helper(const Index& index, const node_sets& nodes);
 	};
 }
 

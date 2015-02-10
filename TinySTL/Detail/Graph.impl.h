@@ -106,6 +106,23 @@ namespace TinySTL{
 					DFS(n.first, func);
 			}
 		}
+		template<class Index, class Value, class EqualFunc>
+		string graph<Index, Value, EqualFunc>::to_string(){
+			string str;
+			std::ostringstream oss;
+			for (auto oit = begin(); oit != end(); ++oit){
+				
+				oss << "[" << oit->first << "," << oit->second << "]" << ":";
+				auto eit = end(oit->first);
+				for (auto iit = begin(oit->first); iit != eit; ++iit){
+					oss << "[" << iit->first << ", " << iit->second << "]" << "-";
+				}
+				oss << "[NULL,NULL]" << std::endl << std::setw(4) << "|" << std::endl;
+			}
+			oss << "[NULL,NULL]" << std::endl;
+			str.append(oss.str().c_str());
+			return str;
+		}
 		//********************************************************************************
 		template<class Index, class Value, class EqualFunc>
 		inner_iterator<Index, Value, EqualFunc>& inner_iterator<Index, Value, EqualFunc>::operator ++(){
@@ -155,17 +172,13 @@ namespace TinySTL{
 	template<class Index, class Value, class EqualFunc>
 	directed_graph<Index, Value, EqualFunc>::directed_graph():graph(){}
 	template<class Index, class Value, class EqualFunc>
-	void directed_graph<Index, Value, EqualFunc>::add_node(const node& n, const node_sets& nodes){
-		if (!is_contained(n.first)){
-			nodes_.push_front(make_pair(n, list<typename graph::node>()));
-			++size_;
-		}
+	void directed_graph<Index, Value, EqualFunc>::add_node_helper(const Index& index, const node_sets& nodes){
 		if (nodes.empty())
 			return;
 		//find node n's list
 		list<typename graph::node>* l;
 		for (auto& pair : nodes_){
-			if (equal_func(pair.first.first, n.first))
+			if (equal_func(pair.first.first, index))
 				l = &(pair.second);
 		}
 		for (const auto& item : nodes){
@@ -174,5 +187,17 @@ namespace TinySTL{
 				add_node(item, empty_node_set());
 			}
 		}
+	}
+	template<class Index, class Value, class EqualFunc>
+	void directed_graph<Index, Value, EqualFunc>::add_node(const node& n, const node_sets& nodes){
+		if (!is_contained(n.first)){
+			nodes_.push_front(make_pair(n, list<typename graph::node>()));
+			++size_;
+		}
+		add_node_helper(n.first, nodes);
+	}
+	template<class Index, class Value, class EqualFunc>
+	void directed_graph<Index, Value, EqualFunc>::add_node(const Index& index, const node_sets& nodes){
+		add_node_helper(index, nodes);
 	}
 }
