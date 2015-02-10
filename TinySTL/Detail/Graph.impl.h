@@ -3,25 +3,25 @@
 namespace TinySTL{
 	namespace Detail{
 		template<class Index, class Value, class EqualFunc>
-		typename graph<Index, Value, EqualFunc>::node&
+		typename graph<Index, Value, EqualFunc>::node_type&
 			graph<Index, Value, EqualFunc>::new_node(const Index& index, const Value& val){
 			auto ptr = nodeAllocator::allocate();
-			nodeAllocator::construct(ptr, node(index, val));
+			nodeAllocator::construct(ptr, node_type(index, val));
 			return *ptr;
 		}
 		template<class Index, class Value, class EqualFunc>
-		void graph<Index, Value, EqualFunc>::del_node(node *p){
+		void graph<Index, Value, EqualFunc>::del_node(node_type *p){
 			nodeAllocator::destroy(p);
 			nodeAllocator::deallocate(p);
 		}
 		template<class Index, class Value, class EqualFunc>
-		typename graph<Index, Value, EqualFunc>::node& 
+		typename graph<Index, Value, EqualFunc>::node_type& 
 			graph<Index, Value, EqualFunc>::get_node(const Index& index){
 			for (auto& pair : nodes_){
 				if (equal_func(pair.first.first, index))
 					return pair.first;
 			}
-			return node();
+			return node_type();
 		}
 		template<class Index, class Value, class EqualFunc>
 		void graph<Index, Value, EqualFunc>::cleanup(){
@@ -40,9 +40,9 @@ namespace TinySTL{
 			return false;
 		}
 		template<class Index, class Value, class EqualFunc>
-		typename graph<Index, Value, EqualFunc>::node_sets
+		typename graph<Index, Value, EqualFunc>::nodes_set_type
 			graph<Index, Value, EqualFunc>::empty_node_set(){
-			return node_sets();
+			return nodes_set_type();
 		}
 		template<class Index, class Value, class EqualFunc>
 		bool graph<Index, Value, EqualFunc>::empty()const{
@@ -80,22 +80,22 @@ namespace TinySTL{
 			return size_;
 		}
 		template<class Index, class Value, class EqualFunc>
-		typename graph<Index, Value, EqualFunc>::node_sets 
+		typename graph<Index, Value, EqualFunc>::nodes_set_type 
 			graph<Index, Value, EqualFunc>::adjacent_nodes(const Index& index){
-			node_sets s;
+			nodes_set_type s;
 			for (auto it = begin(index); it != end(index); ++it){
 				s.push_back(*it);
 			}
 			return s;
 		}
 		template<class Index, class Value, class EqualFunc>
-		typename graph<Index, Value, EqualFunc>::node_sets
-			graph<Index, Value, EqualFunc>::adjacent_nodes(const node& n){
+		typename graph<Index, Value, EqualFunc>::nodes_set_type
+			graph<Index, Value, EqualFunc>::adjacent_nodes(const node_type& n){
 			return adjacent_nodes(n.first);
 		}
 		template<class Index, class Value, class EqualFunc>
 		void graph<Index, Value, EqualFunc>::DFS(const Index& index, visiter_func_type func){
-			node *start = &(get_node(index));
+			node_type *start = &(get_node(index));
 			Unordered_set<Index, std::hash<Index>, EqualFunc> visited(7);
 
 			auto nodes = adjacent_nodes(start->first);
@@ -108,14 +108,14 @@ namespace TinySTL{
 		}
 		template<class Index, class Value, class EqualFunc>
 		void graph<Index, Value, EqualFunc>::BFS(const Index& index, visiter_func_type func){
-			node *start = &(get_node(index));
+			node_type *start = &(get_node(index));
 			Unordered_set<Index, std::hash<Index>, EqualFunc> visited(7);
 
 			auto nodes = adjacent_nodes(start->first);
 			func(*start);
 			visited.insert(start->first);
 			do{
-				node_sets temp;
+				nodes_set_type temp;
 				for (auto it = nodes.begin(); it != nodes.end(); ++it){
 					if (visited.count(it->first) == 0){//has not visited
 						func(*it);
@@ -136,13 +136,18 @@ namespace TinySTL{
 				oss << "[" << oit->first << "," << oit->second << "]" << ":";
 				auto eit = end(oit->first);
 				for (auto iit = begin(oit->first); iit != eit; ++iit){
-					oss << "[" << iit->first << ", " << iit->second << "]" << "-";
+					oss << "[" << iit->first << ", " << iit->second << "]" << "->";
 				}
-				oss << "[nil,nil]" << std::endl << std::setw(4) << "|" << std::endl;
+				oss << "[nil]" << std::endl << std::setw(4) << "|" << std::endl;
 			}
-			oss << "[nil,nil]" << std::endl;
+			oss << "[nil]" << std::endl;
 			str.append(oss.str().c_str());
 			return str;
+		}
+		template<class Index, class Value, class EqualFunc>
+		typename graph<Index, Value, EqualFunc>::equal_func_type
+			graph<Index, Value, EqualFunc>::get_equal_func()const{
+			return equal_func;
 		}
 		//********************************************************************************
 		template<class Index, class Value, class EqualFunc>
@@ -193,11 +198,11 @@ namespace TinySTL{
 	template<class Index, class Value, class EqualFunc>
 	directed_graph<Index, Value, EqualFunc>::directed_graph():graph(){}
 	template<class Index, class Value, class EqualFunc>
-	void directed_graph<Index, Value, EqualFunc>::add_node_helper(const Index& index, const node_sets& nodes){
+	void directed_graph<Index, Value, EqualFunc>::add_node_helper(const Index& index, const nodes_set_type& nodes){
 		if (nodes.empty())
 			return;
 		//find node n's list
-		list<typename graph::node>* l;
+		list<typename graph::node_type>* l;
 		for (auto& pair : nodes_){
 			if (equal_func(pair.first.first, index))
 				l = &(pair.second);
@@ -210,36 +215,42 @@ namespace TinySTL{
 		}
 	}
 	template<class Index, class Value, class EqualFunc>
-	void directed_graph<Index, Value, EqualFunc>::add_node(const node& n, const node_sets& nodes){
+	void directed_graph<Index, Value, EqualFunc>::add_node(const node_type& n, const nodes_set_type& nodes){
 		if (!is_contained(n.first)){
-			nodes_.push_front(make_pair(n, list<typename graph::node>()));
+			nodes_.push_front(make_pair(n, list<typename graph::node_type>()));
 			++size_;
 		}
 		add_node_helper(n.first, nodes);
 	}
 	template<class Index, class Value, class EqualFunc>
-	void directed_graph<Index, Value, EqualFunc>::add_node(const Index& index, const node_sets& nodes){
+	void directed_graph<Index, Value, EqualFunc>::add_node(const Index& index, const nodes_set_type& nodes){
 		add_node_helper(index, nodes);
 	}
 	template<class Index, class Value, class EqualFunc>
 	void directed_graph<Index, Value, EqualFunc>::delete_node(const Index& index){
 		for (auto oit = nodes_.begin(); oit != nodes_.end();){
-			if (equal_func((oit->first).first, index))
+			auto& l = oit->second;
+			if (equal_func((oit->first).first, index)){
+				for (auto iit = l.begin(); iit != l.end(); ++iit){
+					del_node(&(*iit));
+				}
+				del_node(&(oit->first));
 				oit = nodes_.erase(oit);
-			else{
-				auto& l = oit->second;
+			}else{
 				for (auto iit = l.begin(); iit != l.end();){
-					if (equal_func(iit->first, index))
+					if (equal_func(iit->first, index)){
+						del_node(&(*iit));
 						iit = l.erase(iit);
-					else
+					}else{
 						++iit;
+					}
 				}
 				++oit;
 			}
 		}
 	}
 	template<class Index, class Value, class EqualFunc>
-	void directed_graph<Index, Value, EqualFunc>::delete_node(const node& item){
+	void directed_graph<Index, Value, EqualFunc>::delete_node(const node_type& item){
 		delete_node(item.first);
 	}
 }

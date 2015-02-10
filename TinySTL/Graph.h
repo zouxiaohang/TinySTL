@@ -2,6 +2,7 @@
 #define _GRAPH_H_
 
 #include "Allocator.h"
+#include "Iterator.h"
 #include "List.h"
 #include "String.h"
 #include "Unordered_set.h"
@@ -28,35 +29,35 @@ namespace TinySTL{
 			typedef Index index_type;
 			typedef Value value_type;
 			typedef EqualFunc equal_func_type;
-			typedef pair<Index, Value> node;
-			typedef vector<node> node_sets;
-			typedef inner_iterator<Index, Value, EqualFunc> inner_iterator;
+			typedef pair<Index, Value> node_type;
+			typedef vector<node_type> nodes_set_type;
+			typedef allocator<node_type> nodeAllocator;
+			typedef std::function<void(node_type&)> visiter_func_type;
 			typedef outter_iterator<Index, Value, EqualFunc> iterator;
-			typedef allocator<node> nodeAllocator;
-			typedef std::function<void(node&)> visiter_func_type;
+			typedef inner_iterator<Index, Value, EqualFunc> inner_iterator;
 		public:
 			graph() :size_(0){};
 			virtual ~graph(){ cleanup(); };
 
 			//node can be not in the graph
-			virtual void add_node(const node& item, const node_sets& nodes) = 0;
+			virtual void add_node(const node_type& item, const nodes_set_type& nodes) = 0;
 			//node of the index must in the graph
-			virtual void add_node(const Index& index, const node_sets& nodes) = 0;
+			virtual void add_node(const Index& index, const nodes_set_type& nodes) = 0;
 
-			virtual void delete_node(const node& item) = 0;
+			virtual void delete_node(const node_type& item) = 0;
 			virtual void delete_node(const Index& index) = 0;
 
 			void DFS(const Index& index, visiter_func_type func);
 			void BFS(const Index& index, visiter_func_type func);
 
-			node& new_node(const Index& index, const Value& val);
-			void del_node(node *p);
-			node& get_node(const Index& index);
+			node_type& new_node(const Index& index, const Value& val);
+			void del_node(node_type *p);
+			node_type& get_node(const Index& index);
 
 			bool is_contained(const Index& index);
-			inline static node_sets empty_node_set();
-			node_sets adjacent_nodes(const Index& index);
-			node_sets adjacent_nodes(const node& n);
+			inline static nodes_set_type empty_node_set();
+			nodes_set_type adjacent_nodes(const Index& index);
+			nodes_set_type adjacent_nodes(const node_type& n);
 
 			inline bool empty()const;
 			inline size_t size()const;
@@ -65,9 +66,10 @@ namespace TinySTL{
 			inline iterator begin();
 			inline iterator end();
 
+			equal_func_type get_equal_func()const;
 			string to_string();
 		protected:
-			list<pair<node, list<node>>> nodes_;
+			list<pair<node_type, list<node_type>>> nodes_;
 			equal_func_type equal_func;
 			size_t size_;
 		protected:
@@ -75,19 +77,22 @@ namespace TinySTL{
 		};
 
 		template<class Index, class Value, class EqualFunc = equal_to<Index>>
-		class inner_iterator{
+		class inner_iterator :public iterator<bidirectional_iterator_tag, 
+			typename graph<Index, Value, EqualFunc>::node_type>{
 		public:
 			friend class graph < Index, Value, EqualFunc > ;
 			typedef graph<Index, Value, EqualFunc>* cntrPtr;
 			typedef graph<Index, Value, EqualFunc> graph_type;
-			typedef typename list<typename graph_type::node>::iterator inner_it_type;
+			typedef typename list<typename graph_type::node_type>::iterator inner_it_type;
 		public:
 			explicit inner_iterator(cntrPtr c = nullptr, inner_it_type iit = inner_it_type())
 				:container_(c), inner_it_(iit){}
+
 			inner_iterator& operator ++();
 			const inner_iterator operator ++(int);
-			typename graph_type::node& operator*(){ return *inner_it_; }
-			typename graph_type::node* operator ->(){ return &(operator*()); }
+
+			typename graph_type::node_type& operator*(){ return *inner_it_; }
+			typename graph_type::node_type* operator ->(){ return &(operator*()); }
 		private:
 			cntrPtr container_;
 			inner_it_type inner_it_;
@@ -100,22 +105,25 @@ namespace TinySTL{
 				const inner_iterator<Index, Value, EqualFunc>& rhs);
 		};
 		template<class Index, class Value, class EqualFunc = equal_to<Index>>
-		class outter_iterator{
+		class outter_iterator :public iterator<bidirectional_iterator_tag,
+			typename graph<Index, Value, EqualFunc>::node_type>{
 		public:
 			friend class graph < Index, Value, EqualFunc >;
 			typedef graph<Index, Value, EqualFunc>* cntrPtr;
 			typedef graph<Index, Value, EqualFunc> graph_type;
-			typedef typename list<pair<typename graph_type::node, list<typename graph_type::node>>>::iterator outter_it_type;
+			typedef typename list<pair<typename graph_type::node_type, list<typename graph_type::node_type>>>::iterator outter_it_type;
 		private:
 			cntrPtr container_;
 			outter_it_type outter_it_;
 		public:
 			explicit outter_iterator(cntrPtr c = nullptr, outter_it_type oit = outter_it_type())
 				:container_(c), outter_it_(oit){}
+
 			outter_iterator& operator ++();
 			const outter_iterator operator ++(int);
-			typename graph_type::node& operator*(){ return outter_it_->first; }
-			typename graph_type::node* operator ->(){ return &(operator*()); }
+
+			typename graph_type::node_type& operator*(){ return outter_it_->first; }
+			typename graph_type::node_type* operator ->(){ return &(operator*()); }
 		public:
 			template<class Index, class Value, class EqualFunc>
 			friend bool operator ==(const outter_iterator<Index, Value, EqualFunc>& lhs,
@@ -126,20 +134,20 @@ namespace TinySTL{
 		};
 	}//end of namespace Detail
 
-	//ÓÐÏòÍ¼
+	//directed graph
 	template<class Index, class Value, class EqualFunc = equal_to<Index>>
 	class directed_graph :public Detail::graph < Index, Value, EqualFunc > {
 	public:
 		directed_graph();
 		~directed_graph(){}
-		//node n -> every node in the nodes set
-		void add_node(const node& n, const node_sets& nodes) override final;
-		void add_node(const Index& index, const node_sets& nodes) override final;
+		//node n -> every node_type in the nodes set
+		void add_node(const node_type& n, const nodes_set_type& nodes) override final;
+		void add_node(const Index& index, const nodes_set_type& nodes) override final;
 
-		void delete_node(const node& item) override final;
+		void delete_node(const node_type& item) override final;
 		void delete_node(const Index& index) override final;
 	private:
-		void add_node_helper(const Index& index, const node_sets& nodes);
+		void add_node_helper(const Index& index, const nodes_set_type& nodes);
 	};
 }
 
