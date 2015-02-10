@@ -48,7 +48,6 @@ namespace TinySTL{
 			void DFS(const Index& index, visiter_func_type func);
 			void BFS(const Index& index, visiter_func_type func);
 
-			//node_type& new_node(const Index& index, const Value& val);
 			node_type make_node(const Index& index, const Value& val);
 			node_type& get_node(const Index& index);
 
@@ -57,12 +56,12 @@ namespace TinySTL{
 			nodes_set_type adjacent_nodes(const Index& index);
 			nodes_set_type adjacent_nodes(const node_type& n);
 
-			inline bool empty()const;
-			inline size_t size()const;
-			inline inner_iterator begin(const Index& index);
-			inline inner_iterator end(const Index& index);
-			inline iterator begin();
-			inline iterator end();
+			bool empty()const;
+			size_t size()const;
+			inner_iterator begin(const Index& index);
+			inner_iterator end(const Index& index);
+			iterator begin();
+			iterator end();
 
 			equal_func_type get_equal_func()const;
 			string to_string();
