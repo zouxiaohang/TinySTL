@@ -3,16 +3,9 @@
 namespace TinySTL{
 	namespace Detail{
 		template<class Index, class Value, class EqualFunc>
-		typename graph<Index, Value, EqualFunc>::node_type&
-			graph<Index, Value, EqualFunc>::new_node(const Index& index, const Value& val){
-			auto ptr = nodeAllocator::allocate();
-			nodeAllocator::construct(ptr, node_type(index, val));
-			return *ptr;
-		}
-		template<class Index, class Value, class EqualFunc>
-		void graph<Index, Value, EqualFunc>::del_node(node_type *p){
-			nodeAllocator::destroy(p);
-			nodeAllocator::deallocate(p);
+		typename graph<Index, Value, EqualFunc>::node_type
+			graph<Index, Value, EqualFunc>::make_node(const Index& index, const Value& val){
+			return node_type(index, val);
 		}
 		template<class Index, class Value, class EqualFunc>
 		typename graph<Index, Value, EqualFunc>::node_type& 
@@ -22,14 +15,6 @@ namespace TinySTL{
 					return pair.first;
 			}
 			return node_type();
-		}
-		template<class Index, class Value, class EqualFunc>
-		void graph<Index, Value, EqualFunc>::cleanup(){
-			for (auto out = nodes_.begin(); out != nodes_.end(); ++out){
-				for (auto in = (out->second).begin(); in != (out->second).end(); ++in){
-					del_node(&(*in));
-				}
-			}
 		}
 		template<class Index, class Value, class EqualFunc>
 		bool graph<Index, Value, EqualFunc>::is_contained(const Index& index){
@@ -64,7 +49,6 @@ namespace TinySTL{
 				if (equal_func(pair.first.first, index))
 					return inner_iterator(this, (pair.second).end());
 			}
-			//throw std::exception("return end error");
 			return inner_iterator();
 		}
 		template<class Index, class Value, class EqualFunc>
@@ -231,19 +215,13 @@ namespace TinySTL{
 		for (auto oit = nodes_.begin(); oit != nodes_.end();){
 			auto& l = oit->second;
 			if (equal_func((oit->first).first, index)){
-				for (auto iit = l.begin(); iit != l.end(); ++iit){
-					del_node(&(*iit));
-				}
-				del_node(&(oit->first));
 				oit = nodes_.erase(oit);
 			}else{
 				for (auto iit = l.begin(); iit != l.end();){
-					if (equal_func(iit->first, index)){
-						del_node(&(*iit));
+					if (equal_func(iit->first, index))
 						iit = l.erase(iit);
-					}else{
+					else
 						++iit;
-					}
 				}
 				++oit;
 			}

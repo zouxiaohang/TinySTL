@@ -1,7 +1,6 @@
 #ifndef _GRAPH_H_
 #define _GRAPH_H_
 
-#include "Allocator.h"
 #include "Iterator.h"
 #include "List.h"
 #include "String.h"
@@ -31,13 +30,12 @@ namespace TinySTL{
 			typedef EqualFunc equal_func_type;
 			typedef pair<Index, Value> node_type;
 			typedef vector<node_type> nodes_set_type;
-			typedef allocator<node_type> nodeAllocator;
 			typedef std::function<void(node_type&)> visiter_func_type;
 			typedef outter_iterator<Index, Value, EqualFunc> iterator;
 			typedef inner_iterator<Index, Value, EqualFunc> inner_iterator;
 		public:
 			graph() :size_(0){};
-			virtual ~graph(){ cleanup(); };
+			virtual ~graph(){};
 
 			//node can be not in the graph
 			virtual void add_node(const node_type& item, const nodes_set_type& nodes) = 0;
@@ -50,8 +48,8 @@ namespace TinySTL{
 			void DFS(const Index& index, visiter_func_type func);
 			void BFS(const Index& index, visiter_func_type func);
 
-			node_type& new_node(const Index& index, const Value& val);
-			void del_node(node_type *p);
+			//node_type& new_node(const Index& index, const Value& val);
+			node_type make_node(const Index& index, const Value& val);
 			node_type& get_node(const Index& index);
 
 			bool is_contained(const Index& index);
@@ -72,8 +70,6 @@ namespace TinySTL{
 			list<pair<node_type, list<node_type>>> nodes_;
 			equal_func_type equal_func;
 			size_t size_;
-		protected:
-			void cleanup();
 		};
 
 		template<class Index, class Value, class EqualFunc = equal_to<Index>>
