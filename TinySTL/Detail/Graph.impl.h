@@ -138,9 +138,9 @@ namespace TinySTL{
 				for (auto iit = begin(oit->first); iit != eit; ++iit){
 					oss << "[" << iit->first << ", " << iit->second << "]" << "-";
 				}
-				oss << "[NULL,NULL]" << std::endl << std::setw(4) << "|" << std::endl;
+				oss << "[nil,nil]" << std::endl << std::setw(4) << "|" << std::endl;
 			}
-			oss << "[NULL,NULL]" << std::endl;
+			oss << "[nil,nil]" << std::endl;
 			str.append(oss.str().c_str());
 			return str;
 		}
@@ -220,5 +220,26 @@ namespace TinySTL{
 	template<class Index, class Value, class EqualFunc>
 	void directed_graph<Index, Value, EqualFunc>::add_node(const Index& index, const node_sets& nodes){
 		add_node_helper(index, nodes);
+	}
+	template<class Index, class Value, class EqualFunc>
+	void directed_graph<Index, Value, EqualFunc>::delete_node(const Index& index){
+		for (auto oit = nodes_.begin(); oit != nodes_.end();){
+			if (equal_func((oit->first).first, index))
+				oit = nodes_.erase(oit);
+			else{
+				auto& l = oit->second;
+				for (auto iit = l.begin(); iit != l.end();){
+					if (equal_func(iit->first, index))
+						iit = l.erase(iit);
+					else
+						++iit;
+				}
+				++oit;
+			}
+		}
+	}
+	template<class Index, class Value, class EqualFunc>
+	void directed_graph<Index, Value, EqualFunc>::delete_node(const node& item){
+		delete_node(item.first);
 	}
 }

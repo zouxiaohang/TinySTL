@@ -40,11 +40,11 @@ namespace TinySTL{
 
 			//node can be not in the graph
 			virtual void add_node(const node& item, const node_sets& nodes) = 0;
-			//virtual void delte_node(const node& item) = 0;
-
 			//node of the index must in the graph
 			virtual void add_node(const Index& index, const node_sets& nodes) = 0;
-			//virtual void delte_node(const Index& index) = 0;
+
+			virtual void delete_node(const node& item) = 0;
+			virtual void delete_node(const Index& index) = 0;
 
 			void DFS(const Index& index, visiter_func_type func);
 			void BFS(const Index& index, visiter_func_type func);
@@ -133,8 +133,11 @@ namespace TinySTL{
 		directed_graph();
 		~directed_graph(){}
 		//node n -> every node in the nodes set
-		void add_node(const node& n, const node_sets& nodes) override;
-		void add_node(const Index& index, const node_sets& nodes) override;
+		void add_node(const node& n, const node_sets& nodes) override final;
+		void add_node(const Index& index, const node_sets& nodes) override final;
+
+		void delete_node(const node& item) override final;
+		void delete_node(const Index& index) override final;
 	private:
 		void add_node_helper(const Index& index, const node_sets& nodes);
 	};
