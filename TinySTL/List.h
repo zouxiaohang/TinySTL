@@ -20,7 +20,7 @@ namespace TinySTL{
 			node *next;
 			list<T> *container;
 			node(const T& d, node *p, node *n, list<T> *c):
-				data(d), prev(p), node(n), container(c){}
+				data(d), prev(p), next(n), container(c){}
 			bool operator ==(const node& n){
 				return data == n.data && prev == n.prev && next == n.next && container == n.container;
 			}
