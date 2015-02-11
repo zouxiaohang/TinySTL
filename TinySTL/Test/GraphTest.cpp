@@ -51,10 +51,43 @@ namespace TinySTL{
 			g.delete_node(dGraph<int, int>::node_type(7, 77));
 			std::cout << g.to_string();
 		}
+		void testCase3(){
+			dGraph<int, int> g;
+			dGraph<int, int>::nodes_set_type set1, set2;
+			set1.push_back(g.make_node(1, 11));
+			set1.push_back(g.make_node(2, 22));
+			set1.push_back(g.make_node(3, 33));
+			g.add_node(g.make_node(0, 0), set1);
+
+			auto nodes = g.adjacent_nodes(0);
+			std::reverse(set1.begin(), set1.end());
+			assert(TinySTL::Test::container_equal(nodes, set1));
+
+			for (auto it = g.begin(0); it != g.end(0); ++it){
+				set2.push_back(*it);
+			}
+			assert(TinySTL::Test::container_equal(nodes, set2));
+		}
+		void testCase4(){
+			dGraph<int, int> g;
+			dGraph<int, int>::nodes_set_type set;
+			for (auto i = 0; i != 10; ++i){
+				auto node = g.make_node(i, i);
+				g.add_node(node, g.empty_node_set());
+				set.push_back(node);
+			}
+			std::reverse(set.begin(), set.end());
+			auto it2 = set.begin();
+			for (auto it1 = g.begin(); it1 != g.end() && it2 != set.end(); ++it1, ++it2){
+				assert(*it1 == *it2);
+			}
+		}
 
 		void testAllCases(){
 			testCase1();
 			testCase2();
+			testCase3();
+			testCase4();
 		}
 	}
 }
