@@ -90,6 +90,7 @@
     <ClCompile Include="Test\BitmapTest.cpp" />
     <ClCompile Include="Test\CircularBufferTest.cpp" />
     <ClCompile Include="Test\DequeTest.cpp" />
+    <ClCompile Include="Test\GraphTest.cpp" />
     <ClCompile Include="Test\ListTest.cpp" />
     <ClCompile Include="Test\PairTest.cpp" />
     <ClCompile Include="Test\PriorityQueueTest.cpp" />
@@ -115,10 +116,12 @@
     <ClInclude Include="Detail\Bitmap.impl.h" />
     <ClInclude Include="Detail\CircularBuffer.impl.h" />
     <ClInclude Include="Detail\Deque.impl.h" />
+    <ClInclude Include="Detail\Graph.impl.h" />
     <ClInclude Include="Detail\List.impl.h" />
     <ClInclude Include="Detail\Unordered_set.impl.h" />
     <ClInclude Include="Detail\Vector.impl.h" />
     <ClInclude Include="Functional.h" />
+    <ClInclude Include="Graph.h" />
     <ClInclude Include="Iterator.h" />
     <ClInclude Include="List.h" />
     <ClInclude Include="Profiler\Profiler.h" />
@@ -133,6 +136,7 @@
     <ClInclude Include="Test\BitmapTest.h" />
     <ClInclude Include="Test\CircularBufferTest.h" />
     <ClInclude Include="Test\DequeTest.h" />
+    <ClInclude Include="Test\GraphTest.h" />
     <ClInclude Include="Test\ListTest.h" />
     <ClInclude Include="Test\PairTest.h" />
     <ClInclude Include="Test\PriorityQueueTest.h" />
@@ -153,6 +157,10 @@
     <None Include="..\README.md" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="ScreenShots\graph1.png" />
+    <Image Include="ScreenShots\graph2.png" />
+    <Image Include="ScreenShots\graph_bfs.png" />
+    <Image Include="ScreenShots\graph_dfs.png" />
     <Image Include="ScreenShots\suffix_array.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

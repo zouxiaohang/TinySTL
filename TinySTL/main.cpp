@@ -9,6 +9,7 @@
 #include "Test\BinarySearchTreeTest.h"
 #include "Test\CircularBufferTest.h"
 #include "Test\DequeTest.h"
+#include "Test\GraphTest.h"
 #include "Test\ListTest.h"
 #include "Test\PairTest.h"
 #include "Test\PriorityQueueTest.h"
@@ -18,6 +19,8 @@
 #include "Test\SuffixArrayTest.h"
 #include "Test\Unordered_setTest.h"
 #include "Test\VectorTest.h"
+
+#include "Graph.h"
 
 using namespace TinySTL::Profiler;
 
@@ -29,6 +32,7 @@ int main(){
 	TinySTL::CircularBufferTest::testAllCases();
 	TinySTL::DequeTest::testAllCases();
 	TinySTL::ListTest::testAllCases();
+	TinySTL::GraphTest::testAllCases();
 	TinySTL::PairTest::testAllCases();
 	TinySTL::PriorityQueueTest::testAllCases();
 	TinySTL::QueueTest::testAllCases();

@@ -84,6 +84,9 @@
     <ClCompile Include="Test\Unordered_setTest.cpp">
       <Filter>Test</Filter>
     </ClCompile>
+    <ClCompile Include="Test\GraphTest.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TypeTraits.h">
@@ -227,12 +230,33 @@
     <ClInclude Include="Test\Unordered_setTest.h">
       <Filter>Test</Filter>
     </ClInclude>
+    <ClInclude Include="Graph.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Detail\Graph.impl.h">
+      <Filter>Detail</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\GraphTest.h">
+      <Filter>Test</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.md" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="ScreenShots\suffix_array.png">
+      <Filter>ScreenShots</Filter>
+    </Image>
+    <Image Include="ScreenShots\graph_bfs.png">
+      <Filter>ScreenShots</Filter>
+    </Image>
+    <Image Include="ScreenShots\graph_dfs.png">
+      <Filter>ScreenShots</Filter>
+    </Image>
+    <Image Include="ScreenShots\graph1.png">
+      <Filter>ScreenShots</Filter>
+    </Image>
+    <Image Include="ScreenShots\graph2.png">
       <Filter>ScreenShots</Filter>
     </Image>
   </ItemGroup>

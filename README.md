@@ -78,6 +78,7 @@ TinySTL
     * binary_search_tree：100%
     * avl_tree：100%
 	* suffix_array：100%
+	*directed_graph：100%
 
 ##TinySTL单元测试(原单元测试代码逐步)：
   * pair：100%
@@ -95,6 +96,7 @@ TinySTL
   * binary_search_tree：100%
   * avl_tree：100%
   * unordered_set：100%
+  *directed_graph：100%
 
 #TinySTL性能测试:
 ###测试环境：Windows 7 && VS2013 && release模式
@@ -420,7 +422,7 @@ TinySTL
 
 
 
-####(4):sort
+####(14):sort
 
     std::random_device rd;
 	const int len = 10000000;
@@ -440,3 +442,50 @@ TinySTL
 |std::sort|10万|13|  
 |std::sort|100万|147|  
 |std::sort|1000万|1730| 
+
+
+
+
+####(15):directed_graph
+
+    template<class Index, class Value>
+	using dGraph = TinySTL::directed_graph < Index, Value > ;
+	dGraph<int, int> g;
+	dGraph<int, int>::nodes_set_type set1, set2, set3;
+	set1.push_back(g.make_node(1, 11));
+	set1.push_back(g.make_node(2, 22));
+	set1.push_back(g.make_node(3, 33));
+	g.add_node(g.make_node(0, 0), set1);
+
+	set2.push_back(g.make_node(5, 55));
+	set2.push_back(g.make_node(6, 66));
+	set2.push_back(g.make_node(7, 77));
+	g.add_node(g.make_node(1, 11), set2);
+
+	set3.push_back(g.make_node(12, 1212));
+	set3.push_back(g.make_node(13, 1313));
+	set3.push_back(g.make_node(14, 1414));
+	g.add_node(7, set3);
+
+	g.make_edge(12, 2);
+	g.make_edge(12, 3);
+	g.make_edge(12, 0);
+	std::cout << "graph after add nodes:" << std::endl;
+	std::cout << g.to_string();
+
+	auto func = [](const dGraph<int, int>::node_type& node){
+		std::cout << "[" << node.first << "," << node.second << "]" << std::endl;
+	};
+	std::cout << "graph DFS from node(1, 11):" << std::endl;
+	g.DFS(1, func);
+	std::cout << "graph BFS from node(1, 11):" << std::endl;
+	g.BFS(1, func);
+
+	std::cout << "graph after delete node(7, 77):" << std::endl;
+	g.delete_node(dGraph<int, int>::node_type(7, 77));
+	std::cout << g.to_string();
+    
+![image](https://raw.githubusercontent.com/zouxiaohang/TinySTL/master/TinySTL/ScreenShots/graph1.png)  
+![image](https://raw.githubusercontent.com/zouxiaohang/TinySTL/master/TinySTL/ScreenShots/graph_dfs.png)  
+![image](https://raw.githubusercontent.com/zouxiaohang/TinySTL/master/TinySTL/ScreenShots/graph_bfs.png)  
+![image](https://raw.githubusercontent.com/zouxiaohang/TinySTL/master/TinySTL/ScreenShots/graph2.png)
