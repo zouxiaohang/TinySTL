@@ -8,13 +8,14 @@ namespace TinySTL{
 			return node_type(index, val);
 		}
 		template<class Index, class Value, class EqualFunc>
-		typename graph<Index, Value, EqualFunc>::node_type& 
+		typename const graph<Index, Value, EqualFunc>::node_type& 
 			graph<Index, Value, EqualFunc>::get_node(const Index& index){
 			for (auto& pair : nodes_){
 				if (equal_func(pair.first.first, index))
 					return pair.first;
 			}
-			return node_type();
+			static node_type empty_node;
+			return empty_node;
 		}
 		template<class Index, class Value, class EqualFunc>
 		bool graph<Index, Value, EqualFunc>::is_contained(const Index& index){
@@ -78,38 +79,61 @@ namespace TinySTL{
 			return adjacent_nodes(n.first);
 		}
 		template<class Index, class Value, class EqualFunc>
-		void graph<Index, Value, EqualFunc>::DFS(const Index& index, visiter_func_type func){
-			node_type *start = &(get_node(index));
-			Unordered_set<Index, std::hash<Index>, EqualFunc> visited(7);
-
-			auto nodes = adjacent_nodes(start->first);
-			func(*start);
-			visited.insert(start->first);
-			for (const auto& n : nodes){
+		void graph<Index, Value, EqualFunc>::_DFS(node_type& node, 
+			visiter_func_type func, Unordered_set<Index, std::hash<Index>, EqualFunc>& visited){
+			auto nodes = adjacent_nodes(node.first);
+			func(node);
+			visited.insert(node.first);
+			for (auto& n : nodes){
 				if (visited.count(n.first) == 0)//has not visited
-					DFS(n.first, func);
+					_DFS(n, func, visited);
 			}
 		}
 		template<class Index, class Value, class EqualFunc>
-		void graph<Index, Value, EqualFunc>::BFS(const Index& index, visiter_func_type func){
-			node_type *start = &(get_node(index));
+		void graph<Index, Value, EqualFunc>::DFS(const Index& index, visiter_func_type func){
+			node_type start = (get_node(index));
 			Unordered_set<Index, std::hash<Index>, EqualFunc> visited(7);
-
-			auto nodes = adjacent_nodes(start->first);
-			func(*start);
-			visited.insert(start->first);
+			_DFS(start, func, visited);
+		}
+		template<class Index, class Value, class EqualFunc>
+		void graph<Index, Value, EqualFunc>::_BFS(node_type& node,
+			visiter_func_type func, Unordered_set<Index, std::hash<Index>, EqualFunc>& visited){
+			auto nodes = adjacent_nodes(node.first);
+			func(node);
+			visited.insert(node.first);
 			do{
 				nodes_set_type temp;
 				for (auto it = nodes.begin(); it != nodes.end(); ++it){
 					if (visited.count(it->first) == 0){//has not visited
 						func(*it);
 						visited.insert(it->first);
-						auto s = adjacent_nodes(it->first);						
+						auto s = adjacent_nodes(it->first);
 						temp.insert(temp.end(), s.begin(), s.end());
 					}
 				}
 				nodes = temp;
 			} while (!nodes.empty());
+		}
+		template<class Index, class Value, class EqualFunc>
+		void graph<Index, Value, EqualFunc>::BFS(const Index& index, visiter_func_type func){
+			node_type start = (get_node(index));
+			Unordered_set<Index, std::hash<Index>, EqualFunc> visited(7);
+			_BFS(start, func, visited);
+			//auto nodes = adjacent_nodes(start->first);
+			//func(*start);
+			//visited.insert(start->first);
+			//do{
+			//	nodes_set_type temp;
+			//	for (auto it = nodes.begin(); it != nodes.end(); ++it){
+			//		if (visited.count(it->first) == 0){//has not visited
+			//			func(*it);
+			//			visited.insert(it->first);
+			//			auto s = adjacent_nodes(it->first);						
+			//			temp.insert(temp.end(), s.begin(), s.end());
+			//		}
+			//	}
+			//	nodes = temp;
+			//} while (!nodes.empty());
 		}
 		template<class Index, class Value, class EqualFunc>
 		string graph<Index, Value, EqualFunc>::to_string(){
@@ -120,7 +144,7 @@ namespace TinySTL{
 				oss << "[" << oit->first << "," << oit->second << "]" << ":";
 				auto eit = end(oit->first);
 				for (auto iit = begin(oit->first); iit != eit; ++iit){
-					oss << "[" << iit->first << ", " << iit->second << "]" << "->";
+					oss << "[" << iit->first << "," << iit->second << "]" << "->";
 				}
 				oss << "[nil]" << std::endl << std::setw(4) << "|" << std::endl;
 			}
@@ -230,5 +254,13 @@ namespace TinySTL{
 	template<class Index, class Value, class EqualFunc>
 	void directed_graph<Index, Value, EqualFunc>::delete_node(const node_type& item){
 		delete_node(item.first);
+	}
+	template<class Index, class Value, class EqualFunc>
+	void directed_graph<Index, Value, EqualFunc>::make_edge(const Index& index1, const Index& index2){
+		auto node1 = get_node(index1), node2 = get_node(index2);
+		for (auto it = nodes_.begin(); it != nodes_.end(); ++it){
+			if (equal_func((it->first).first, index1))
+				(it->second).push_front(node2);
+		}
 	}
 }

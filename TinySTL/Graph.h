@@ -41,6 +41,7 @@ namespace TinySTL{
 			virtual void add_node(const node_type& item, const nodes_set_type& nodes) = 0;
 			//node of the index must in the graph
 			virtual void add_node(const Index& index, const nodes_set_type& nodes) = 0;
+			virtual void make_edge(const Index& index1, const Index& index2) = 0;
 
 			virtual void delete_node(const node_type& item) = 0;
 			virtual void delete_node(const Index& index) = 0;
@@ -49,7 +50,7 @@ namespace TinySTL{
 			void BFS(const Index& index, visiter_func_type func);
 
 			node_type make_node(const Index& index, const Value& val);
-			node_type& get_node(const Index& index);
+			const node_type& get_node(const Index& index);
 
 			bool is_contained(const Index& index);
 			inline static nodes_set_type empty_node_set();
@@ -65,6 +66,9 @@ namespace TinySTL{
 
 			equal_func_type get_equal_func()const;
 			string to_string();
+		protected:
+			void _DFS(node_type& node, visiter_func_type func, Unordered_set<Index, std::hash<Index>, EqualFunc>& visited);
+			void _BFS(node_type& node, visiter_func_type func, Unordered_set<Index, std::hash<Index>, EqualFunc>& visited);
 		protected:
 			list<pair<node_type, list<node_type>>> nodes_;
 			equal_func_type equal_func;
@@ -138,6 +142,8 @@ namespace TinySTL{
 		//node n -> every node_type in the nodes set
 		void add_node(const node_type& n, const nodes_set_type& nodes) override final;
 		void add_node(const Index& index, const nodes_set_type& nodes) override final;
+		//node index1 -> node index2
+		void make_edge(const Index& index1, const Index& index2) override final;
 
 		void delete_node(const node_type& item) override final;
 		void delete_node(const Index& index) override final;
