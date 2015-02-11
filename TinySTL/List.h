@@ -62,6 +62,7 @@ namespace TinySTL{
 	public:
 		typedef T value_type;
 		typedef Detail::listIterator<T> iterator;
+		typedef Detail::listIterator<const T> const_iterator;
 		typedef reverse_iterator_t<iterator> reverse_iterator;
 		typedef T& reference;
 		typedef size_t size_type;
@@ -87,10 +88,12 @@ namespace TinySTL{
 		void push_back(const value_type& val);
 		void pop_back();
 
-		iterator begin(){ return head; }
-		iterator end(){ return tail; }
-		reverse_iterator rbegin(){ return reverse_iterator(tail); }
-		reverse_iterator rend(){ return reverse_iterator(head); }
+		iterator begin();
+		iterator end();
+		const_iterator begin()const;
+		const_iterator end()const;
+		reverse_iterator rbegin();
+		reverse_iterator rend();
 
 		iterator insert(iterator position, const value_type& val);
 		void insert(iterator position, size_type n, const value_type& val);
@@ -125,6 +128,7 @@ namespace TinySTL{
 		void insert_aux(iterator position, size_type n, const T& val, std::true_type);
 		template<class InputIterator>
 		void insert_aux(iterator position, InputIterator first, InputIterator last, std::false_type);
+		const_iterator changeIteratorToConstIterator(iterator& it)const;
 	public:
 		template<class T>
 		friend void swap(list<T>& x, list<T>& y);

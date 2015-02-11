@@ -214,6 +214,40 @@ namespace TinySTL{
 		erase(begin(), end());
 	}
 	template<class T>
+	typename list<T>::iterator list<T>::begin(){
+		return head;
+	}
+	template<class T>
+	typename list<T>::iterator list<T>::end(){
+		return tail;
+	}
+	template<class T>
+	typename list<T>::const_iterator list<T>::changeIteratorToConstIterator(iterator& it)const{
+		using nodeP = Detail::node<const T>*;
+		auto temp = (list<const T>*const)this;
+		auto ptr = it.p;
+		Detail::node<const T> node(ptr->data, (nodeP)(ptr->prev), (nodeP)(ptr->next), temp);
+		return const_iterator(&node);
+	}
+	template<class T>
+	typename list<T>::const_iterator list<T>::begin()const{
+		auto temp = (list*const)this;
+		return changeIteratorToConstIterator(temp->head);
+	}
+	template<class T>
+	typename list<T>::const_iterator list<T>::end()const{
+		auto temp = (list*const)this;
+		return changeIteratorToConstIterator(temp->tail);
+	}
+	template<class T>
+	typename list<T>::reverse_iterator list<T>::rbegin(){
+		return reverse_iterator(tail);
+	}
+	template<class T>
+	typename list<T>::reverse_iterator list<T>::rend(){
+		return reverse_iterator(head);
+	}
+	template<class T>
 	void list<T>::reverse(){//²ÉÓÃÎ²²å·¨
 		if (empty() || head.p->next == tail.p) return;
 		auto curNode = head.p;
