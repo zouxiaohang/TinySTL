@@ -119,21 +119,6 @@ namespace TinySTL{
 			node_type start = (get_node(index));
 			Unordered_set<Index, std::hash<Index>, EqualFunc> visited(7);
 			_BFS(start, func, visited);
-			//auto nodes = adjacent_nodes(start->first);
-			//func(*start);
-			//visited.insert(start->first);
-			//do{
-			//	nodes_set_type temp;
-			//	for (auto it = nodes.begin(); it != nodes.end(); ++it){
-			//		if (visited.count(it->first) == 0){//has not visited
-			//			func(*it);
-			//			visited.insert(it->first);
-			//			auto s = adjacent_nodes(it->first);						
-			//			temp.insert(temp.end(), s.begin(), s.end());
-			//		}
-			//	}
-			//	nodes = temp;
-			//} while (!nodes.empty());
 		}
 		template<class Index, class Value, class EqualFunc>
 		string graph<Index, Value, EqualFunc>::to_string(){
