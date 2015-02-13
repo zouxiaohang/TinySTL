@@ -87,6 +87,9 @@
     <ClCompile Include="Test\GraphTest.cpp">
       <Filter>Test</Filter>
     </ClCompile>
+    <ClCompile Include="Detail\TireTree.cpp">
+      <Filter>Detail</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TypeTraits.h">
@@ -238,6 +241,9 @@
     </ClInclude>
     <ClInclude Include="Test\GraphTest.h">
       <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="TrieTree.h">
+      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
