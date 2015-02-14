@@ -79,6 +79,7 @@ TinySTL
     * avl_tree：100%
 	* suffix_array：100%
 	* directed_graph：100%
+	* trie tree：100%
 
 ##TinySTL单元测试(原单元测试代码逐步)：
   * pair：100%
@@ -97,6 +98,7 @@ TinySTL
   * avl_tree：100%
   * unordered_set：100%
   * directed_graph：100%
+  * trie tree：100%
 
 #TinySTL性能测试:
 ###测试环境：Windows 7 && VS2013 && release模式
@@ -489,3 +491,39 @@ TinySTL
 ![image](https://raw.githubusercontent.com/zouxiaohang/TinySTL/master/TinySTL/ScreenShots/graph_dfs.png)  
 ![image](https://raw.githubusercontent.com/zouxiaohang/TinySTL/master/TinySTL/ScreenShots/graph_bfs.png)  
 ![image](https://raw.githubusercontent.com/zouxiaohang/TinySTL/master/TinySTL/ScreenShots/graph2.png)
+
+
+
+
+
+####(16):trie tree
+
+    TinySTL::trie_tree t;
+	std::ifstream in;
+	in.open("C:\\Users\\zxh\\Desktop\\trie_tree_test.txt");
+	std::vector<std::string> v;
+	std::string s;
+	while (in){
+		in >> s;
+		v.push_back(s);
+	}
+	ProfilerInstance::start();
+	for (const auto& str : v){
+		t.insert(TinySTL::string(str.data()));
+	}
+	ProfilerInstance::finish();
+	std::cout << "build trie tree costs " << ProfilerInstance::millisecond() << "ms" << std::endl;
+
+	ProfilerInstance::start();
+	auto res = t.get_word_by_prefix("v");
+	ProfilerInstance::finish();
+	std::cout << "get word by prefix \"v\" costs " << ProfilerInstance::millisecond() << "ms" << std::endl;
+	auto i = 0;
+	for (const auto& str : res){
+		++i;
+		if (i % 10 == 0) std::cout << std::endl;
+		std::cout << str << " ";
+	}
+	std::cout << std::endl;
+    
+![image](https://raw.githubusercontent.com/zouxiaohang/TinySTL/master/TinySTL/ScreenShots/trie_tree.png)  

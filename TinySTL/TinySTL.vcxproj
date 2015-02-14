@@ -99,6 +99,7 @@
     <ClCompile Include="Test\StackTest.cpp" />
     <ClCompile Include="Test\StringTest.cpp" />
     <ClCompile Include="Test\SuffixArrayTest.cpp" />
+    <ClCompile Include="Test\TrieTreeTest.cpp" />
     <ClCompile Include="Test\Unordered_setTest.cpp" />
     <ClCompile Include="Test\VectorTest.cpp" />
   </ItemGroup>
@@ -146,6 +147,7 @@
     <ClInclude Include="Test\StringTest.h" />
     <ClInclude Include="Test\SuffixArrayTest.h" />
     <ClInclude Include="Test\TestUtil.h" />
+    <ClInclude Include="Test\TrieTreeTest.h" />
     <ClInclude Include="Test\Unordered_setTest.h" />
     <ClInclude Include="Test\VectorTest.h" />
     <ClInclude Include="TrieTree.h" />
@@ -164,6 +166,10 @@
     <Image Include="ScreenShots\graph_bfs.png" />
     <Image Include="ScreenShots\graph_dfs.png" />
     <Image Include="ScreenShots\suffix_array.png" />
+    <Image Include="ScreenShots\trie_tree.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="TestData\trie_tree_test.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

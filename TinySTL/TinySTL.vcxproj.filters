@@ -25,6 +25,9 @@
     <Filter Include="Detail">
       <UniqueIdentifier>{7dd5c5f0-33b6-44c6-b2b9-d4c0ec1d4c13}</UniqueIdentifier>
     </Filter>
+    <Filter Include="TestData">
+      <UniqueIdentifier>{676114e9-f556-46bf-9f51-65d820758de2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Profiler\Profiler.cpp">
@@ -89,6 +92,9 @@
     </ClCompile>
     <ClCompile Include="Detail\TireTree.cpp">
       <Filter>Detail</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\TrieTreeTest.cpp">
+      <Filter>Test</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -245,6 +251,9 @@
     <ClInclude Include="TrieTree.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Test\TrieTreeTest.h">
+      <Filter>Test</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.md" />
@@ -265,5 +274,13 @@
     <Image Include="ScreenShots\graph2.png">
       <Filter>ScreenShots</Filter>
     </Image>
+    <Image Include="ScreenShots\trie_tree.png">
+      <Filter>ScreenShots</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="TestData\trie_tree_test.txt">
+      <Filter>TestData</Filter>
+    </Text>
   </ItemGroup>
 </Project>
