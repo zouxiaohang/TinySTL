@@ -16,14 +16,22 @@ namespace TinySTL{
 			char data;
 			bool is_a_word;
 			std::map<char, std::shared_ptr<trie_node>> map_childs;
+			trie_node() :data('\0'), is_a_word(false){}
 		};
+	public:
+		typedef string value_type;
+		typedef size_t size_type;
 	private:
 		trie_node *data;
+		size_type size_;
 	public:
 		trie_tree();
 		~trie_tree();
 		trie_tree(const trie_tree&) = delete;
 		trie_tree& operator = (const trie_tree&) = delete;
+
+		bool empty()const;
+		size_type size()const;
 
 		vector<string> get_word_by_prefix(const string& prefix)const;
 		void print_tree(std::ostream& os = std::cout)const;

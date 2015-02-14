@@ -1,16 +1,18 @@
 #include "../TrieTree.h"
 
 namespace TinySTL{
-	trie_tree::trie_tree(){
-		data = new trie_node;
-		data->is_a_word = false;
-		data->map_childs.clear();
-	}
+	trie_tree::trie_tree():data(new trie_node), size_(0){}
 	trie_tree::~trie_tree(){
 		if (data){
 			data->map_childs.clear();
 			delete data;
 		}
+	}
+	bool trie_tree::empty()const{
+		return size() == 0;
+	}
+	trie_tree::size_type trie_tree::size()const{
+		return size_;
 	}
 	bool trie_tree::is_existed(const string& word)const{
 		if (word.empty())
@@ -41,8 +43,7 @@ namespace TinySTL{
 		auto root = get_root();
 		auto res = root->map_childs.find(ch);
 		if (res != root->map_childs.end()){
-			string tmp_word(word.substr(1));
-			return _insert(tmp_word, res->second);
+			return _insert(word.substr(1), res->second);
 		}else{
 			auto new_sp = std::make_shared<trie_node>();
 			new_sp->data = ch;
@@ -53,6 +54,7 @@ namespace TinySTL{
 	}
 	bool trie_tree::_insert(const string& word, std::shared_ptr<trie_node> sp){
 		if (word.empty()){
+			++size_;
 			sp->is_a_word = true;
 			return true;
 		}
@@ -97,6 +99,8 @@ namespace TinySTL{
 	void trie_tree::_get_word_by_prefix(const string& prefix, std::shared_ptr<trie_node> sp,
 		const string& real_prefix, vector<string>& words)const{
 		if (prefix.size() == 1){
+			if (sp->is_a_word)
+				words.push_back(real_prefix);
 			for (auto cit = sp->map_childs.cbegin(); cit != sp->map_childs.cend(); ++cit){
 				__get_word_by_prefix(cit->second, string(), real_prefix, words);
 			}
