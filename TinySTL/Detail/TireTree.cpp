@@ -1,11 +1,11 @@
 #include "../TrieTree.h"
 
 namespace TinySTL{
-	trie_tree::trie_tree():data(new trie_node), size_(0){}
+	trie_tree::trie_tree() :root_(new trie_node), size_(0){}
 	trie_tree::~trie_tree(){
-		if (data){
-			data->map_childs.clear();
-			delete data;
+		if (root_){
+			root_->map_childs.clear();
+			delete root_;
 		}
 	}
 	bool trie_tree::empty()const{

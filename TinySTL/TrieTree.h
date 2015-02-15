@@ -24,7 +24,7 @@ namespace TinySTL{
 		typedef string value_type;
 		typedef size_t size_type;
 	private:
-		trie_node *data;
+		trie_node *root_;
 		size_type size_;
 	public:
 		trie_tree();
@@ -41,7 +41,7 @@ namespace TinySTL{
 		bool is_existed(const string& word)const;
 	private:
 		node_ptr make_node(char ch, bool is_a_word);
-		inline trie_node* get_root()const{ return data; }
+		inline trie_node* get_root()const{ return root_; }
 		void _get_word_by_prefix(const string& prefix, const node_ptr& up, const string& real_prefix, vector<string>& words)const;
 		void __get_word_by_prefix(const node_ptr& up, string& word, const string& prefix, vector<string>& words)const;
 		void _print_tree(std::ostream& os, const node_ptr& up, string word)const;
