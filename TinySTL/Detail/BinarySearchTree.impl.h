@@ -137,9 +137,8 @@ namespace TinySTL{
 	void binary_search_tree<T>::insert_elem(const T& val, node *&ptr){//重复的元素不插入
 		if (ptr == 0){
 			ptr = nodeAllocator::allocate();
-			TinySTL::construct(&(ptr->data_), val);
-			//memset(ptr, 0, sizeof(node));
-			//ptr->data_ = val;
+			nodeAllocator::construct(ptr);
+			ptr->data_ = val;
 			ptr->left_ = ptr->right_ = 0;
 			++size_;
 		}

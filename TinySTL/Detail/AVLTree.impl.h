@@ -154,8 +154,8 @@ namespace TinySTL{
 	void avl_tree<T>::insert_elem(const T& val, node *&p){
 		if (p == 0){
 			p = dataAllocator::allocate();
-			//p->data_ = val;
-			construct(&(p->data_), val);
+			dataAllocator::construct(p);
+			p->data_ = val;
 			p->left_ = p->right_ = 0;
 			p->height_ = 1;
 			++size_;
