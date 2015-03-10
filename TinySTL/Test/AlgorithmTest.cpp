@@ -221,6 +221,14 @@ namespace TinySTL{
 				std::generate(std::begin(arr2), std::end(arr2), func);
 			}
 			assert(TinySTL::Test::container_equal(arr1, arr2));
+
+			int n1 = 0, n2 = 0;
+			auto gen1 = [&n1](){return n1++; };
+			auto gen2 = [&n2](){return n2++; };
+			int arr3[100], arr4[100];
+			TinySTL::generate_n(arr3, 100, gen1);
+			std::generate_n(arr4, 100, gen2);
+			assert(TinySTL::Test::container_equal(arr3, arr4));
 		}
 		void testDistance(){
 			TinySTL::list<int> l(10, 0);

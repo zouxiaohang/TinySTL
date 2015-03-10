@@ -71,6 +71,7 @@ TinySTL
 	* advance：100%
 	* sort：100%
 	* generate：100%
+	* generate_n：100%
 	* distance：100%
 * 其他组件：
     * circular_buffer：100%   

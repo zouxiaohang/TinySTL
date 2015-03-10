@@ -544,6 +544,15 @@ namespace TinySTL{
 			*first = func();
 		}
 	}
+	//********** [generate_n] ******************************
+	//********* [Algorithm Complexity: O(N)] ****************
+	template <class OutputIterator, class Size, class Generator>
+	void generate_n(OutputIterator first, Size n, Generator gen){
+		while (n--){
+			*first = gen();
+			++first;
+		}
+	}
 	//********** [distance] ******************************
 	//********* [Algorithm Complexity: O(N)] ****************
 	template<class InputIterator>
