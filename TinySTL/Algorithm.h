@@ -576,6 +576,45 @@ namespace TinySTL{
 		typedef typename iterator_traits<Iterator>::iterator_category iterator_category;
 		return _distance(first, last, iterator_category());
 	}
+	//********** [copy] ******************************
+	//********* [Algorithm Complexity: O(N)] ****************
+	template<class InputIterator, class OutputIterator>
+	OutputIterator __copy(InputIterator first, InputIterator last, OutputIterator result, _true_type){
+		auto dist = distance(first, last);
+		memcpy(result, first, sizeof(*first) * dist);
+		advance(result, dist);
+		return result;
+	}
+	template<class InputIterator, class OutputIterator>
+	OutputIterator __copy(InputIterator first, InputIterator last, OutputIterator result, _false_type){
+		while (first != last){
+			*result = *first;
+			++result;
+			++first;
+		}
+		return result;
+	}
+	template<class InputIterator, class OutputIterator, class T>
+	OutputIterator _copy(InputIterator first, InputIterator last, OutputIterator result, T*){
+		typedef typename TinySTL::_type_traits<T>::is_POD_type is_pod;
+		return __copy(first, last, result, is_pod());
+	}
+	template <class InputIterator, class OutputIterator>
+	OutputIterator copy(InputIterator first, InputIterator last, OutputIterator result){
+		return _copy(first, last, result, value_type(first));
+	}
+	template<>
+	inline char *copy(char *first, char *last, char *result){
+		auto dist = last - first;
+		memcpy(result, first, sizeof(*first) * dist);
+		return result + dist;
+	}
+	template<>
+	inline wchar_t *copy(wchar_t *first, wchar_t *last, wchar_t *result){
+		auto dist = last - first;
+		memcpy(result, first, sizeof(*first) * dist);
+		return result + dist;
+	}
 }
 
 

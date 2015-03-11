@@ -44,6 +44,7 @@ namespace TinySTL{
 		void testSort();
 		void testGenerate();
 		void testDistance();
+		void testCopy();
 
 		void testAllCases();
 	}
