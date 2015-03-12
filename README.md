@@ -45,6 +45,7 @@ TinySTL
     * pair：100%
     * list：100%
 	* unordered_set：100%
+	* unique_ptr：100%
 * STL Algorithms:  
     * fill：100% 
     * fill_n：100% 
@@ -101,6 +102,7 @@ TinySTL
   * unordered_set：100%
   * directed_graph：100%
   * trie tree：100%
+  * unique_ptr：100%
 
 #TinySTL性能测试:
 ###测试环境：Windows 7 && VS2013 && release模式

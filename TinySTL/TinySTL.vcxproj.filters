@@ -96,6 +96,9 @@
     <ClCompile Include="Test\TrieTreeTest.cpp">
       <Filter>Test</Filter>
     </ClCompile>
+    <ClCompile Include="Test\UniquePtrTest.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TypeTraits.h">
@@ -252,6 +255,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Test\TrieTreeTest.h">
+      <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Memory.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\UniquePtrTest.h">
       <Filter>Test</Filter>
     </ClInclude>
   </ItemGroup>
