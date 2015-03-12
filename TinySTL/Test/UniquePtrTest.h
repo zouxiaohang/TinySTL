@@ -10,6 +10,8 @@
 namespace TinySTL{
 	namespace UniquePtrTest{
 		void testCase1();
+		void testCase2();
+		void testCase3();
 
 		void testAllCases();
 	}
