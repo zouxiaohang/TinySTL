@@ -6,11 +6,11 @@
 namespace TinySTL{
 	template<class T>
 	struct default_delete{
-		void operator ()(T* ptr){ delete ptr; }
+		void operator ()(T* ptr){ if(ptr) delete ptr; }
 	};
 	template<class T>
 	struct default_delete < T[] > {
-		void operator ()(T* ptr){ delete[] ptr; }
+		void operator ()(T* ptr){ if(ptr) delete[] ptr; }
 	};
 
 	template<class T, class D = default_delete<T>>
@@ -23,15 +23,15 @@ namespace TinySTL{
 		explicit unique_ptr(T *data = nullptr) :data_(data){}
 		unique_ptr(T *data, deleter_type del) :data_(data), deleter(del){}
 
-		unique_ptr(unique_ptr&& up){ 
-			clean();
-			swap(data_, up.data_); 
+		unique_ptr(unique_ptr&& up) :data_(nullptr){ 
+			TinySTL::swap(data_, up.data_); 
 		}
 		unique_ptr& operator = (unique_ptr&& up){
 			if (&up != this){
 				clean();
-				swap(*this, up);
+				TinySTL::swap(*this, up);
 			}
+			return *this;
 		}
 
 		unique_ptr(const unique_ptr&) = delete;
@@ -46,17 +46,15 @@ namespace TinySTL{
 		operator bool()const{ return get() != nullptr; }
 
 		pointer release(){ 
-			auto p = nullptr; 
-			swap(p, data_);
+			T *p = nullptr; 
+			TinySTL::swap(p, data_);
 			return p;
 		}
 		void reset(pointer p = pointer()){
 			clean();
 			data_ = p;
 		}
-		void swap(unique_ptr& up){
-			swap(data_, up.data_);
-		}
+		void swap(unique_ptr& up){ TinySTL::swap(data_, up.data_); }
 
 		element_type operator *()const{ return *data_; }
 		pointer operator ->()const{ return data_; }
@@ -77,9 +75,25 @@ namespace TinySTL{
 	bool operator == (const unique_ptr<T1, D1>& lhs, const unique_ptr<T2, D2>& rhs){
 		return lhs.get() == rhs.get();
 	}
+	template <class T, class D>
+	bool operator == (const unique_ptr<T, D>& up, nullptr_t p){
+		return up.get() == p;
+	}
+	template <class T, class D>
+	bool operator == (nullptr_t p, const unique_ptr<T, D>& up){
+		return up.get() == p;
+	}
 	template <class T1, class D1, class T2, class D2>
 	bool operator != (const unique_ptr<T1, D1>& lhs, const unique_ptr<T2, D2>& rhs){
 		return !(lhs == rhs);
+	}
+	template <class T, class D>
+	bool operator != (const unique_ptr<T, D>& up, nullptr_t p){
+		return up.get() != p;
+	}
+	template <class T, class D>
+	bool operator != (nullptr_t p, const unique_ptr<T, D>& up){
+		return up.get() != p;
 	}
 
 	template <class T, class... Args>
