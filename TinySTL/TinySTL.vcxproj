@@ -121,6 +121,7 @@
     <ClInclude Include="Detail\Deque.impl.h" />
     <ClInclude Include="Detail\Graph.impl.h" />
     <ClInclude Include="Detail\List.impl.h" />
+    <ClInclude Include="Detail\Ref.h" />
     <ClInclude Include="Detail\Unordered_set.impl.h" />
     <ClInclude Include="Detail\Vector.impl.h" />
     <ClInclude Include="Functional.h" />

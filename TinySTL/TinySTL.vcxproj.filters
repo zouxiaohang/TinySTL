@@ -263,6 +263,9 @@
     <ClInclude Include="Test\UniquePtrTest.h">
       <Filter>Test</Filter>
     </ClInclude>
+    <ClInclude Include="Detail\Ref.h">
+      <Filter>Detail</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.md" />
