@@ -99,6 +99,9 @@
     <ClCompile Include="Test\UniquePtrTest.cpp">
       <Filter>Test</Filter>
     </ClCompile>
+    <ClCompile Include="Test\RefTest.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TypeTraits.h">
@@ -265,6 +268,9 @@
     </ClInclude>
     <ClInclude Include="Detail\Ref.h">
       <Filter>Detail</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\RefTest.h">
+      <Filter>Test</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

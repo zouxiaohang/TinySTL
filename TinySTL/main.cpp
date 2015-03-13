@@ -14,6 +14,7 @@
 #include "Test\PairTest.h"
 #include "Test\PriorityQueueTest.h"
 #include "Test\QueueTest.h"
+#include "Test\RefTest.h"
 #include "Test\StackTest.h"
 #include "Test\StringTest.h"
 #include "Test\SuffixArrayTest.h"
@@ -36,6 +37,7 @@ int main(){
 	TinySTL::PairTest::testAllCases();
 	TinySTL::PriorityQueueTest::testAllCases();
 	TinySTL::QueueTest::testAllCases();
+	TinySTL::RefTest::testAllCases();
 	TinySTL::StackTest::testAllCases();
 	TinySTL::StringTest::testAllCases();
 	TinySTL::SuffixArrayTest::testAllCases();
