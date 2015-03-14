@@ -15,22 +15,22 @@ namespace TinySTL{
 		void testCase2(){
 			bitmap<8> bt1, bt2;
 			bt1.set();
-			cout << bt1 << endl;
+			assert(bt1.to_string() == "11111111");
 			bt1.reset();
-			cout << bt1 << endl;
+			assert(bt1.to_string() == "00000000");
 
 			bt2.set(0); bt2.set(2); bt2.set(4);
-			cout << bt2 << endl;
+			assert(bt2.to_string() == "10101000");
 			bt2.reset(0); bt2.reset(2); bt2.reset(4);
-			cout << bt2 << endl;
+			assert(bt2.to_string() == "00000000");
 		}
 		void testCase3(){
 			bitmap<8> bt;
 			bt.flip();
-			cout << bt << endl;
+			assert(bt.to_string() == "11111111");
 
 			bt.flip(0);
-			cout << bt << endl;
+			assert(bt.to_string() == "01111111");
 		}
 		void testCase4(){
 			bitmap<8> bt;

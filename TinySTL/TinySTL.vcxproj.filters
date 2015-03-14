@@ -300,5 +300,8 @@
     <Text Include="TestData\trie_tree_test.txt">
       <Filter>TestData</Filter>
     </Text>
+    <Text Include="TestData\string_test.txt">
+      <Filter>TestData</Filter>
+    </Text>
   </ItemGroup>
 </Project>

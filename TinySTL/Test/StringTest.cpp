@@ -1,5 +1,7 @@
 #include "StringTest.h"
 
+#include <fstream>
+
 namespace TinySTL{
 	namespace StringTest{
 
@@ -65,12 +67,16 @@ namespace TinySTL{
 		}
 		void testCase4(){
 			tsStr str("Test string");
-			for (tsStr::iterator it = str.begin(); it != str.end(); ++it)
-				std::cout << *it;
-			std::cout << '\n';
-			for (tsStr::reverse_iterator it = str.rbegin(); it != str.rend(); ++it)
-				std::cout << *it;
-			std::cout << '\n';
+			stdStr s(str.begin(), str.end());
+			auto i = 0;
+			for (tsStr::iterator it = str.begin(); it != str.end(); ++it, ++i){
+				assert(*it == s[i]);
+			}
+			
+			i = s.size() - 1;
+			for (tsStr::reverse_iterator it = str.rbegin(); it != str.rend(); ++it, --i){
+				assert(*it == s[i]);
+			}
 		}
 		void testCase5(){
 			tsStr s;
@@ -121,11 +127,11 @@ namespace TinySTL{
 			s.resize(10);
 			for (auto i = 0; i != s.size(); ++i)
 				s[i] = 'a' + i;
-			TinySTL::Test::print_container(s);
+			assert(s == "abcdefghij");
 
 			s.back() = 'Z';
 			s.front() = 'A';
-			TinySTL::Test::print_container(s);
+			assert(s == "AbcdefghiZ");
 		}
 		void testCase10(){
 			stdStr s1;
@@ -295,15 +301,15 @@ namespace TinySTL{
 			tsStr seller("goods");
 
 			seller.swap(buyer);
-			TinySTL::Test::print_container(buyer, "buyer");
-			TinySTL::Test::print_container(seller, "seller");
+			assert(seller == "money");
+			assert(buyer == "goods");
 		}
 		void testCase18(){
 			char buffer[20];
 			tsStr str("Test string...");
 			std::size_t length = str.copy(buffer, 6, 5);
 			buffer[length] = '\0';
-			std::cout << "buffer contains: " << buffer << '\n';
+			std::equal(std::begin(buffer), std::end(buffer), str.begin());
 		}
 		void testCase19(){
 			tsStr str("There are two needles in this haystack with needles.");
@@ -432,17 +438,13 @@ namespace TinySTL{
 		}
 		void testCase29(){
 			tsStr name;
+			std::ifstream in(".\\TestData\\string_test.txt");
 
-			std::cout << "Please, enter your name: ";
-			std::cin >> name;
-			std::cout << "Hello, " << name << "!\n";
-		}
-		void testCase30(){
-			tsStr name;
-
-			std::cout << "Please, enter your full name: ";
-			TinySTL::getline(std::cin, name);
-			std::cout << "Hello, " << name << "!\n";
+			if (in){
+				in >> name;
+				assert(name == "zouxiaohang");
+				in.close();
+			}
 		}
 
 		void testAllCases(){
@@ -475,7 +477,6 @@ namespace TinySTL{
 			testCase27();
 			testCase28();
 			testCase29();
-			testCase30();
 		}
 	}
 }

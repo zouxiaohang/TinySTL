@@ -1,5 +1,8 @@
 #include "GraphTest.h"
 
+#include <sstream>
+#include <fstream>
+
 namespace TinySTL{
 	namespace GraphTest{
 		void testCase1(){
@@ -36,20 +39,71 @@ namespace TinySTL{
 			g.make_edge(12, 2);
 			g.make_edge(12, 3);
 			g.make_edge(12, 0);
-			std::cout << "graph after add nodes:" << std::endl;
-			std::cout << g.to_string();
+			std::ostringstream os;
+			os << g.to_string();
+			std::string res(R"([14,1414]:[nil]
+   |
+[13,1313]:[nil]
+   |
+[12,1212]:[0,0]->[3,33]->[2,22]->[nil]
+   |
+[7,77]:[14,1414]->[13,1313]->[12,1212]->[nil]
+   |
+[6,66]:[nil]
+   |
+[5,55]:[nil]
+   |
+[3,33]:[nil]
+   |
+[2,22]:[nil]
+   |
+[1,11]:[7,77]->[6,66]->[5,55]->[nil]
+   |
+[0,0]:[3,33]->[2,22]->[1,11]->[nil]
+   |
+[nil]
+)");
+			assert(os.str() == res);
 
-			auto func = [](const dGraph<int, int>::node_type& node){
-				std::cout << "[" << node.first << "," << node.second << "]" << std::endl;
+			std::ostringstream os1, os2;
+			auto func1 = [&os1](const dGraph<int, int>::node_type& node){
+				os1 << "[" << node.first << "," << node.second << "]";
 			};
-			std::cout << "graph DFS from node(1, 11):" << std::endl;
-			g.DFS(1, func);
-			std::cout << "graph BFS from node(1, 11):" << std::endl;
-			g.BFS(1, func);
+			auto func2 = [&os2](const dGraph<int, int>::node_type& node){
+				os2 << "[" << node.first << "," << node.second << "]";
+			};
+			res = R"([1,11][7,77][14,1414][13,1313][12,1212][0,0][3,33][2,22][6,66][5,55])";
+			g.DFS(1, func1);
+			assert(os1.str() == res);
 
-			std::cout << "graph after delete node(7, 77):" << std::endl;
+			res = R"([1,11][7,77][6,66][5,55][14,1414][13,1313][12,1212][0,0][3,33][2,22])";
+			g.BFS(1, func2);
+			assert(os2.str() == res);
+
+			std::ostringstream os3;
 			g.delete_node(dGraph<int, int>::node_type(7, 77));
-			std::cout << g.to_string();
+			os3 << g.to_string();
+			res = R"([14,1414]:[nil]
+   |
+[13,1313]:[nil]
+   |
+[12,1212]:[0,0]->[3,33]->[2,22]->[nil]
+   |
+[6,66]:[nil]
+   |
+[5,55]:[nil]
+   |
+[3,33]:[nil]
+   |
+[2,22]:[nil]
+   |
+[1,11]:[6,66]->[5,55]->[nil]
+   |
+[0,0]:[3,33]->[2,22]->[1,11]->[nil]
+   |
+[nil]
+)";
+			assert(os3.str() == res);
 		}
 		void testCase3(){
 			dGraph<int, int> g;

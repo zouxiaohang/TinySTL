@@ -51,15 +51,15 @@ namespace TinySTL{
 			tsVec<int> myvector;
 			for (int i = 1; i <= 5; i++) myvector.push_back(i);
 
-			std::cout << "myvector contains:";
-			for (tsVec<int>::iterator it = myvector.begin(); it != myvector.end(); ++it)
-				std::cout << ' ' << *it;
-			std::cout << '\n';
+			auto i = 1;
+			for (tsVec<int>::iterator it = myvector.begin(); it != myvector.end(); ++it, ++i){
+				assert(*it == i);
+			}
 
-			std::cout << "myvector contains:";
-			for (tsVec<int>::const_iterator it = myvector.cbegin(); it != myvector.cend(); ++it)
-				std::cout << ' ' << *it;
-			std::cout << '\n';
+			i = 1;
+			for (tsVec<int>::const_iterator it = myvector.cbegin(); it != myvector.cend(); ++it, ++i){
+				assert(*it == i);
+			}
 		}
 		void testCase5(){
 			tsVec<int> myvector(5);  // 5 default-constructed ints
@@ -68,14 +68,15 @@ namespace TinySTL{
 			for (; rit != myvector.rend(); ++rit)
 				*rit = ++i;
 
-			std::cout << "myvector contains:";
-			for (tsVec<int>::iterator it = myvector.begin(); it != myvector.end(); ++it)
-				std::cout << ' ' << *it;
-			std::cout << '\n';
-			std::cout << "myvector contains(reverse order):";
-			for (tsVec<int>::reverse_iterator it = myvector.rbegin(); it != myvector.rend(); ++it)
-				std::cout << ' ' << *it;
-			std::cout << '\n';
+			i = 5;
+			for (tsVec<int>::iterator it = myvector.begin(); it != myvector.end(); ++it, --i){
+				assert(*it == i);
+			}
+
+			i = 1;
+			for (tsVec<int>::reverse_iterator it = myvector.rbegin(); it != myvector.rend(); ++it, ++i){
+				assert(*it == i);
+			}
 		}
 		void testCase6(){
 			tsVec<int> v(11, 0);
@@ -121,13 +122,14 @@ namespace TinySTL{
 		}
 		void testCase10(){
 			tsVec<int> foo(3, 100);   // three ints with a value of 100
-			tsVec<int> bar(5, 200);   // five ints with a value of 200
+			tsVec<int> bar(2, 200);   // five ints with a value of 200
 
-			TinySTL::Test::print_container(foo, "foo");
-			TinySTL::Test::print_container(bar, "bar");
+			assert(TinySTL::Test::container_equal(foo, stdVec < int > { 100, 100, 100 }));
+			assert(TinySTL::Test::container_equal(bar, stdVec < int > {200, 200}));
+
 			foo.swap(bar);
-			TinySTL::Test::print_container(foo, "foo");
-			TinySTL::Test::print_container(bar, "bar");
+			assert(TinySTL::Test::container_equal(bar, stdVec < int > { 100, 100, 100 }));
+			assert(TinySTL::Test::container_equal(foo, stdVec < int > {200, 200}));
 		}
 		void testCase11(){
 			stdVec<std::string> v1;

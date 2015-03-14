@@ -175,6 +175,7 @@
     <Image Include="ScreenShots\trie_tree.png" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="TestData\string_test.txt" />
     <Text Include="TestData\trie_tree_test.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

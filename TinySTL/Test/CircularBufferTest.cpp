@@ -1,5 +1,7 @@
 #include "CircularBufferTest.h"
 
+#include <sstream>
+
 namespace TinySTL{
 	namespace CircularBufferTest{
 		void testCase1(){
@@ -66,7 +68,10 @@ namespace TinySTL{
 		void testCase6(){
 			std::string arr[] = { "1", "2", "3" };
 			tsCB<std::string, 3> cb(std::begin(arr), std::end(arr));
-			std::cout << cb << std::endl;
+
+			std::ostringstream os;
+			os << cb;
+			assert(os.str() == "(1, 2, 3)");
 		}
 
 

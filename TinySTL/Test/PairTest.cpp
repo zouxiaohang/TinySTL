@@ -29,15 +29,12 @@ namespace TinySTL{
 			TinySTL::pair<int, char> foo(10, 'z');
 			TinySTL::pair<int, char> bar(90, 'a');
 		
-			//foo and bar are not equal
-			//foo is less than bar
-			//foo is less than or equal to bar
-			if (foo == bar) std::cout << "foo and bar are equal\n";
-			if (foo != bar) std::cout << "foo and bar are not equal\n";
-			if (foo< bar) std::cout << "foo is less than bar\n";
-			if (foo> bar) std::cout << "foo is greater than bar\n";
-			if (foo <= bar) std::cout << "foo is less than or equal to bar\n";
-			if (foo >= bar) std::cout << "foo is greater than or equal to bar\n";
+			assert(!(foo == bar));
+			assert(foo != bar);
+			assert(foo < bar);
+			assert(!(foo > bar));
+			assert(foo <= bar);
+			assert(!(foo >= bar));
 		}
 		void testCase5(){
 			TinySTL::pair<int, char> foo(10, 'z');
@@ -45,10 +42,8 @@ namespace TinySTL{
 		
 			foo.swap(bar);
 		
-			std::cout << "foo : (" << foo.first << ", " << foo.second << ")" << std::endl;
-			std::cout << "bar : (" << bar.first << ", " << bar.second << ")" << std::endl;
-			//TinySTL::Test::print_container(foo);
-			//TinySTL::Test::print_container(bar);
+			assert(foo.first == 90 && foo.second == 'a');
+			assert(bar.first == 10 && bar.second == 'z');
 		}
 
 
