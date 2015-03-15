@@ -112,14 +112,71 @@ namespace TinySTL{
 		template<class D>
 		shared_ptr(T *p, D del) : ref_(new ref_t<T>(p, del)){}
 
+		shared_ptr(const shared_ptr& sp){
+			ref_ = sp.ref_;
+			++(*ref_);
+		}
+
+		shared_ptr& operator = (const shared_ptr& sp){
+			if (this != &sp){
+				decrease_ref();
+				ref_ = sp.ref_;
+			}
+			return *this;
+		}
+
+		~shared_ptr(){ decrease_ref(); }
+
+		element_type operator *()const{ return *(get()); }
+		element_type *operator ->()const{ return get(); }
+
 		element_type* get() const{ return ref_->get_data(); }
 		size_t use_count() const{ return ref_->count(); }
+
+		operator bool() const{ return get() != nullptr; }
+	private:
+		void decrease_ref(){
+			if (ref_){
+				--(*ref_);
+				if (use_count() == 0)
+					delete ref_;
+			}
+		}
 	private:
 		template<class Type>
 		using ref_t = Detail::ref_t < Type > ;
 
 		ref_t<T> *ref_;
 	};
+	template<class T1, class T2>
+	bool operator == (const shared_ptr<T1>& lhs, const shared_ptr<T2>& rhs){
+		return lhs.get() == rhs.get();
+	}
+	template<class T>
+	bool operator == (const shared_ptr<T>& sp, nullptr_t p){
+		return sp.get() == p;
+	}
+	template<class T>
+	bool operator == (nullptr_t p, const shared_ptr<T>& sp){
+		return sp == p;
+	}
+	template<class T1, class T2>
+	bool operator != (const shared_ptr<T1>& lhs, const shared_ptr<T2>& rhs){
+		return !(lhs == rhs);
+	}
+	template<class T>
+	bool operator != (const shared_ptr<T>& sp, nullptr_t p){
+		return !(sp == p);
+	}
+	template<class T>
+	bool operator != (nullptr_t p, const shared_ptr<T>& sp){
+		return !(sp == p);
+	}
+
+	template<class T, class...Args>
+	shared_ptr<T> make_shared(Args... args){
+		return shared_ptr<T>(new T(std::forward<Args>(args)...));
+	}
 }
 
 #endif
