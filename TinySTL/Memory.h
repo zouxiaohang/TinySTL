@@ -1,7 +1,9 @@
 #ifndef _MEMORY_H_
-#define _MEMORY_H
+#define _MEMORY_H_
 
 #include <utility>
+
+#include "Detail\Ref.h"
 
 namespace TinySTL{
 	template<class T>
@@ -99,6 +101,24 @@ namespace TinySTL{
 	template <class T, class... Args>
 	unique_ptr<T> make_unique(Args&&... args){
 		return unique_ptr<T>(new T(std::forward<Args>(args)...));
+	};
+
+	template<class T>
+	class shared_ptr{
+	public:
+		typedef T element_type;
+	public:
+		explicit shared_ptr(T *p = nullptr) :ref_(new ref_t<T>(p)){}
+		template<class D>
+		shared_ptr(T *p, D del) : ref_(new ref_t<T>(p, del)){}
+
+		element_type* get() const{ return ref_->get_data(); }
+		size_t use_count() const{ return ref_->count(); }
+	private:
+		template<class Type>
+		using ref_t = Detail::ref_t < Type > ;
+
+		ref_t<T> *ref_;
 	};
 }
 
