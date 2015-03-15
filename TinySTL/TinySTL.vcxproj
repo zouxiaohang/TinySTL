@@ -97,6 +97,7 @@
     <ClCompile Include="Test\PriorityQueueTest.cpp" />
     <ClCompile Include="Test\QueueTest.cpp" />
     <ClCompile Include="Test\RefTest.cpp" />
+    <ClCompile Include="Test\SharedPtrTest.cpp" />
     <ClCompile Include="Test\StackTest.cpp" />
     <ClCompile Include="Test\StringTest.cpp" />
     <ClCompile Include="Test\SuffixArrayTest.cpp" />
@@ -148,6 +149,7 @@
     <ClInclude Include="Test\PriorityQueueTest.h" />
     <ClInclude Include="Test\QueueTest.h" />
     <ClInclude Include="Test\RefTest.h" />
+    <ClInclude Include="Test\SharedPtrTest.h" />
     <ClInclude Include="Test\StackTest.h" />
     <ClInclude Include="Test\StringTest.h" />
     <ClInclude Include="Test\SuffixArrayTest.h" />

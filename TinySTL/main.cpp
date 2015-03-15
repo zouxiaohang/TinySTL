@@ -15,6 +15,7 @@
 #include "Test\PriorityQueueTest.h"
 #include "Test\QueueTest.h"
 #include "Test\RefTest.h"
+#include "Test\SharedPtrTest.h"
 #include "Test\StackTest.h"
 #include "Test\StringTest.h"
 #include "Test\SuffixArrayTest.h"
@@ -38,6 +39,7 @@ int main(){
 	TinySTL::PriorityQueueTest::testAllCases();
 	TinySTL::QueueTest::testAllCases();
 	TinySTL::RefTest::testAllCases();
+	TinySTL::SharedPtrTest::testAllCases();
 	TinySTL::StackTest::testAllCases();
 	TinySTL::StringTest::testAllCases();
 	TinySTL::SuffixArrayTest::testAllCases();

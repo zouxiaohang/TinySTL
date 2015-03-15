@@ -102,6 +102,9 @@
     <ClCompile Include="Test\RefTest.cpp">
       <Filter>Test</Filter>
     </ClCompile>
+    <ClCompile Include="Test\SharedPtrTest.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TypeTraits.h">
@@ -270,6 +273,9 @@
       <Filter>Detail</Filter>
     </ClInclude>
     <ClInclude Include="Test\RefTest.h">
+      <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\SharedPtrTest.h">
       <Filter>Test</Filter>
     </ClInclude>
   </ItemGroup>
