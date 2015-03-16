@@ -6,6 +6,10 @@
 #include "Detail\Ref.h"
 
 namespace TinySTL{
+	template<class _T>
+	class cow_ptr;
+
+
 	template<class T>
 	struct default_delete{
 		void operator ()(T* ptr){ if(ptr) delete ptr; }
@@ -150,6 +154,10 @@ namespace TinySTL{
 		}
 	private:
 		ref_t<T> *ref_;
+
+	public:
+		template<class _T>
+		friend class cow_ptr;
 	};
 	template<class T1, class T2>
 	bool operator == (const shared_ptr<T1>& lhs, const shared_ptr<T2>& rhs){
