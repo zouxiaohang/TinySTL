@@ -5,9 +5,32 @@
 
 namespace TinySTL{
 	template<class T>
+	class cow_ptr;
+	namespace Detail{
+		template <class T>
+		class proxy{
+		public:
+			explicit proxy(cow_ptr<T> *const cp) :cp_(cp){}
+			proxy(const proxy<T>&) = default;
+			proxy& operator = (const proxy<T>&) = default;
+
+			const T& operator *()const;
+			T& operator *();
+			const T *operator ->()const;
+			T *operator ->();
+			cow_ptr<T>& operator = (const T& val);
+			operator T()const;
+		private:
+			cow_ptr<T> *cp_;
+		};
+	}
+	template<class T>
 	class cow_ptr{
 	public:
 		typedef T element_type;
+	private:
+		template<class _T>
+		using proxy = Detail::proxy < _T > ;
 	public:
 		explicit cow_ptr(T *p = nullptr);
 		template<class D>
@@ -15,13 +38,12 @@ namespace TinySTL{
 
 		cow_ptr(const cow_ptr& cp);
 		cow_ptr& operator = (const cow_ptr& cp);
-
-		const element_type& operator *()const;
-		const element_type *operator ->()const;
-		//注意 这两个函数可能会改变指针指向的对象的内容，需要cow机制
-		//element_type& operator *();
-		//element_type *operator ->();
-
+		
+		const proxy<element_type> operator *()const;
+		proxy<element_type> operator *();
+		const proxy<element_type> operator ->()const;
+		proxy<element_type> operator ->();
+		
 		element_type *get();
 		const element_type *get()const;
 
@@ -41,6 +63,9 @@ namespace TinySTL{
 		friend bool operator != (const cow_ptr<T>& cp, nullptr_t p);
 		template<class T>
 		friend bool operator != (nullptr_t p, const cow_ptr<T>& cp);
+
+		template<class _T>
+		friend class Detail::proxy;
 	};
 }
 

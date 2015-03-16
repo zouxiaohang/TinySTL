@@ -2,6 +2,35 @@
 #define _COWPTR_IMPL_H_
 
 namespace TinySTL{
+	namespace Detail{
+		template<class T>
+		const T& proxy<T>::operator *()const{ 
+			return *(cp_->ptr_); 
+		}
+		template<class T>
+		T& proxy<T>::operator *(){
+			auto t = *(cp_->ptr_);
+			cp_->ptr_ = make_shared<T>(t);
+			return *(cp_->ptr_);
+		}
+		template<class T>
+		const T *proxy<T>::operator ->()const{
+			return cp_->ptr_.operator->(); 
+		}
+		template<class T>
+		T *proxy<T>::operator ->(){
+			auto t = *(cp_->ptr_);
+			cp_->ptr_ = make_shared<T>(t);
+			return cp_->ptr_.operator->();
+		}
+		template<class T>
+		cow_ptr<T>& proxy<T>::operator = (const T& val){
+			cp_->ptr_ = make_shared<T>(val);
+			return *cp_;
+		}
+		template<class T>
+		proxy<T>::operator T()const{ return *(cp_->ptr_); }
+	}
 	template<class T>
 	cow_ptr<T>::cow_ptr(T *p = nullptr) :ptr_(p){}
 	template<class T>
@@ -20,19 +49,6 @@ namespace TinySTL{
 		return *this;
 	}
 	template<class T>
-	const typename cow_ptr<T>::element_type& cow_ptr<T>::operator *()const{
-		return *ptr_;
-	}
-	template<class T>
-	const typename cow_ptr<T>::element_type *cow_ptr<T>::operator ->()const{
-		return ptr_.operator->();
-	}
-	//注意 这两个函数可能会改变指针指向的对象的内容，需要cow机制
-	//template<class T>
-	//typename cow_ptr<T>::element_type& cow_ptr<T>::operator *();
-	//template<class T>
-	//typename cow_ptr<T>::element_type *cow_ptr<T>::operator ->();
-	template<class T>
 	typename cow_ptr<T>::element_type *cow_ptr<T>::get(){
 		return ptr_.get();
 	}
@@ -43,6 +59,22 @@ namespace TinySTL{
 	template<class T>
 	cow_ptr<T>::operator bool()const{
 		return ptr_ != nullptr;
+	}
+	template<class T>
+	const typename cow_ptr<T>::proxy<T> cow_ptr<T>::operator *()const{
+		return proxy<T>(const_cast<cow_ptr *const>(this)); 
+	}
+	template<class T>
+	typename cow_ptr<T>::proxy<T> cow_ptr<T>::operator *(){ 
+		return proxy<T>(this); 
+	}
+	template<class T>
+	const typename cow_ptr<T>::proxy<T> cow_ptr<T>::operator ->()const{ 
+		return proxy<T>(const_cast<cow_ptr *const>(this)); 
+	}
+	template<class T>
+	typename cow_ptr<T>::proxy<T> cow_ptr<T>::operator ->(){ 
+		return proxy<T>(this); 
 	}
 
 	template<class T1, class T2>
