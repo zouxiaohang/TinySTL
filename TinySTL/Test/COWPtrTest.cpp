@@ -17,11 +17,11 @@ namespace TinySTL{
 			assert(*cp3 == "hello");
 
 			assert(cp1.get() == cp2.get() && cp2.get() == cp3.get());
-
 			assert(cp1 == cp2 && !(cp2 != cp3));
 
-			*cp1 = "zouxiaohang";
-			assert(*cp1 == "zouxiaohang");
+			string zxh(" zouxiaohang");
+			cp1->append(zxh);
+			assert(*cp1 == "hello zouxiaohang");
 			assert(*cp2 == "hello" && *cp3 == "hello");
 
 			cow_ptr<string> cp4;
@@ -37,9 +37,9 @@ namespace TinySTL{
 			assert(cp1 == cp2 && cp2 == cp3);
 			assert(*cp1 == *cp2 && *cp2 == *cp3 && *cp3 == "zouxiaohang");
 
-			cp2->append(" C++");//write
+			*cp2 = ("C++");//write
 			assert(*cp1 == *cp3 && *cp3 == "zouxiaohang");
-			assert(*cp2 == "zouxiaohang C++");
+			assert(*cp2 == "C++");
 		}
 
 		void testAllCases(){
