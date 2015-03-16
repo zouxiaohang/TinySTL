@@ -45,7 +45,8 @@ namespace TinySTL{
 
 		~unique_ptr(){ clean(); }
 
-		pointer get()const{ return data_; }
+		const pointer get()const{ return data_; }
+		pointer get(){ return data_; }
 		deleter_type& get_deleter(){ return deleter; }
 		const deleter_type& get_deleter()const{ return deleter; }
 
@@ -62,8 +63,10 @@ namespace TinySTL{
 		}
 		void swap(unique_ptr& up){ TinySTL::swap(data_, up.data_); }
 
-		element_type operator *()const{ return *data_; }
-		pointer operator ->()const{ return data_; }
+		const element_type& operator *()const{ return *data_; }
+		const pointer operator ->()const{ return data_; }
+		element_type& operator *(){ return *data_; }
+		pointer operator ->(){ return data_; }
 	private:
 		inline void clean(){
 			deleter(data_);
@@ -133,10 +136,13 @@ namespace TinySTL{
 
 		~shared_ptr(){ decrease_ref(); }
 
-		element_type operator *()const{ return *(get()); }
-		element_type *operator ->()const{ return get(); }
+		const element_type& operator *()const{ return *(get()); }
+		const element_type *operator ->()const{ return get(); }
+		element_type& operator *(){ return *(get()); }
+		element_type *operator ->(){ return get(); }
 
-		element_type* get() const{ return ref_->get_data(); }
+		const element_type* get() const{ return ref_->get_data(); }
+		element_type* get(){ return ref_->get_data(); }
 		size_t use_count() const{ return ref_->count(); }
 
 		operator bool() const{ return get() != nullptr; }
