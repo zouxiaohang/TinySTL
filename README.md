@@ -47,6 +47,7 @@ TinySTL
 	* unordered_set：100%
 	* unique_ptr：100%
 	* shared_ptr：100%
+	* cow_ptr：100%
 * STL Algorithms:  
     * fill：100% 
     * fill_n：100% 
@@ -563,6 +564,23 @@ TinySTL
 
 	up.reset(new string("hello"));
 	assert(*up == "hello");
+
+
+
+####(19):cow_ptr
+
+    cow_ptr<string> cp1(new string("zouxiaohang"));
+	auto cp2 = cp1, cp3 = cp1;
+	assert(cp1 == cp2 && cp2 == cp3);
+	assert(*cp1 == *cp2 && *cp2 == *cp3 && *cp3 == "zouxiaohang");
+
+	*cp2;//read
+	assert(cp1 == cp2 && cp2 == cp3);
+	assert(*cp1 == *cp2 && *cp2 == *cp3 && *cp3 == "zouxiaohang");
+
+	cp2->append(" C++");//write
+	assert(*cp1 == *cp3 && *cp3 == "zouxiaohang");
+	assert(*cp2 == "zouxiaohang C++");
     
  
     
