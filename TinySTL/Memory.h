@@ -107,20 +107,22 @@ namespace TinySTL{
 	class shared_ptr{
 	public:
 		typedef T element_type;
+	private:
+		template<class Type>
+		using ref_t = Detail::ref_t < Type >;
 	public:
 		explicit shared_ptr(T *p = nullptr) :ref_(new ref_t<T>(p)){}
 		template<class D>
 		shared_ptr(T *p, D del) : ref_(new ref_t<T>(p, del)){}
 
 		shared_ptr(const shared_ptr& sp){
-			ref_ = sp.ref_;
-			++(*ref_);
+			copy_ref(sp.ref_);
 		}
 
 		shared_ptr& operator = (const shared_ptr& sp){
 			if (this != &sp){
 				decrease_ref();
-				ref_ = sp.ref_;
+				copy_ref(sp.ref_);
 			}
 			return *this;
 		}
@@ -136,16 +138,17 @@ namespace TinySTL{
 		operator bool() const{ return get() != nullptr; }
 	private:
 		void decrease_ref(){
-			if (ref_){
+			if (ref_->get_data()){
 				--(*ref_);
 				if (use_count() == 0)
 					delete ref_;
 			}
 		}
+		void copy_ref(ref_t<T> *r){//ÕýÈ·µÄ¿½±´ref_t
+			ref_ = r;
+			++(*ref_);
+		}
 	private:
-		template<class Type>
-		using ref_t = Detail::ref_t < Type > ;
-
 		ref_t<T> *ref_;
 	};
 	template<class T1, class T2>
