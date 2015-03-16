@@ -13,12 +13,14 @@ namespace TinySTL{
 
 			auto sp3(sp2);
 			assert(sp3.use_count() == 2);
-			
-			auto sp4 = sp2;
-			assert(sp4.use_count() == 3);
+			{
+				auto sp4 = sp2;
+				assert(sp4.use_count() == 3 && sp3.use_count() == sp4.use_count());
 
-			assert(sp2.get() == sp3.get() && sp2.get() == sp4.get());
-			assert(sp2 == sp3 && !(sp2 != sp4));
+				assert(sp2.get() == sp3.get() && sp2.get() == sp4.get());
+				assert(sp2 == sp3 && !(sp2 != sp4));
+			}
+			assert(sp3.use_count() == 2);
 
 			shared_ptr<string> sp5(new string("hello"));
 			assert(*sp5 == "hello");
