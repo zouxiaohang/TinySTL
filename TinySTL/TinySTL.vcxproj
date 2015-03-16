@@ -82,7 +82,7 @@
   <ItemGroup>
     <ClCompile Include="Detail\Alloc.cpp" />
     <ClCompile Include="Detail\String.cpp" />
-    <ClCompile Include="Detail\TireTree.cpp" />
+    <ClCompile Include="Detail\TrieTree.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Profiler\Profiler.cpp" />
     <ClCompile Include="Test\AlgorithmTest.cpp" />
@@ -90,6 +90,7 @@
     <ClCompile Include="Test\BinarySearchTreeTest.cpp" />
     <ClCompile Include="Test\BitmapTest.cpp" />
     <ClCompile Include="Test\CircularBufferTest.cpp" />
+    <ClCompile Include="Test\COWPtrTest.cpp" />
     <ClCompile Include="Test\DequeTest.cpp" />
     <ClCompile Include="Test\GraphTest.cpp" />
     <ClCompile Include="Test\ListTest.cpp" />
@@ -115,11 +116,13 @@
     <ClInclude Include="Bitmap.h" />
     <ClInclude Include="CircularBuffer.h" />
     <ClInclude Include="Construct.h" />
+    <ClInclude Include="COWPtr.h" />
     <ClInclude Include="Deque.h" />
     <ClInclude Include="Detail\AVLTree.impl.h" />
     <ClInclude Include="Detail\BinarySearchTree.impl.h" />
     <ClInclude Include="Detail\Bitmap.impl.h" />
     <ClInclude Include="Detail\CircularBuffer.impl.h" />
+    <ClInclude Include="Detail\COWPtr.impl.h" />
     <ClInclude Include="Detail\Deque.impl.h" />
     <ClInclude Include="Detail\Graph.impl.h" />
     <ClInclude Include="Detail\List.impl.h" />
@@ -142,6 +145,7 @@
     <ClInclude Include="Test\BinarySearchTreeTest.h" />
     <ClInclude Include="Test\BitmapTest.h" />
     <ClInclude Include="Test\CircularBufferTest.h" />
+    <ClInclude Include="Test\COWPtrTest.h" />
     <ClInclude Include="Test\DequeTest.h" />
     <ClInclude Include="Test\GraphTest.h" />
     <ClInclude Include="Test\ListTest.h" />

@@ -90,9 +90,6 @@
     <ClCompile Include="Test\GraphTest.cpp">
       <Filter>Test</Filter>
     </ClCompile>
-    <ClCompile Include="Detail\TireTree.cpp">
-      <Filter>Detail</Filter>
-    </ClCompile>
     <ClCompile Include="Test\TrieTreeTest.cpp">
       <Filter>Test</Filter>
     </ClCompile>
@@ -103,6 +100,12 @@
       <Filter>Test</Filter>
     </ClCompile>
     <ClCompile Include="Test\SharedPtrTest.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
+    <ClCompile Include="Detail\TrieTree.cpp">
+      <Filter>Detail</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\COWPtrTest.cpp">
       <Filter>Test</Filter>
     </ClCompile>
   </ItemGroup>
@@ -276,6 +279,15 @@
       <Filter>Test</Filter>
     </ClInclude>
     <ClInclude Include="Test\SharedPtrTest.h">
+      <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="COWPtr.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Detail\COWPtr.impl.h">
+      <Filter>Detail</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\COWPtrTest.h">
       <Filter>Test</Filter>
     </ClInclude>
   </ItemGroup>

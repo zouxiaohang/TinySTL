@@ -8,6 +8,7 @@
 #include "Test\BitmapTest.h"
 #include "Test\BinarySearchTreeTest.h"
 #include "Test\CircularBufferTest.h"
+#include "Test\COWPtrTest.h"
 #include "Test\DequeTest.h"
 #include "Test\GraphTest.h"
 #include "Test\ListTest.h"
@@ -32,6 +33,7 @@ int main(){
 	TinySTL::BitmapTest::testAllCases();
 	TinySTL::BinarySearchTreeTest::testAllCases();
 	TinySTL::CircularBufferTest::testAllCases();
+	TinySTL::COWPtrTest::testAllCases();
 	TinySTL::DequeTest::testAllCases();
 	TinySTL::ListTest::testAllCases();
 	TinySTL::GraphTest::testAllCases();
