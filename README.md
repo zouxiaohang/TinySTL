@@ -578,9 +578,9 @@ TinySTL
 	assert(cp1 == cp2 && cp2 == cp3);
 	assert(*cp1 == *cp2 && *cp2 == *cp3 && *cp3 == "zouxiaohang");
 
-	cp2->append(" C++");//write
+	*cp2 = ("C++");//write
 	assert(*cp1 == *cp3 && *cp3 == "zouxiaohang");
-	assert(*cp2 == "zouxiaohang C++");
+	assert(*cp2 == "C++");
     
  
     
