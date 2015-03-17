@@ -33,7 +33,9 @@ namespace TinySTL{
 			assert(cp1 == cp2 && cp2 == cp3);
 			assert(*cp1 == *cp2 && *cp2 == *cp3 && *cp3 == "zouxiaohang");
 
-			*cp2;//read
+			//cp2->capacity(); change the cow_ptr -> 由于代理类代理的类型未知(T)造成的
+			string s = *cp2;//read
+			assert(s == "zouxiaohang");
 			assert(cp1 == cp2 && cp2 == cp3);
 			assert(*cp1 == *cp2 && *cp2 == *cp3 && *cp3 == "zouxiaohang");
 

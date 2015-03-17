@@ -24,6 +24,7 @@ namespace TinySTL{
 			cow_ptr<T> *cp_;
 		};
 	}
+	//未能完全模拟原生指针操作，只供参考，详情见单元测试
 	template<class T>
 	class cow_ptr{
 	public:
