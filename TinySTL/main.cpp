@@ -26,8 +26,6 @@
 #include "Test\VectorTest.h"
 
 using namespace TinySTL::Profiler;
-#include <string>
-#include <type_traits>
 
 int main(){
 	TinySTL::AlgorithmTest::testAllCases();
@@ -52,10 +50,6 @@ int main(){
 	TinySTL::Unordered_setTest::testAllCases();
 	TinySTL::VectorTest::testAllCases();
 
-	std::string s;
-	if (std::is_const<decltype(s.cbegin())>::value){
-		std::cout << "const" << std::endl;
-	}
 	system("pause");
 	return 0;
 }
