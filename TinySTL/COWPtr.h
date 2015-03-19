@@ -68,6 +68,11 @@ namespace TinySTL{
 		template<class _T>
 		friend class Detail::proxy;
 	};
+
+	template<class T, class... Args>
+	cow_ptr<T> make_cow(Args...args){
+		return cow_ptr<T>(new T(std::forward<Args>(args)...));
+	}
 }
 
 #include "Detail\COWPtr.impl.h"

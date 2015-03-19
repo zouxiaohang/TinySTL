@@ -569,7 +569,7 @@ TinySTL
 
 ####(19):cow_ptr
 
-    cow_ptr<string> cp1(new string("zouxiaohang"));
+    cow_ptr<string> cp1 = make_cow<string>("zouxiaohang");
 	auto cp2 = cp1, cp3 = cp1;
 	assert(cp1 == cp2 && cp2 == cp3);
 	assert(*cp1 == *cp2 && *cp2 == *cp3 && *cp3 == "zouxiaohang");
