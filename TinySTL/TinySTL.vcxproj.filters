@@ -108,6 +108,9 @@
     <ClCompile Include="Test\COWPtrTest.cpp">
       <Filter>Test</Filter>
     </ClCompile>
+    <ClCompile Include="Test\UFSetTest.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TypeTraits.h">
@@ -289,6 +292,12 @@
     </ClInclude>
     <ClInclude Include="Test\COWPtrTest.h">
       <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\UFSetTest.h">
+      <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="UFSet.h">
+      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

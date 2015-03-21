@@ -582,6 +582,17 @@ TinySTL
 	*cp2 = ("C++");//write
 	assert(*cp1 == *cp3 && *cp3 == "zouxiaohang");
 	assert(*cp2 == "C++");
+
+
+
+
+####(19):union-find set
+
+    uf_set<10> uf;
+	uf.Union(0, 1);
+	uf.Union(2, 3);
+	uf.Union(3, 1);
+	assert(uf.Find(0) == uf.Find(2));
     
  
     

@@ -21,6 +21,7 @@
 #include "Test\StringTest.h"
 #include "Test\SuffixArrayTest.h"
 #include "Test\TrieTreeTest.h"
+#include "Test\UFSetTest.h"
 #include "Test\UniquePtrTest.h"
 #include "Test\Unordered_setTest.h"
 #include "Test\VectorTest.h"
@@ -46,6 +47,7 @@ int main(){
 	TinySTL::StringTest::testAllCases();
 	TinySTL::SuffixArrayTest::testAllCases();
 	TinySTL::TrieTreeTest::testAllCases();
+	TinySTL::UFSetTest::testAllCases();
 	TinySTL::UniquePtrTest::testAllCases();
 	TinySTL::Unordered_setTest::testAllCases();
 	TinySTL::VectorTest::testAllCases();
