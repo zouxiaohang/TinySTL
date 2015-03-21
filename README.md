@@ -85,6 +85,7 @@ TinySTL
 	* suffix_array：100%
 	* directed_graph：100%
 	* trie tree：100%
+	* Disjoint-set data structure：100%
 
 ##TinySTL单元测试(原单元测试代码逐步)：
   * pair：100%
@@ -106,6 +107,7 @@ TinySTL
   * trie tree：100%
   * unique_ptr：100%
   * shared_ptr：100%
+  * Disjoint-set data structure：100%
 
 #TinySTL性能测试:
 ###测试环境：Windows 7 && VS2013 && release模式
