@@ -111,6 +111,9 @@
     <ClCompile Include="Test\UFSetTest.cpp">
       <Filter>Test</Filter>
     </ClCompile>
+    <ClCompile Include="Test\TypeTraitsTest.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TypeTraits.h">
@@ -298,6 +301,9 @@
     </ClInclude>
     <ClInclude Include="UFSet.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\TypeTraitsTest.h">
+      <Filter>Test</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -3,6 +3,19 @@
 
 namespace TinySTL{
 
+	namespace{
+		template<bool, class Ta, class Tb>
+		struct IfThenElse;
+		template<class Ta, class Tb>
+		struct IfThenElse < true, Ta, Tb > {
+			using result = Ta;
+		};
+		template<class Ta, class Tb>
+		struct IfThenElse < false, Ta, Tb > {
+			using result = Tb;
+		};
+	}
+
 	struct _true_type { };
 	struct _false_type { };
 
@@ -236,6 +249,6 @@ namespace TinySTL{
 		typedef _true_type		has_trivial_destructor;
 		typedef _true_type		is_POD_type;
 	};
-}
 
+}
 #endif

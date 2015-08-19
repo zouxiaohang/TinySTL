@@ -103,6 +103,7 @@
     <ClCompile Include="Test\StringTest.cpp" />
     <ClCompile Include="Test\SuffixArrayTest.cpp" />
     <ClCompile Include="Test\TrieTreeTest.cpp" />
+    <ClCompile Include="Test\TypeTraitsTest.cpp" />
     <ClCompile Include="Test\UFSetTest.cpp" />
     <ClCompile Include="Test\UniquePtrTest.cpp" />
     <ClCompile Include="Test\Unordered_setTest.cpp" />
@@ -160,6 +161,7 @@
     <ClInclude Include="Test\SuffixArrayTest.h" />
     <ClInclude Include="Test\TestUtil.h" />
     <ClInclude Include="Test\TrieTreeTest.h" />
+    <ClInclude Include="Test\TypeTraitsTest.h" />
     <ClInclude Include="Test\UFSetTest.h" />
     <ClInclude Include="Test\UniquePtrTest.h" />
     <ClInclude Include="Test\Unordered_setTest.h" />
