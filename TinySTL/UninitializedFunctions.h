@@ -66,7 +66,7 @@ namespace TinySTL{
 
 	/***************************************************************************/
 	template<class ForwardIterator, class Size, class T>
-	ForwardIterator _uninitialized_n_fill_aux(ForwardIterator first,
+	ForwardIterator _uninitialized_fill_n_aux(ForwardIterator first,
 		Size n, const T& x, _true_type);
 	template<class ForwardIterator, class Size, class T>
 	ForwardIterator _uninitialized_fill_n_aux(ForwardIterator first,
