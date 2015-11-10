@@ -141,12 +141,13 @@ namespace TinySTL{
 		InputIterator last,
 		std::false_type){
 		difference_type locationLeft = endOfStorage_ - finish_; // the size of left storage
-		difference_type locationNeed = last - first;
+		difference_type locationNeed = distance(first, last);//last - first;
 
 		if (locationLeft >= locationNeed){
 			iterator tempPtr = end() - 1;
 			for (; tempPtr - position >= 0; --tempPtr){//move the [position, finish_) back
-				*(tempPtr + locationNeed) = *tempPtr;
+				//*(tempPtr + locationNeed) = *tempPtr;//bug
+				construct(tempPtr + locationNeed, *tempPtr);
 			}
 			TinySTL::uninitialized_copy(first, last, position);
 			finish_ += locationNeed;
@@ -165,7 +166,8 @@ namespace TinySTL{
 		if (locationLeft >= locationNeed){
 			auto tempPtr = end() - 1;
 			for (; tempPtr - position >= 0; --tempPtr){//move the [position, finish_) back
-				*(tempPtr + locationNeed) = *tempPtr;
+				//*(tempPtr + locationNeed) = *tempPtr;//bug
+				construct(tempPtr + locationNeed, *tempPtr);
 			}
 			TinySTL::uninitialized_fill_n(position, n, value);
 			finish_ += locationNeed;

@@ -244,7 +244,7 @@ namespace TinySTL{
 	template <class InputIterator>
 	string::iterator string::insert(iterator p, InputIterator first, InputIterator last){
 		auto lengthOfLeft = capacity() - size();
-		size_t lengthOfInsert = last - first;
+		size_t lengthOfInsert = distance(first, last);
 		if (lengthOfInsert <= lengthOfLeft){
 			for (iterator it = finish_ - 1; it >= p; --it){
 				*(it + lengthOfInsert) = *(it);
