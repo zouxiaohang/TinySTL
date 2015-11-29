@@ -186,7 +186,48 @@ namespace TinySTL{
 			assert(!(foo == bar));
 			assert(foo != bar);
 		}
+		
+		class TestItem
+		{
+		public:
+			TestItem()
+			{
+				++count;
+			}
+			TestItem(const TestItem & other)
+			{
+				++count;
+			}
 
+			virtual ~TestItem()
+			{
+				--count;
+			}
+
+			static int getCount()
+			{
+				return count;
+			}
+		private:
+			static int count;
+		};
+		int TestItem::count = 0;
+
+		void testCase15()
+		{
+			assert(TestItem::getCount() == 0);
+			{
+				typedef TinySTL::vector<TestItem> TVector;
+				TVector t(10);
+				t.push_back(TestItem());
+				t.push_back(TestItem());
+				t.push_back(TestItem());
+				t.insert(t.begin(), t.begin(), t.begin() + 1);
+
+			}
+			assert(TestItem::getCount() == 0);
+
+		}
 
 		void testAllCases(){
 			testCase1();
@@ -203,6 +244,7 @@ namespace TinySTL{
 			testCase12();
 			testCase13();
 			testCase14();
+			testCase15();
 		}
 	}
 }
