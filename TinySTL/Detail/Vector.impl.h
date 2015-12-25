@@ -226,7 +226,12 @@ namespace TinySTL{
 	}
 	template<class T, class Alloc>
 	void vector<T, Alloc>::shrink_to_fit(){
-		dataAllocator::deallocate(finish_, endOfStorage_ - finish_);
+		//dataAllocator::deallocate(finish_, endOfStorage_ - finish_);
+		//endOfStorage_ = finish_;
+		T* t = (T*)dataAllocator::allocate(size());
+		finish_ = TinySTL::uninitialized_copy(start_, finish_, t);
+		dataAllocator::deallocate(start_, capacity());
+		start_ = t;
 		endOfStorage_ = finish_;
 	}
 	template<class T, class Alloc>
