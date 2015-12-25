@@ -144,12 +144,16 @@ namespace TinySTL{
 		difference_type locationNeed = distance(first, last);//last - first;
 
 		if (locationLeft >= locationNeed){
-			iterator tempPtr = end() - 1;
-			for (; tempPtr - position >= 0; --tempPtr){//move the [position, finish_) back
-				//*(tempPtr + locationNeed) = *tempPtr;//bug
-				construct(tempPtr + locationNeed, *tempPtr);
+			if (finish_ - position > locationNeed){
+				TinySTL::uninitialized_copy(finish_ - locationNeed, finish_, finish_);
+				std::copy_backward(position, finish_ - locationNeed, finish_);
+				std::copy(first, last, position);
 			}
-			TinySTL::uninitialized_copy(first, last, position);
+			else{
+				iterator temp = TinySTL::uninitialized_copy(first + (finish_ - position), last, finish_);
+				TinySTL::uninitialized_copy(position, finish_, temp);
+				std::copy(first, first + (finish_ - position), position);
+			}
 			finish_ += locationNeed;
 		}
 		else{
