@@ -101,7 +101,7 @@ namespace TinySTL{
 		return static_cast<typename iterator_traits<Iterator>::value_type*>(0);
 	}
 	template<class Iterator>
-	inline typename iterator_traits<Iterator>::difference_type
+	inline typename iterator_traits<Iterator>::difference_type*
 		difference_type(const Iterator& It){
 		return static_cast<typename iterator_traits<Iterator>::difference_type*>(0);
 	}
