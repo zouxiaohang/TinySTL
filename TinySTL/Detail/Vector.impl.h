@@ -92,16 +92,10 @@ namespace TinySTL{
 	}
 	template<class T, class Alloc>
 	typename vector<T, Alloc>::iterator vector<T, Alloc>::erase(iterator first, iterator last){
-		//尾部残留对象数
-		difference_type lenOfTail = end() - last;
-		//删去的对象数目
-		difference_type lenOfRemoved = last - first;
-		finish_ = finish_ - lenOfRemoved;
-		for (; lenOfTail != 0; --lenOfTail){
-			auto temp = (last - lenOfRemoved);
-			*temp = *(last++);
-		}
-		return (first);
+		iterator pos = std::copy(last, finish_, first);
+		dataAllocator::destroy(pos, finish_);
+		finish_ = finish_ - (last - first);
+		return first;
 	}
 	template<class T, class Alloc>
 	template<class InputIterator>
