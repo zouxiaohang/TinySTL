@@ -63,7 +63,8 @@ namespace TinySTL{
 		}
 		else if (n > capacity()){
 			auto lengthOfInsert = n - size();
-			T *newStart = dataAllocator::allocate(getNewCapacity(lengthOfInsert));
+			//T *newStart = dataAllocator::allocate(getNewCapacity(lengthOfInsert));
+			T *newStart = dataAllocator::allocate(getNewCapacity(n));
 			T *newFinish = TinySTL::uninitialized_copy(begin(), end(), newStart);
 			newFinish = TinySTL::uninitialized_fill_n(newFinish, lengthOfInsert, val);
 
