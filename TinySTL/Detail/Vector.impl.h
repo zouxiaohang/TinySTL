@@ -89,7 +89,12 @@ namespace TinySTL{
 	//***************修改容器的相关操作**************************
 	template<class T, class Alloc>
 	typename vector<T, Alloc>::iterator vector<T, Alloc>::erase(iterator position){
-		return erase(position, position + 1);
+		if (position + 1 != end())
+			std::copy(position + 1, finish_, position);
+		auto tmp = finish_;
+		--finish_;
+		dataAllocator::destroy(tmp);
+		return position;
 	}
 	template<class T, class Alloc>
 	typename vector<T, Alloc>::iterator vector<T, Alloc>::erase(iterator first, iterator last){
