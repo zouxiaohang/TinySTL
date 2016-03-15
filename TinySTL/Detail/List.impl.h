@@ -395,7 +395,7 @@ namespace TinySTL{
 		auto node1 = lhs.head.p, node2 = rhs.head.p;
 		for (; node1 != lhs.tail.p && node2 != rhs.tail.p; node1 = node1->next, node2 = node2->next){
 			if (node1->data != node2->data)
-				break;
+				return false;
 		}
 		if (node1 == lhs.tail.p && node2 == rhs.tail.p)
 			return true;
