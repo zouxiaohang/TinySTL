@@ -243,7 +243,9 @@ namespace TinySTL{
 	}
 	size_t string::find(const string& str, size_t pos) const{
 		size_t lengthOfS = str.size();
-		if (size() - pos < lengthOfS)
+		//if (size() - pos < lengthOfS)
+		//	return npos;
+		if (size() < lengthOfS + pos)
 			return npos;
 		return find_aux(str.cbegin(), pos, lengthOfS, size());
 	}
