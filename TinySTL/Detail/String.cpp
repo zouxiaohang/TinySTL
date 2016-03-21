@@ -264,6 +264,7 @@ namespace TinySTL{
 	}
 	size_t string::rfind(char c, size_t pos) const{
 		pos = changeVarWhenEuqalNPOS(pos, size(), 1);
+		if (npos == pos) return npos;
 		for (auto cit = cbegin() + pos; cit >= cbegin(); --cit){
 			if (*cit == c)
 				return cit - cbegin();
@@ -290,10 +291,12 @@ namespace TinySTL{
 		//if (pos - 0 < lengthOfS)
 		//	return npos;
 		pos = changeVarWhenEuqalNPOS(pos, size(), 1);
+		if (npos == pos) return npos;
 		return rfind_aux(str.begin(), pos, lengthOfS, 0);
 	}
 	size_t string::rfind(const char* s, size_t pos) const{
 		pos = changeVarWhenEuqalNPOS(pos, size(), 1);
+		if (npos == pos) return npos;
 		return rfind(s, pos, strlen(s));
 	}
 	size_t string::rfind(const char* s, size_t pos, size_t n) const{
@@ -388,6 +391,7 @@ namespace TinySTL{
 	size_t string::find_last_of(const string& str, size_t pos) const{
 		pos = changeVarWhenEuqalNPOS(pos, size(), 1);
 		//return find_last_of(str.begin(), pos, pos + 1);
+		if (npos == pos) return npos;
 		return find_last_of(str.begin(), pos, str.size());
 	}
 	size_t string::find_last_of(const char* s, size_t pos) const{
@@ -414,11 +418,13 @@ namespace TinySTL{
 	size_t string::find_last_not_of(const string& str, size_t pos) const{
 		pos = changeVarWhenEuqalNPOS(pos, size(), 1);
 		//return find_last_not_of(str.begin(), pos, size());
+		if (npos == pos) return npos;
 		return find_last_not_of(str.begin(), pos, str.size());
 	}
 	size_t string::find_last_not_of(const char* s, size_t pos) const{
 		pos = changeVarWhenEuqalNPOS(pos, size(), 1);
 		//return find_last_not_of(s, pos, pos + 1);
+		if (npos == pos) return npos;
 		return find_last_not_of(s, pos, strlen(s));
 	}
 	size_t string::find_last_not_of(const char* s, size_t pos, size_t n) const{
