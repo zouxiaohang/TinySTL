@@ -382,7 +382,8 @@ namespace TinySTL{
 		return npos;
 	}
 	size_t string::find_first_not_of(char c, size_t pos) const{
-		for (size_t i = pos; i != size(); ++i){
+		//bug fix (if pos>size())
+		for (size_t i = pos; i < size(); ++i){ 
 			if ((*this)[i] != c)
 				return i;
 		}
