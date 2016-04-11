@@ -101,7 +101,7 @@ namespace TinySTL{
 			start_free = (char *)malloc(bytes_to_get);
 			if (!start_free){
 				obj **my_free_list = 0, *p = 0;
-				for (int i = 0; i <= EMaxBytes::MAXBYTES; i += EAlign::ALIGN){
+				for (int i = bytes; i <= EMaxBytes::MAXBYTES; i += EAlign::ALIGN){
 					my_free_list = free_list + FREELIST_INDEX(i);
 					p = *my_free_list;
 					if (p != 0){
