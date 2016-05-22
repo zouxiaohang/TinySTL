@@ -55,7 +55,7 @@ namespace TinySTL{
 		cb_iter<T, N, Alloc> operator +(const cb_iter<T, N, Alloc>& cit, std::ptrdiff_t i){
 			int real_i = i % (std::ptrdiff_t)N;//assume i >= 0
 			if (real_i < 0)
-				real_i += 5;
+				real_i += N;
 			cb_iter<T, N, Alloc> res = cit;
 			res.setIndex_(res.index_ + real_i);
 			res.setPtr_(res.ptr_ + res.index_);
