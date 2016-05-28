@@ -63,7 +63,8 @@ namespace TinySTL{
 		}
 		else if (n > capacity()){
 			auto lengthOfInsert = n - size();
-			T *newStart = dataAllocator::allocate(getNewCapacity(lengthOfInsert));
+			//T *newStart = dataAllocator::allocate(getNewCapacity(lengthOfInsert));
+			T *newStart = dataAllocator::allocate(getNewCapacity(n));
 			T *newFinish = TinySTL::uninitialized_copy(begin(), end(), newStart);
 			newFinish = TinySTL::uninitialized_fill_n(newFinish, lengthOfInsert, val);
 
@@ -88,20 +89,19 @@ namespace TinySTL{
 	//***************修改容器的相关操作**************************
 	template<class T, class Alloc>
 	typename vector<T, Alloc>::iterator vector<T, Alloc>::erase(iterator position){
-		return erase(position, position + 1);
+		if (position + 1 != end())
+			std::copy(position + 1, finish_, position);
+		auto tmp = finish_;
+		--finish_;
+		dataAllocator::destroy(tmp);
+		return position;
 	}
 	template<class T, class Alloc>
 	typename vector<T, Alloc>::iterator vector<T, Alloc>::erase(iterator first, iterator last){
-		//尾部残留对象数
-		difference_type lenOfTail = end() - last;
-		//删去的对象数目
-		difference_type lenOfRemoved = last - first;
-		finish_ = finish_ - lenOfRemoved;
-		for (; lenOfTail != 0; --lenOfTail){
-			auto temp = (last - lenOfRemoved);
-			*temp = *(last++);
-		}
-		return (first);
+		iterator pos = std::copy(last, finish_, first);
+		dataAllocator::destroy(pos, finish_);
+		finish_ = finish_ - (last - first);
+		return first;
 	}
 	template<class T, class Alloc>
 	template<class InputIterator>
