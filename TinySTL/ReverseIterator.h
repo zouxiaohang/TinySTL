@@ -44,7 +44,7 @@ namespace TinySTL{
 			--cur_;
 			return *this;
 		}
-		reverse_iterator_t& operator ++(int){
+		reverse_iterator_t operator ++(int){
 			reverse_iterator_t temp = *this;
 			++(*this);
 			return temp;
