@@ -296,6 +296,7 @@ namespace TinySTL{
 					nextNode->next->prev = curNode;
 				}
 				deleteNode(nextNode);
+                curNode = curNode->next;
 			}
 			else{
 				curNode = nextNode;
