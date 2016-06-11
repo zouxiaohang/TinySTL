@@ -170,7 +170,7 @@ namespace TinySTL{
 	}
 	template<class T>
 	void list<T>::insert(iterator position, size_type n, const value_type& val){
-		insert_aux(position, n, val, typename std::is_integral<InputIterator>::type());
+		insert_aux(position, n, val, typename std::is_integral<T>::type());
 	}
 	template<class T>
 	template <class InputIterator>
@@ -296,6 +296,7 @@ namespace TinySTL{
 					nextNode->next->prev = curNode;
 				}
 				deleteNode(nextNode);
+                curNode = curNode->next;
 			}
 			else{
 				curNode = nextNode;
