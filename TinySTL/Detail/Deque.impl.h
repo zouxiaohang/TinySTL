@@ -5,15 +5,15 @@ namespace TinySTL{
 	namespace Detail{
 		template<class T>
 		dq_iter<T>& dq_iter<T>::operator ++(){
-			if (cur_ != getBuckTail(mapIndex_))//+1ºó»¹ÔÚÍ¬Ò»¸öÍ°Àï
+			if (cur_ != getBuckTail(mapIndex_))//+1åè¿˜åœ¨åŒä¸€ä¸ªæ¡¶é‡Œ
 				++cur_;
-			else if (mapIndex_ + 1 < container_->mapSize_){//+1ºó»¹ÔÚÍ¬Ò»¸ömapÀï
+			else if (mapIndex_ + 1 < container_->mapSize_){//+1åè¿˜åœ¨åŒä¸€ä¸ªmapé‡Œ
 				++mapIndex_;
 				cur_ = getBuckHead(mapIndex_);
 			}
-			else{//+1ºóÌø³öÁËmap
+			else{//+1åè·³å‡ºäº†map
 				mapIndex_ = container_->mapSize_;
-				//cur_ = container_->map_[mapIndex_] + getBuckSize();//Ö¸Ïòmap_[mapSize_-1]µÄÎ²µÄÏÂÒ»¸öÎ»ÖÃ
+				//cur_ = container_->map_[mapIndex_] + getBuckSize();//æŒ‡å‘map_[mapSize_-1]çš„å°¾çš„ä¸‹ä¸€ä¸ªä½ç½®
 				cur_ = container_->map_[mapIndex_];
 			}
 			return *this;
@@ -26,15 +26,15 @@ namespace TinySTL{
 		}
 		template<class T>
 		dq_iter<T>& dq_iter<T>::operator --(){
-			if (cur_ != getBuckHead(mapIndex_))//µ±Ç°²»Ö¸ÏòÍ°Í·
+			if (cur_ != getBuckHead(mapIndex_))//å½“å‰ä¸æŒ‡å‘æ¡¶å¤´
 				--cur_;
-			else if (mapIndex_ - 1 >= 0){//-1ºó»¹ÔÚmapÀïÃæ
+			else if (mapIndex_ - 1 >= 0){//-1åè¿˜åœ¨mapé‡Œé¢
 				--mapIndex_;
 				cur_ = getBuckTail(mapIndex_);
 			}
 			else{
 				mapIndex_ = 0;
-				cur_ = container_->map_[mapIndex_];//Ö¸Ïòmap_[0]µÄÍ·
+				cur_ = container_->map_[mapIndex_];//æŒ‡å‘map_[0]çš„å¤´
 			}
 			return *this;
 		}
@@ -64,7 +64,7 @@ namespace TinySTL{
 		}
 		template<class T>
 		void dq_iter<T>::swap(dq_iter& it){
-			TinySTL::swap(mapIndex_, it.mapIndex_);
+			TinySTL::swap(mapIndex_ff , it.mapIndex_);
 			TinySTL::swap(cur_, it.cur_);
 			//TinySTL::swap(container_, it.container_);
 		}
@@ -72,7 +72,7 @@ namespace TinySTL{
 		dq_iter<T> operator + (const dq_iter<T>& it, typename dq_iter<T>::difference_type n){//assume n >= 0
 			dq_iter<T> res(it);
 			auto m = res.getBuckTail(res.mapIndex_) - res.cur_;
-			if (n <= m){//Ç°½øn²½ÈÔÔÚÍ¬Ò»¸öÍ°ÖĞ
+			if (n <= m){//å‰è¿›næ­¥ä»åœ¨åŒä¸€ä¸ªæ¡¶ä¸­
 				res.cur_ += n;
 			}
 			else{
@@ -92,7 +92,7 @@ namespace TinySTL{
 		dq_iter<T> operator - (const dq_iter<T>& it, typename dq_iter<T>::difference_type n){//assume n >= 0
 			dq_iter<T> res(it);
 			auto m = res.cur_ - res.getBuckHead(res.mapIndex_);
-			if (n <= m)//ºóÍËn²½»¹ÔÚÍ¬Ò»¸öÍ°ÖĞ
+			if (n <= m)//åé€€næ­¥è¿˜åœ¨åŒä¸€ä¸ªæ¡¶ä¸­
 				res.cur_ -= n;
 			else{
 				n = n - m;
@@ -207,7 +207,7 @@ namespace TinySTL{
 	typename deque<T, Alloc>::reference deque<T, Alloc>::back(){
 		return *(end() - 1);
 	}
-	//ÓÉÓÚconstµü´úÆ÷µÄÉè¼ÆÊ§Îó¹ÊÒÔÏÂÈı¸öconstº¯Êı»áÉ¥Ê§constÌØĞÔ
+	//ç”±äºconstè¿­ä»£å™¨çš„è®¾è®¡å¤±è¯¯æ•…ä»¥ä¸‹ä¸‰ä¸ªconstå‡½æ•°ä¼šä¸§å¤±constç‰¹æ€§
 	template<class T, class Alloc>
 	typename deque<T, Alloc>::const_reference deque<T, Alloc>::operator[] (size_type n) const{
 		return *(begin() + n);
@@ -224,7 +224,7 @@ namespace TinySTL{
 	typename deque<T, Alloc>::iterator deque<T, Alloc>::begin(){ return beg_; }
 	template<class T, class Alloc>
 	typename deque<T, Alloc>::iterator deque<T, Alloc>::end(){ return end_; }
-	//µü´úÆ÷Éè¼ÆÊ§Îó£¬»áÊ¹ÏÂÃæÁ½¸öº¯ÊıÉ¥Ê§constÌØĞÔ£¬ÔİÊ±Ã»ÓĞĞ§½â¾ö°ì·¨¹ÊÖ»ÄÜÏÈÕâÑùÍ×Ğ­
+	//è¿­ä»£å™¨è®¾è®¡å¤±è¯¯ï¼Œä¼šä½¿ä¸‹é¢ä¸¤ä¸ªå‡½æ•°ä¸§å¤±constç‰¹æ€§ï¼Œæš‚æ—¶æ²¡æœ‰æ•ˆè§£å†³åŠæ³•æ•…åªèƒ½å…ˆè¿™æ ·å¦¥å
 	template<class T, class Alloc>
 	typename deque<T, Alloc>::iterator deque<T, Alloc>::begin()const{ return beg_; }
 	template<class T, class Alloc>
