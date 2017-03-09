@@ -46,8 +46,12 @@ namespace TinySTL{
 		}
 		template<class T>
 		bool dq_iter<T>::operator ==(const dq_iter& it)const{
-			return ((mapIndex_ == it.mapIndex_) &&
-				(cur_ == it.cur_) && (container_ == it.container_));
+			//这里我有一个小问题，就是当两个duque的迭代器进行比较是否相同的时候，直接比较cur_就应该可以了吧？
+			//我是这么想的，因为我们每次新建一个缓冲区的后，将map中的一个node指向该缓冲区，这样就说明每一个缓冲区都是allocate得到的，那么在
+			//内存空间中，每个地址都是独一无二的，那么每一个cur_就应该是不同的，所以直接比较cur_我觉得就达到了目的。
+			//return ((mapIndex_ == it.mapIndex_) &&
+				//(cur_ == it.cur_) && (container_ == it.container_));
+				return cur_ == it.cur_;
 		}
 		template<class T>
 		bool dq_iter<T>::operator !=(const dq_iter<T>& it)const{
