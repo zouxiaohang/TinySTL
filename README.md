@@ -6,7 +6,7 @@ TinySTL
 
 编译环境：VS2013及以上版本
 
-##开发计划：
+## 开发计划：
   * STL的几大基本组件，如string、vector、list、deque、set、map、unordered_\*等
   * STL算法库中的大部分算法
   * circular buffer
@@ -30,7 +30,7 @@ TinySTL
   * Graph
   * bloom filter
 
-##完成进度：
+## 完成进度：
 * STL的几大基本组件
     * type traits：100%  
     * 空间配置器：100%
@@ -87,7 +87,7 @@ TinySTL
 	* trie tree：100%
 	* Disjoint-set data structure：100%
 
-##TinySTL单元测试(原单元测试代码逐步)：
+## TinySTL单元测试(原单元测试代码逐步)：
   * pair：100%
   * algorithm：20%
   * vector：100%
@@ -109,10 +109,10 @@ TinySTL
   * shared_ptr：100%
   * Disjoint-set data structure：100%
 
-#TinySTL性能测试:
-###测试环境：Windows 7 && VS2013 && release模式
-###测试结果：
-####(1):vector&lt;int>
+# TinySTL性能测试:
+### 测试环境：Windows 7 && VS2013 && release模式
+### 测试结果：
+#### (1):vector&lt;int>
 
     //std::vector<int> vec;
     TinySTL::vector<int> vec;
@@ -132,7 +132,7 @@ TinySTL
 |std::vector&lt;int>|10万|6|  
 |std::vector&lt;int>|100万|16|  
 |std::vector&lt;int>|1000万|210|    
-####(2):vector&lt;string>
+#### (2):vector&lt;string>
 
     //std::vector<std::string> vec;
     TinySTL::vector<std::string> vec;
@@ -152,7 +152,7 @@ TinySTL
 |std::vector&lt;string>|10万|29|  
 |std::vector&lt;string>|100万|232|  
 |std::vector&lt;string>|1000万|1972|
-####(3):circular_buffer&lt;int, N>
+#### (3):circular_buffer&lt;int, N>
 
     TinySTL::circular_buffer<int, 10000> cb(10000, 0);
     //boost::circular_buffer<int> cb(10000, 0);
@@ -171,7 +171,7 @@ TinySTL
 |boost::circular_buffer|1000万|22|  
 |boost::circular_buffer|10000万|252|  
 |boost::circular_buffer|100000万|2241|  
-####(4):题目：利用bitmap找出str中未出现的字母  
+#### (4):题目：利用bitmap找出str中未出现的字母  
 
     std::string str("abcdefghijklmnpqrstuvwxyz");
     TinySTL::bitmap<26> bm;
@@ -190,7 +190,7 @@ TinySTL
     32  
     字母o没出现！！！
     
-####(5):string
+#### (5):string
 
     //std::string str;
     TinySTL::string str;
@@ -211,7 +211,7 @@ TinySTL
 |std::string|1000万|229|  
 |std::string|10000万|1965|  
 
-####(6):priority_queue&lt;int>
+#### (6):priority_queue&lt;int>
 
     //std::priority_queue<int> pq;
     TinySTL::priority_queue<int> pq;
@@ -255,7 +255,7 @@ TinySTL
 |std::priority_queue&lt;int>|100万|92|  
 |std::priority_queue&lt;int>|1000万|1214|  
 
-####(7):binary_search_tree&lt;string>
+#### (7):binary_search_tree&lt;string>
 
     ifstream f;
 	//char buff[256] = { 0 };
@@ -283,7 +283,7 @@ TinySTL
 |TinySTL::binary_search_tree&lt;string>|169664|64|  
 |TinySTL::binary_search_tree&lt;string>|438230|277|   
 
-####(8):deque&lt;int>
+#### (8):deque&lt;int>
 
     //std::deque<int> dq;
     TinySTL::deque<int> dq;
@@ -307,9 +307,9 @@ TinySTL
 |std::deque&lt;int>|10万|90|  
 |std::deque&lt;int>|100万|1087|  
 |std::deque&lt;int>|1000万|4835|  
-#####ps：这个性能差距的原因1是内部实现的机制不同，我的deque是预先分配内存因此相同条件下占用的内存更多，而stl的deque是需要的时候再分配，更加节省内存；2是stl的deque实现了更多更灵活的插入删除操作，我只是实现了在头尾的插入和删除
+##### ps：这个性能差距的原因1是内部实现的机制不同，我的deque是预先分配内存因此相同条件下占用的内存更多，而stl的deque是需要的时候再分配，更加节省内存；2是stl的deque实现了更多更灵活的插入删除操作，我只是实现了在头尾的插入和删除
 
-####(9):avl_tree&lt;int> 
+#### (9):avl_tree&lt;int> 
     TinySTL::binary_search_tree<int> bst;
     TinySTL::avl_tree<int> avlt;
 	for (int i = 0; i != 10000; ++i){
@@ -324,7 +324,7 @@ TinySTL
     avl_tree height = 14
 
 
-####(10):list&lt;int>
+#### (10):list&lt;int>
 
     TinySTL::list<int> list;
     //std::list<int> list;
@@ -345,7 +345,7 @@ TinySTL
 |std::list&lt;int>|1000万|17571|  
 
 
-####(11):list&lt;int>::sort()
+#### (11):list&lt;int>::sort()
 
     TinySTL::list<int> list1;
     std::list<int> list2;
@@ -382,7 +382,7 @@ TinySTL
 |std::list&lt;int>|100万|665.128|  
 
 
-####(12):suffix_array
+#### (12):suffix_array
 
     char arr[] = { 'a', 'a', 'b', 'a', 'a', 'a', 'a', 'b' };
     TinySTL::suffix_array sa(arr, 8);
@@ -399,7 +399,7 @@ TinySTL
 
 
 
-####(13):unordered_set&lt;int>
+#### (13):unordered_set&lt;int>
 
     TinySTL::Unordered_set<int> ust(10);
 	//std::unordered_set<int> ust(10);
@@ -433,7 +433,7 @@ TinySTL
 
 
 
-####(14):sort
+#### (14):sort
 
     std::random_device rd;
 	const int len = 10000000;
@@ -457,7 +457,7 @@ TinySTL
 
 
 
-####(15):directed_graph
+#### (15):directed_graph
 
     template<class Index, class Value>
 	using dGraph = TinySTL::directed_graph < Index, Value > ;
@@ -505,7 +505,7 @@ TinySTL
 
 
 
-####(16):trie tree
+#### (16):trie tree
 
     TinySTL::trie_tree t;
 	std::ifstream in;
@@ -539,7 +539,7 @@ TinySTL
 
 
 
-####(17):shared_ptr
+#### (17):shared_ptr
 
     shared_ptr<string> sp1(new string("hello"));
 	assert(sp1.use_count() == 1);
@@ -555,7 +555,7 @@ TinySTL
 
 
 
-####(18):unique_ptr
+#### (18):unique_ptr
 
     auto up = make_unique<string>(10, '0');
 	up->append("111");
@@ -569,7 +569,7 @@ TinySTL
 
 
 
-####(19):cow_ptr
+#### (19):cow_ptr
 
     cow_ptr<string> cp1 = make_cow<string>("zouxiaohang");
 	auto cp2 = cp1, cp3 = cp1;
@@ -588,7 +588,7 @@ TinySTL
 
 
 
-####(19):union-find set
+#### (19):union-find set
 
     uf_set<10> uf;
 	uf.Union(0, 1);
